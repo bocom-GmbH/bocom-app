@@ -15,7 +15,9 @@
 
 import { defineComponent } from 'vue'
 import { useMutation } from '@vue/apollo-composable';
-import gql from 'graphql-tag';
+import { useUserStore } from 'stores/authentication';
+import { Cookies } from 'quasar';
+import { loginWithTokenMutation } from 'src/apollo/mutations/user'
 
 export default defineComponent({
 	name: 'LoginPage',
@@ -26,30 +28,20 @@ export default defineComponent({
 		}
 	},
 	setup () {
-		let { mutate: login, error: loginError, loading: loading } = useMutation( 
-			gql`
-				mutation Login (
-					$username: String!,
-					$password: String!
-				) {
-					login (
-						username: $username,
-						password: $password
-					) {
-						token
-					}
-				}
-			`
-		)
-
+		let { mutate: login, error: loginError, loading: loading } = useMutation(loginWithTokenMutation)
+		const store = useUserStore();
 		return {
-			login
+			login,
+			store
 		}
 	},
 	methods:{
 		async loginFunc(){
 			const loginData = await this.login({ username: this.username, password: this.password })
 			console.log(loginData)
+			this.$router.push('/')
+			Cookies.set('apollo-token',loginData?.data.login.token)
+			this.store.setUserToken(loginData?.data.login.token)
 		}
 	}
 })
