@@ -1,10 +1,12 @@
 import type { ApolloClientOptions } from '@apollo/client/core'
 import { createHttpLink, InMemoryCache } from '@apollo/client/core'
 import type { BootFileParams } from '@quasar/app'
+import { Cookies } from 'quasar'
 
 export /* async */ function getClientOptions(
   /* {app, router, ...} */ options?: Partial<BootFileParams<any>>
 ) {
+
   return <ApolloClientOptions<unknown>>Object.assign(
     // General options.
     <ApolloClientOptions<unknown>>{
@@ -13,8 +15,10 @@ export /* async */ function getClientOptions(
           process.env.GRAPHQL_URI ||
           // Change to your graphql endpoint.
           'https://graphql.bocom.at/',
+          headers:{
+            authorization: Cookies.get('apollo-token'),
+          }
       }),
-
       cache: new InMemoryCache(),
     },
 
