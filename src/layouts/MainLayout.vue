@@ -17,12 +17,14 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-
+import { Cookies } from 'quasar';
+import { useUserStore } from 'src/stores/authentication';
 
 export default defineComponent({
 	name: 'MainLayout',
 	setup(){
-			
+		const store = useUserStore();
+		store.setPermissions(window.localStorage.getItem('permissions')?.split(','))
 			
 		return {
 			

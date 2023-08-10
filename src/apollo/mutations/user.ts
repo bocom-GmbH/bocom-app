@@ -10,6 +10,7 @@ const loginWithTokenMutation = gql`
             password: $password
         ) {
             token
+            permissions
         }
     }
 `

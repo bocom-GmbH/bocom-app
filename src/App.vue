@@ -6,9 +6,10 @@
 import { defineComponent } from 'vue';
 import { useApolloClient } from 'src/apollo/utils';
 
+
 export default defineComponent({
 	name: 'App',
-	setup(){
+	setup() {
 		useApolloClient();
 	}
 });

@@ -21,7 +21,6 @@ export /* async */ function getClientOptions(
       }),
       cache: new InMemoryCache(),
     },
-
     // Specific Quasar mode options.
     process.env.MODE === 'spa'
       ? {

@@ -19,6 +19,8 @@ import { useUserStore } from 'stores/authentication';
 import { Cookies } from 'quasar';
 import { loginWithTokenMutation } from 'src/apollo/mutations/user'
 
+
+
 export default defineComponent({
 	name: 'LoginPage',
 	data () {
@@ -38,10 +40,13 @@ export default defineComponent({
 	methods:{
 		async loginFunc(){
 			const loginData = await this.login({ username: this.username, password: this.password })
-			console.log(loginData)
-			this.$router.push('/')
 			Cookies.set('apollo-token',loginData?.data.login.token)
-			this.store.setUserToken(loginData?.data.login.token)
+			window.localStorage.setItem('permissions', loginData?.data.login.permissions)
+			//console.log(window.localStorage.getItem('permissions'))
+			this.store.setPermissions(window.localStorage.getItem('permissions')?.split(','))
+			
+			this.$router.push('/')
+			
 		}
 	}
 })
