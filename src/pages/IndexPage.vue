@@ -6,7 +6,7 @@
 		</div>
 		<q-btn label="test permission"/>
 		<q-btn label="test" @click="console.log(getFile(files[0]))"/>
-		{{ filesFromTheDataBase }}
+		
 		<q-btn label="logout" class="bg-primary text-white" style="width: 70%;" @click="logout" />
 	</q-page>
 </template>
@@ -71,18 +71,22 @@ export default defineComponent({
 			store.$reset();
 		}
 
-		const { result:query } = useQuery(queryFileData)
+		const { onResult } = useQuery(queryFileData)
+
+		onResult((result) => {
+			console.log(result)
+		})
 
 		return {
 			logout,
 			buttons,
 			files,
-			query
+			
 		};
 	},
 	methods: {
 		async getFile(elementId:string) {
-			await this.query({fileId: elementId})
+			await this.getFiles({fileId: elementId})
 		}
 	}
 });
