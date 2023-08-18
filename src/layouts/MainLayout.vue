@@ -24,7 +24,7 @@ export default defineComponent({
 	name: 'MainLayout',
 	setup(){
 		const store = useUserStore();
-		//store.setPermissions(window.localStorage.getItem('permissions')?.split(','))
+		store.setPermissions(window.localStorage.getItem('permissions')?.split(','))
 			
 		return {
 			

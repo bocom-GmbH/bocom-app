@@ -8,6 +8,7 @@ const queryFileData = gql`
             label
             nodedata
             schemaId
+            permission
         }
     }
 `
