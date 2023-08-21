@@ -20,7 +20,6 @@ import { Cookies } from 'quasar';
 import { loginWithTokenMutation } from 'src/apollo/mutations/user'
 
 
-
 export default defineComponent({
 	name: 'LoginPage',
 	data () {
@@ -44,8 +43,8 @@ export default defineComponent({
 			window.localStorage.setItem('permissions', loginData?.data.login.permissions)
 			//console.log(window.localStorage.getItem('permissions'))
 			this.store.setPermissions(window.localStorage.getItem('permissions')?.split(','))
-			
 			this.$router.push('/')
+			
 			
 		}
 	}

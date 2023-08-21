@@ -6,7 +6,6 @@ import { Cookies } from 'quasar'
 export /* async */ function getClientOptions(
   /* {app, router, ...} */ options?: Partial<BootFileParams<any>>
 ) {
-
   return <ApolloClientOptions<unknown>>Object.assign(
     // General options.
     <ApolloClientOptions<unknown>>{
