@@ -6,3 +6,10 @@ export interface Todo {
 export interface Meta {
   totalCount: number;
 }
+
+export interface BottomMenuItem {
+	label: string,
+	icon: string,
+	notification: number;
+	navigateToPath: string;
+}

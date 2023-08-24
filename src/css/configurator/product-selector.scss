@@ -1,0 +1,13 @@
+/* This file is not working, edit in the component style tag */
+
+.wrapper {
+  width: 100%;
+  display: flex;
+  gap: 15px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+}
+
+.product-title {
+  font-size: 22px;
+}

@@ -1,15 +1,7 @@
 <template>
-	<q-page>
-    <InputFieldsCard/>
-    <ArticleSelector/>
-    <ProductSelector/>
-  <!--  <MagazineItem
-        :id="1"
-        :progress="66"
-        :label="'Sommerausgabe 2023 und Limon-Chello Etikett'"
-    /> -->
-    <ImageSelector/>
-	<!-- 	<file-component
+	<q-page class="">
+    shop Page
+		<file-component
 			v-for="file in files"
 			:id="file"
 			:key="file"
@@ -21,46 +13,38 @@
 			:disable="!button.disable"
 		>
 			{{ button.label }}
-		</q-btn> -->
+		</q-btn>
 
-		<!-- <q-btn label="logout" class="bg-primary text-white q-ma-lg" style="width: 70%;" @click="logout" />
- -->
+		<q-btn label="logout" class="bg-primary text-white q-ma-lg" style="width: 70%;" @click="logout" />
+
 	</q-page>
 </template>
 
 <script lang="ts">
 
 
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router'
 import { useUserStore } from 'stores/authentication';
 import { Cookies } from 'quasar'
-//import MagazineItem from 'src/components/MagazineItem.vue'
-import ImageSelector from 'src/components/configurator/ImageSelector.vue'
-import ArticleSelector from 'src/components/configurator/ArticleSelector.vue'
-import ProductSelector from 'src/components/configurator/ProductSelector.vue'
-//import FileComponent from 'src/components/FileComponent.vue'
-import InputFieldsCard from 'src/components/configurator/InputFieldsCard.vue';
+
+
+import FileComponent from 'src/components/FileComponent.vue'
 
 
 
 
 export default defineComponent({
-	name: 'IndexPage',
+	name: 'ActivityPage',
 	components: {
-		    //FileComponent,
-        //MagazineItem,
-        ImageSelector,
-        ArticleSelector,
-        ProductSelector,
-        InputFieldsCard
+		FileComponent
 	},
 	setup () {
-
+		let temp = ref()
 		const router = useRouter();
 		const store = useUserStore();
 
-
+		const tempValue = ref<any>([])
 
 		const files = [
 			'07ad890b-82ee-4bc9-ab6a-ebd0dc6b954d',
