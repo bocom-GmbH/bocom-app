@@ -1,7 +1,7 @@
 <template>
 <div>
     <component
-        v-for="element in componentData.elements"
+        v-for="element in componentData?.elements"
         :is="element.componentId"
         :key="element.id"
     />

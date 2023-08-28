@@ -3,7 +3,7 @@
       <h6>Seite {{ currentSite }}</h6>
       <ComponentRouter
           :id="id"
-          :componentData="magazine?.Templates.find( template => template.label === 'Seite' + ' ' + currentSite)"
+          :componentData="magazine?.Templates?.find( template => template?.label === 'Seite' + ' ' + currentSite)"
       />
         <q-pagination
             v-model="currentSite"
