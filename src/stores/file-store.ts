@@ -10,7 +10,7 @@ export const useFileStore = defineStore('file', {
             return state.fileData;
         },
         getFileDataById: (state) => (id: string) => {
-            return state.fileData.find((fileData: any) => fileData.id === id);
+            return state.fileData?.find((file: any) => file.id === id);
         }
     },
     actions: {

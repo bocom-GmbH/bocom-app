@@ -8,41 +8,52 @@
             color="bocom-lila"
         />
         <q-card class="card-styled full-width bg-primary q-pa-xs q-pr-xl q-ma-none flex relative">
-            <span class="text-bold"> {{ magazine.data?.Magazin[0]?.label }} </span>
+            <span class="text-bold"> {{ label }} </span>
             <q-icon class="icon-styled" color="white" size="24px" name="arrow_forward_ios"></q-icon>
         </q-card>
     </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
-
+import { defineComponent, toRefs, computed } from 'vue';
+import { useFileStore } from 'stores/file-store';
+import { storeToRefs } from 'pinia';
 
 export default defineComponent({
-	name: 'MagazineItem',
-	props: {
-		magazine: {
-			type: Object,
-			required: true
-		},
-    id: {
-      type: String,
-      required: false
+    name: 'MagazineItem',
+    props: {
+        id: {
+            type: String,
+            required: true
+        }
+    },
+    setup(props){
+        const fileStore = useFileStore();
+        //const { getFileDataById } = storeToRefs(fileStore)
+        const { id } = toRefs(props)
+
+
+        console.log(id.value, "id value")
+        const magazineLabel = fileStore.getFileDataById(id.value)
+
+        return {
+            label: magazineLabel.label
+        }
     }
-	}
+
 
 })
 </script>
 
 <style scoped>
 .card-styled {
-  height: 57px;
-  border-radius: 12px;
+	height: 57px;
+	border-radius: 12px;
 }
 
 .icon-styled {
-  position: absolute;
-  right: 10px;
-  top: 18px;
+	position: absolute;
+	right: 10px;
+	top: 18px;
 }
 </style>
