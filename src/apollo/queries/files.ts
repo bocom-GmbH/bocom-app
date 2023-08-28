@@ -13,4 +13,15 @@ const queryFileData = gql`
     }
 `
 
-export {queryFileData}
+const getMagazine = gql`
+    query Magazin {
+        Magazin {
+            Jahr
+            Templates
+            id
+            label
+        }
+    }
+`
+
+export {queryFileData, getMagazine}

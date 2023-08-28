@@ -39,26 +39,26 @@ export default defineComponent({
     },
 	setup(){
 		const store = useUserStore();
-    const drawer = ref(false)
+		const drawer = ref(false)
 		store.setPermissions(window.localStorage.getItem('permissions')?.split(','))
-        const bottomMenu = computed(() => [
-            {
-                label: 'Home',
-                icon: 'Home_light',
-                notification: 0,
-                navigateToPath: '/',
-            },
-            {
-                label: 'Aktivitat',
-                icon: 'Bell',
-                notification: 0,
-                navigateToPath: '/ActivityPage',
-            },
-        ]);
+		const bottomMenu = computed(() => [
+			{
+				label: 'Home',
+				icon: 'Home_light',
+				notification: 0,
+				navigateToPath: '/',
+			},
+			{
+				label: 'Aktivitat',
+				icon: 'Bell',
+				notification: 0,
+				navigateToPath: '/ActivityPage',
+			},
+		]);
 
 		return {
 			bottomMenu,
-      drawer
+			drawer
 		}
 	}
 });

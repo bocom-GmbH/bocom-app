@@ -14,7 +14,7 @@
 import { defineComponent, ref } from 'vue'
 import ProductCard from 'src/components/configurator/ProductCard.vue'
 export default defineComponent({
-    name: 'ProductSelector',
+    name: 'CardCarousel',
     components: {
         ProductCard
     },

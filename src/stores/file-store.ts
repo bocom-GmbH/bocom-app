@@ -2,12 +2,15 @@ import { defineStore } from 'pinia';
 
 export const useFileStore = defineStore('file', {
     state: () => ({
-        fileData: null
+        fileData: null || []
     }),
 
     getters: {
         getFileData (state) {
             return state.fileData;
+        },
+        getFileDataById: (state) => (id: string) => {
+            return state.fileData.find((fileData: any) => fileData.id === id);
         }
     },
     actions: {
