@@ -1,11 +1,13 @@
 <template>
-    <div class="q-pa-xs">
-        <span class="text-weight-bold product-title">Produkte auswahlen</span>
+    <div class="q-pa-sm">
+        <span class="text-weight-bold product-title">{{ element.label }}</span>
         <div class="wrapper q-pl-sm">
-            <ProductCard/>
-            <ProductCard/>
-            <ProductCard/>
-            <ProductCard/>
+            <component
+                v-for="file in element.fileIds"
+                :is="element.label === 'Mitarbeiter' ? 'Mitarbeiter' : 'ProductCard'"
+                :key="file.elementId"
+                :id="file"
+            />
         </div>
     </div>
 </template>
@@ -13,10 +15,18 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
 import ProductCard from 'src/components/configurator/ProductCard.vue'
+import Mitarbeiter from 'src/components/configurator/MitarbeiterCard.vue'
 export default defineComponent({
     name: 'CardCarousel',
     components: {
-        ProductCard
+        ProductCard,
+        Mitarbeiter
+    },
+    props:{
+        element: {
+            type: Object,
+            required: true
+        }
     },
     setup() {
         return {
@@ -33,15 +43,15 @@ export default defineComponent({
 @import '../../css/configurator/article-selector.scss';
 
 .wrapper {
-  width: 100%;
-  display: flex;
-  gap: 15px;
-  overflow-x: auto;
-  scroll-behavior: smooth;
+    width: 100%;
+    display: flex;
+    gap: 15px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
 }
 
 .product-title {
-  font-size: 22px;
+    font-size: 22px;
 }
 
 </style>

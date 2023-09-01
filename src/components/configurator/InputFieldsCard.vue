@@ -11,14 +11,14 @@
       />
         <q-card class="q-ma-sm q-pa-md bg-primary flex card">
            <div class="first-column flex">
-                <q-input rounded outlined bg-color="green" v-model="text" label="Rounded outlined" />
-                <q-input rounded outlined bg-color="green" v-model="text" label="Input" />
-                <q-input rounded outlined bg-color="green" v-model="text" label="Input" />
+                <q-input rounded outlined :bg-color="text ? 'green' : 'blue'" v-model="text" label="Rounded outlined" />
+                <q-input rounded outlined :bg-color="text ? 'green' : 'blue'" v-model="text" label="Input" />
+                <q-input rounded outlined :bg-color="text ? 'green' : 'blue'" v-model="text" label="Input" />
            </div>
            <div class="second-column flex">
-                <q-input rounded outlined bg-color="blue" v-model="text" label="Input" />
-                <q-input rounded outlined bg-color="blue" v-model="text" label="Input" />
-                <q-input rounded outlined bg-color="blue" v-model="text" label="Input" />
+                <q-input rounded outlined :bg-color="text ? 'green' : 'blue'" v-model="text" label="Input" />
+                <q-input rounded outlined :bg-color="text ? 'green' : 'blue'" v-model="text" label="Input" />
+                <q-input rounded outlined :bg-color="text ? 'green' : 'blue'" v-model="text" label="Input" />
            </div>
         </q-card>
     </div>

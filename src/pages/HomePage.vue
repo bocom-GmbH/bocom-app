@@ -2,6 +2,7 @@
 	<q-page>
 
    <router-link
+        style="text-decoration: none;"
         v-for="magazine in magazineList"
         :key="magazine.data?.Magazin[0]?.id"
         :to="{ path: `/FileEditorPage/${magazine.id}` }">
@@ -9,6 +10,12 @@
             :id="magazine.id"
         />
     </router-link>
+    <q-btn
+        class="logout-button"
+        color="primary"
+        label="Logout"
+        @click="logout"
+    />
 	</q-page>
 </template>
 
@@ -49,8 +56,18 @@ export default defineComponent({
         return {
             logout,
             magazineList
-        };
+        }
     },
 
 });
 </script>
+<style scoped>
+.logout-button {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    margin: 10px;
+}
+
+
+</style>

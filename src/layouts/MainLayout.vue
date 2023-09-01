@@ -3,16 +3,14 @@
 
 		<q-header elevated>
 			<q-toolbar>
-				<q-toolbar-title class="text-accent text-bold">
-					Bocom-app
-				</q-toolbar-title>
-        <q-btn
-          flat
-          round
-          icon="menu"
-          class="text-accent"
-          @click="$q.drawer('left').toggle()"
-        />
+                <q-btn
+                    color="primary"
+                    icon="arrow_back"
+                    class="back-button q-ma-sm absolute"
+                    @click="goBack"
+                    round
+                />
+
 			</q-toolbar>
 		</q-header>
 
@@ -32,6 +30,7 @@ import { Cookies } from 'quasar';
 import { useUserStore } from 'src/stores/authentication';
 import BottomMenu from 'src/components/BottomMenu.vue';
 
+
 import { useFileStore } from 'stores/file-store';
 import { useQuery } from '@vue/apollo-composable'
 import { getMagazine } from '../apollo/queries/files'
@@ -48,6 +47,9 @@ export default defineComponent({
         const fileStore = useFileStore();
         const magazine = ref({})
 
+        const goBack = () => {
+			history.back();
+		};
         const queryFileData = () => {
             try {
                 const { onResult } = useQuery(
@@ -75,13 +77,13 @@ export default defineComponent({
         const bottomMenu = computed(() => [
             {
                 label: 'Home',
-                icon: 'Home_light',
+                icon: 'MenuIcon',
                 notification: 0,
                 navigateToPath: '/',
             },
             {
                 label: 'Aktivitat',
-                icon: 'Bell',
+                icon: 'ShopIcon',
                 notification: 0,
                 navigateToPath: '/ActivityPage',
             },
@@ -89,7 +91,8 @@ export default defineComponent({
 
         return {
             bottomMenu,
-            drawer
+            drawer,
+            goBack,
         }
     }
 });

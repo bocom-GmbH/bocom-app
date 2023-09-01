@@ -18,3 +18,9 @@
 .card-title {
   font-size: 24px;
 }
+
+.synopsys {
+    max-height: 120px;
+    overflow: hidden;
+    text-overflow: ellipsis " [..]";
+}

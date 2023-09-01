@@ -1,104 +1,103 @@
 <template>
-    <div class="q-pa-md">
-        <span class="text-weight-bold title-text">Titelbild auswahlen</span>
-        <q-carousel
-            animated
-            v-model="slide"
-            navigation
-            ref="carousel"
-            transition-prev="slide-right"
-            transition-next="slide-left"
-            class="carousel-styling bg-primary"
-        >
-            <q-carousel-slide :name="1">
-                <q-card class="carousel-card">
-                    <q-img class="carousel-image" fit="fill" src="https://cdn.quasar.dev/img/parallax1.jpg"></q-img>
-                </q-card>
-                <div class="toggle-wrapper">
-                    <q-toggle class="q-mt-xs" color="positive" size="70px" v-model="shape" val="xl" label="" />
-                </div>
-            </q-carousel-slide>
-            <q-carousel-slide :name="2">
-                <q-card class="carousel-card">
-                    <q-img class="carousel-image" fit="fill" src="https://cdn.quasar.dev/img/parallax2.jpg"></q-img>
-                </q-card>
-                <div class="toggle-wrapper">
-                    <q-toggle class="q-mt-xs" color="positive" size="70px" v-model="shape" val="xl" label="" />
-                </div>
-            </q-carousel-slide>
-            <q-carousel-slide :name="3">
-                <q-card class="carousel-card">
-                    <q-img class="carousel-image" fit="fill" src="https://cdn.quasar.dev/img/quasar.jpg"></q-img>
-                </q-card>
-                <div class="toggle-wrapper">
-                    <q-toggle class="q-mt-xs" color="positive" size="70px" v-model="shape" val="xl" label="" />
-                </div>
-            </q-carousel-slide>
-            <template v-slot:control>
-                <q-carousel-control
-                    position="bottom-left"
-                    :offset="[18, 18]"
-                    class="q-gutter-xs"
+    <div class="q-pa-xs">
+        <span class="text-weight-bold product-title">{{ element.label }}</span>
+        <div class="wrapper q-pl-sm">
+            <q-card
+                class="custom-card bg-primary q-my-md flex"
+                    v-for="(slide, index) in data?.data?.TitelbildById.Bilder"
+                    :key="index"
                 >
-                <q-btn
-                    round dense color="white" text-color="black" icon="chevron_left"
-                    @click="$refs.carousel.previous()"
-                />
-                </q-carousel-control>
-                <q-carousel-control
-                    position="bottom-right"
-                    :offset="[18, 18]"
-                    class="q-gutter-xs"
-                >
-                <q-btn
-                    round dense color="white" text-color="black" icon="chevron_right"
-                    @click="$refs.carousel.next()"
-                />
-                </q-carousel-control>
-            </template>
-        </q-carousel>
+                <q-img class="custom-img" :src="`https://images.bocom.at/${slide}`"></q-img>
+
+                <div class="flex-column q-pa-sm no-wrap">
+                    <div class="custom-text q-mb-none text-weight-bold text-left">Kamillen Complex Kapseln</div>
+                </div>
+
+                <q-toggle class="q-mt-xs" color="positive" v-model="shape" size="70px"/>
+
+            </q-card>
+        </div>
     </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { defineComponent, onMounted, ref } from 'vue'
+import { useQuery } from '@vue/apollo-composable'
+import { getTitelBildById } from '../../apollo/queries/files'
 
 export default defineComponent({
-  name: 'ImageSelector',
-  setup() {
-    return {
-      slide: ref(1),
-      shape: ref(['line'])
+    props:{
+        element:{
+            type: Object,
+            required: true
+        }
+    },
+    setup(props){
+        const data = ref()
+        const getImages = ( id:string ) => {
+            try {
+                const { onResult } = useQuery(
+                    getTitelBildById, () => ({
+                        fileId: id
+                    }),
+                    () => ({
+                        errorPolicy: 'all',
+                    })
+                )
+                onResult((result) => {
+                    data.value = result
+                })
+            }
+            catch (error) {
+                console.log(error)
+            }
+        }
+
+
+        onMounted(() => {
+            getImages(props?.element?.fileIds[0])
+        })
+
+        return {
+            shape: ref(false),
+            data
+        }
     }
-  }
 })
+
+
 </script>
 
-<style scoped>
-.title-text {
-  font-size: 22px;
+<style scoped lang="scss">
+.wrapper {
+    width: 100%;
+    display: flex;
+    gap: 15px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
 }
 
-.carousel-styling {
-  height: 650px;
-  border-radius: 12px;
+.product-title {
+    font-size: 22px;
 }
-
-.carousel-card {
-  height: 500px;
-  border-radius: 12px;
-}
-
-.carousel-image {
-  height: 500px;
-}
-
-.toggle-wrapper {
+.no-wrap {
   width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  word-break: break-all;
 }
-/* Import is not working here */
-/* @import '../../css/configurator/article-selector.scss'; */
+.row.inline, .column.inline, .flex.inline {
+  display: inline-flex;
+  justify-content: center;
+}
+.custom-card {
+  border-radius: 12px;
+  min-width: 200px !important;
+}
+.custom-img {
+  height: 270px;
+}
+.custom-text {
+  font-size: large;
+}
+
+
 </style>

@@ -24,4 +24,35 @@ const getMagazine = gql`
     }
 `
 
-export {queryFileData, getMagazine}
+const getMitarbeiter = gql`
+    query Mitarbeiter {
+		Mitarbeiter {
+			Titel
+			id
+			label
+		}
+    }
+`
+const getEditorialById = gql`
+	query EditorialById($fileId: String!) {
+		EditorialById(fileId: $fileId) {
+			Synopsis_Header
+			Synopsis_Text
+			id
+			label
+		}
+	}
+`
+const getTitelBildById = gql`
+    query TitelbildById($fileId: String!) {
+        TitelbildById(fileId: $fileId) {
+            Bilder
+            id
+            label
+        }
+    }
+`
+
+
+
+export {queryFileData, getMagazine, getMitarbeiter, getEditorialById, getTitelBildById}

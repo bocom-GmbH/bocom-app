@@ -16,8 +16,8 @@
                 :name= tab.label
                 :to="tab.navigateToPath"
             >
-                <!-- <q-badge class="q-mt-xs q-pt-xs" v-if="tab.notification" color="red" floating>{{ tab.notification }}</q-badge> -->
-                <q-icon height="30px" width="30px" class="svg-icon" :name="getIcon(tab.icon)"></q-icon>
+               <!--  <q-badge class="q-mt-xs q-pt-xs" v-if="tab.notification" color="red" floating>{{ tab.notification }}</q-badge> -->
+                <q-img height="24px" width="24px" :src="getIcon(tab.icon)"></q-img>
                 <div class="text-black"> {{ tab.label }}</div>
             </q-route-tab>
         </q-tabs>
@@ -77,8 +77,8 @@ export default defineComponent({
 
 <style>
 
-.svg-icon{
+/* .svg-icon{
   stroke-width: 10px;
-}
+} */
 
 </style>
