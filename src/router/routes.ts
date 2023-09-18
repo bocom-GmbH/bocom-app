@@ -12,9 +12,9 @@ const routes: RouteRecordRaw[] = [
     children: [{ path: '', component: () => import('pages/LoginPage.vue') }],
   },
   {
-    path: '/ActivityPage',
+    path: '/UserPage',
     component: () => import('layouts/MainLayout.vue'),
-    children: [{ path: '/ActivityPage', component: () => import('pages/ActivityPage.vue') }],
+    children: [{ path: '', component: () => import('pages/UserPage.vue') }],
   },
   {
     path: '/FileEditorPage',

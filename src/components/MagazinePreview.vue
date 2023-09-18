@@ -2,8 +2,8 @@
      <div class="flex no-wrap items-center">
         <q-circular-progress
             show-value
-            class="text-accent q-ma-md"
-            :value="progress"
+            class="text-secondary  q-ma-md"
+            value="55"
             size="57px"
             color="bocom-lila"
         />

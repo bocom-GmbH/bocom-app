@@ -5,6 +5,7 @@
             :is="element.componentId"
             :key="element.id"
             :element="element"
+            :children="componentData?.elements.filter( child => child.parentId === element.id)"
         />
     </div>
 </template>
@@ -16,6 +17,7 @@ import ImageSelector from './configurator/ImageSelector.vue';
 import ArticleSelector from './configurator/ArticleSelector.vue';
 import InputFieldsCard from './configurator/InputFieldsCard.vue';
 import CardCarousel from './configurator/CardCarousel.vue';
+import GroupingComponent from './configurator/GroupingComponent.vue';
 
 export default defineComponent({
     props: {
@@ -32,7 +34,8 @@ export default defineComponent({
         ImageSelector,
         ArticleSelector,
         InputFieldsCard,
-        CardCarousel
+        CardCarousel,
+        GroupingComponent
     },
 
 

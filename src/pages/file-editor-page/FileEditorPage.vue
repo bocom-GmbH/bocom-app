@@ -13,11 +13,6 @@
                 :max="sites.value"
                 direction-links
             />
-            <q-btn
-                v-if="currentSite === sites.value"
-                color="positive"
-                label="Speichern"
-            />
         </div>
     </div>
 </template>
@@ -29,6 +24,7 @@ import { useFileStore } from 'stores/file-store';
 import { useRoute } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import ComponentRouter from 'src/components/ComponentRouter.vue';
+
 
 
 export default defineComponent({

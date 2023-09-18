@@ -1,14 +1,14 @@
 <template>
 	<q-layout view="lHh Lpr lFf">
 
-		<q-header elevated>
+		<q-header class="bg-accent" elevated>
 			<q-toolbar>
                 <q-btn
-                    color="primary"
+                    color="secondary"
                     icon="arrow_back"
                     class="back-button q-ma-sm absolute"
                     @click="goBack"
-                    round
+                    unelevated
                 />
 
 			</q-toolbar>
@@ -26,7 +26,6 @@
 
 <script lang="ts">
 import { defineComponent, computed, ref, onMounted } from 'vue';
-import { Cookies } from 'quasar';
 import { useUserStore } from 'src/stores/authentication';
 import BottomMenu from 'src/components/BottomMenu.vue';
 
@@ -43,7 +42,9 @@ export default defineComponent({
     setup(){
         const store = useUserStore();
         const drawer = ref(false)
-        store.setPermissions(window.localStorage.getItem('permissions')?.split(','))
+        if(window.localStorage.getItem('permissions')){
+            store.setPermissions(window.localStorage.getItem('permissions')?.split(','))
+        }
         const fileStore = useFileStore();
         const magazine = ref({})
 
@@ -76,16 +77,16 @@ export default defineComponent({
 
         const bottomMenu = computed(() => [
             {
-                label: 'Home',
-                icon: 'MenuIcon',
+                label: 'Startseite',
+                icon: 'las la-home',
                 notification: 0,
                 navigateToPath: '/',
             },
             {
-                label: 'Aktivitat',
-                icon: 'ShopIcon',
+                label: 'Benutzer',
+                icon: 'lar la-user',
                 notification: 0,
-                navigateToPath: '/ActivityPage',
+                navigateToPath: '/UserPage',
             },
         ]);
 
