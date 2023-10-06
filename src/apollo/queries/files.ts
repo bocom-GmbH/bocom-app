@@ -12,7 +12,7 @@ const queryFileData = gql`
         }
     }
 `
-
+/*
 const getMagazine = gql`
     query Magazin {
         Magazin {
@@ -22,7 +22,7 @@ const getMagazine = gql`
             label
         }
     }
-`
+` */
 
 const getMitarbeiter = gql`
     query Mitarbeiter {
@@ -52,7 +52,29 @@ const getTitelBildById = gql`
         }
     }
 `
+const getMagazine = gql`
+    query Magazin {
+        Magazin {
+            Jahr
+            TemplateIds
+            id
+            label
+        }
+    }
+`
+
+const getSiteById = gql`
+    query Seite($templateId: String!) {
+    Seite(templateId: $templateId) {
+            data
+            label
+            metadata {
+                id
+                schemaId
+            }
+        }
+    }
+`
 
 
-
-export {queryFileData, getMagazine, getMitarbeiter, getEditorialById, getTitelBildById}
+export { queryFileData, getMagazine, getMitarbeiter, getEditorialById, getTitelBildById, getSiteById }

@@ -1,19 +1,25 @@
 <template>
-    <div>
-        <h6 class="seite-titel">Seite {{ currentSite }}</h6>
-        <ComponentRouter
-            v-if="magazine?.Templates"
-            :id="id"
-            :componentData="magazine?.Templates?.find( template => template?.label === 'Seite' + ' ' + currentSite)"
-        />
+    <div v-if="magazine?.TemplateIds">
+       <SingleSitePage
+            :siteId="magazine.TemplateIds[currentSite - 1]"
+       />
         <div class="pagination">
             <q-pagination
                 class="q-ma-none"
                 v-model="currentSite"
-                :max="sites.value"
+                :max="magazine.TemplateIds.length"
                 direction-links
             />
         </div>
+    </div>
+    <div v-else class="q-pa-md flex flex-center">
+        <q-circular-progress
+            indeterminate
+            rounded
+            size="50px"
+            color="primary"
+            class="q-ma-md"
+        />
     </div>
 </template>
 
@@ -23,45 +29,42 @@ import { defineComponent, onMounted, ref, watch } from 'vue';
 import { useFileStore } from 'stores/file-store';
 import { useRoute } from 'vue-router';
 import { storeToRefs } from 'pinia';
-import ComponentRouter from 'src/components/ComponentRouter.vue';
-
-
+import SingleSitePage from './SingleSitePage.vue';
 
 export default defineComponent({
     name: 'FileEditorPage',
     props: {
-        id: {
+        magazineId: {
             type: String,
             required: true
         }
     },
     components: {
-        ComponentRouter
+        SingleSitePage
     },
-    setup () {
+    setup() {
         const route = useRoute();
         const fileStore = useFileStore();
-        const magazine = ref()
-        const { getFileData } = storeToRefs(fileStore)
+        const magazine = ref();
+        const sites = ref<string[]>(['']);
+        const { getFileData } = storeToRefs(fileStore);
 
-        const sites = ref(0)
-        const currentSite = ref(1)
+        const currentSite = ref(1);
+
 
         onMounted(() => {
-            magazine.value = fileStore.getFileDataById(route.params.id)
-            sites.value = ref(magazine.value?.Templates?.length)
-        })
+            magazine.value = fileStore.getFileDataById(route.params.magazineId);
+        });
 
         watch(getFileData, () => {
-            magazine.value = fileStore.getFileDataById(route.params.id)
-            sites.value = ref(magazine.value?.Templates?.length)
-        })
+            magazine.value = fileStore.getFileDataById(route.params.magazineId);
+        });
 
         return {
             magazine,
             sites,
             currentSite
-        }
+        };
     }
 })
 

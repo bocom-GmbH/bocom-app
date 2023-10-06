@@ -41,6 +41,7 @@ export default defineComponent({
 			const loginData = await this.login({ username: this.username, password: this.password })
 			Cookies.set('apollo-token',loginData?.data.login.token)
 			window.localStorage.setItem('permissions', loginData?.data.login.permissions)
+            window.localStorage.setItem('apollo-token', loginData?.data.login.token)
             this.store.setUserData(loginData?.data.login.token)
 			this.store.setPermissions(window.localStorage.getItem('permissions')?.split(','))
 			this.$router.push('/')

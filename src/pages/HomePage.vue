@@ -5,7 +5,7 @@
             style="text-decoration: none;"
             v-for="magazine in magazineList"
             :key="magazine.data?.Magazin[0]?.id"
-            :to="{ path: `/FileEditorPage/${magazine.id}` }">
+            :to="{ path: `/HomePage/FileEditorPage/${magazine.id}` }">
             <MagazinePreview
                 :id="magazine.id"
             />
@@ -22,7 +22,6 @@ import { useRouter } from 'vue-router'
 import { useUserStore } from 'stores/authentication';
 import { useFileStore } from 'stores/file-store';
 
-import { Cookies } from 'quasar'
 import { storeToRefs } from 'pinia';
 import MagazinePreview from 'src/components/MagazinePreview.vue'
 

@@ -1,27 +1,27 @@
 <template>
     <div class="q-pa-sm">
-        <span class="text-weight-bold product-title">{{ element.label }}</span>
-        <div class="wrapper q-pl-sm">
+        <div class="wrapper q-pl-sm" v-if="element">
+            <div
+                v-for="card in element.slice(1)"
+                :key="card.data.elementId"
+            >
+
             <component
-                v-for="file in element.fileIds"
-                :is="element.label === 'Mitarbeiter' ? 'Mitarbeiter' : 'ProductCard'"
-                :key="file.elementId"
-                :id="file"
+                :is="componentHub.getComponentById(card.data[0].elementId)"
+                :element="card.data"
             />
         </div>
+    </div>
     </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
-import ProductCard from 'src/components/configurator/ProductCard.vue'
-import Mitarbeiter from 'src/components/configurator/MitarbeiterCard.vue'
+import { useComponentStore } from 'stores/component-hub-store'
+
 export default defineComponent({
     name: 'CardCarousel',
-    components: {
-        ProductCard,
-        Mitarbeiter
-    },
+
     props:{
         element: {
             type: Object,
@@ -29,8 +29,9 @@ export default defineComponent({
         }
     },
     setup() {
+        const componentHub = useComponentStore()
         return {
-
+            componentHub
         }
     }
 })

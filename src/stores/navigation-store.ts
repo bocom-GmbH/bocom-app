@@ -2,12 +2,14 @@ import { defineStore } from 'pinia';
 
 interface StoreState {
 	activeTab: string
+    backButtonAvailable: boolean
 }
 
 export const useTabStore = defineStore('tabStore', {
 	// define the state
 	state: (): StoreState => ({
-		activeTab: 'Menü'
+		activeTab: 'Menü',
+        backButtonAvailable: false
 	}),
 
 	// define getters
@@ -15,6 +17,9 @@ export const useTabStore = defineStore('tabStore', {
 		getActiveTab(): string {
 			return this.activeTab;
 		},
+        isBackButtonAvailable(): boolean {
+            return this.backButtonAvailable;
+        }
 	},
 
 	// define actions
@@ -22,5 +27,8 @@ export const useTabStore = defineStore('tabStore', {
 		setActiveTab(tab: string ) {
 			this.activeTab = tab;
 		},
+        setBackButtonAvailable(available: boolean) {
+            this.backButtonAvailable = available;
+        }
 	},
 });

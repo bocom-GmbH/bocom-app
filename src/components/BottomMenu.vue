@@ -4,20 +4,17 @@
             no-caps
             active-color="secondary"
             switch-indicator
-            indicator-color="accent"
+            indicator-color="secondary"
             class="text-grey-8 footer-tabs"
             v-model="activeTab"
-
-
         >
             <q-route-tab
                 v-for="tab in bottomMenuList"
                 :key="tab.navigateToPath"
-                :name= tab.label
+                :name= tab.name
                 :to="tab.navigateToPath"
                 :icon="tab.icon"
             >
-
                 <div class="text-black"> {{ tab.label }}</div>
             </q-route-tab>
         </q-tabs>
@@ -50,8 +47,6 @@ export default defineComponent({
         watch(() => activeTab.value, () => {
             tabStore.setActiveTab(activeTab.value)
         })
-
-
 
         return {
             activeTab,

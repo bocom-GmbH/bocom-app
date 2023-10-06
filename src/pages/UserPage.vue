@@ -29,6 +29,7 @@ export default defineComponent({
             Cookies.remove('apollo-token')
             store.resetUserAuthentication();
             window.localStorage.removeItem('permissions');
+            window.localStorage.removeItem('apollo-token');
             router.push('/login')
             store.$reset();
         }
