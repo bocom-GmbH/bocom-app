@@ -1,24 +1,27 @@
 <template>
-    <div class="q-ma-sm">
+    <div class="">
         <q-carousel
             animated
             v-model="slide"
             navigation
             transition-prev="slide-right"
             transition-next="slide-left"
-            class="carousel-styled bg-primary q-pa-md q-ma-sm"
+            class="carousel-styled body"
             ref="carousel"
         >
-            <q-carousel-slide v-for="(slide, index) in element.slice(1)" :key="index" class="q-pa-none" :name="index">
+        <q-carousel-slide v-for="(slide, index) in element[1].data.filter(element => element.label === 'Story')" :key="index" class="q-pa-none" :name="index">
                 <ArticleCard
                     :slide="slide.data"
                     :disable="!!(numberToSelect && selectedData.length >= numberToSelect) && selectedData.find(element => element === slide.data[0].id) !== slide.data[0].id"
+                />
+               <CardCarousel
+                   :element="elementsCopy[2].data.find(element => element.label === 'Produktplatzierungen').data.slice(1).filter(element => element.data[0].storyId === currentSlideId)"
                 />
             </q-carousel-slide>
             <template v-slot:control>
                 <q-carousel-control
                     position="bottom-left"
-                    :offset="[18, 18]"
+                    :offset="[18,450]"
                     class="q-gutter-xs"
                 >
                 <q-btn
@@ -28,7 +31,7 @@
                 </q-carousel-control>
                 <q-carousel-control
                     position="bottom-right"
-                    :offset="[18, 18]"
+                    :offset="[18, 450]"
                     class="q-gutter-xs"
                 >
                 <q-btn
@@ -42,11 +45,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, inject, ref } from 'vue'
+import { defineComponent, onMounted, inject, ref, onBeforeMount, provide } from 'vue';
 import ArticleCard from './cards/ArticleCard.vue'
+import { cloneDeep } from 'lodash'
+import CardCarousel from './CardCarousel.vue';
+
 
 export default defineComponent({
-    name: 'ArticleSelector',
+    name: 'GroupingComponent',
     props: {
         element: {
             type: Object,
@@ -58,19 +64,40 @@ export default defineComponent({
         }
     },
     components: {
-        ArticleCard
+        ArticleCard,
+        CardCarousel
     },
-    setup() {
+    setup(props){
+
         const selectedData = inject('selectedData') as string[]
+        const elementsCopy = ref<object>({})
+
+        const currentSlideId = ref('')
+
+        provide('currentSlideId', currentSlideId)
+
+        onBeforeMount(() => {
+            elementsCopy.value = cloneDeep(props.element)
+        })
+
+        onMounted(() => {
+           console.log(elementsCopy.value[2].data.find(element => element.label === 'Produktplatzierungen').data.slice(1).filter(element => element.data[0].storyId === currentSlideId.value), 'props')
+        })
 
         return {
             slide: ref(0),
-            selectedData
-        };
+            selectedData,
+            currentSlideId,
+            elementsCopy
+        }
     }
 })
 </script>
 
 <style scoped>
-@import '../../css/configurator/article-selector.scss';
+
+.body {
+    height: auto;
+}
+
 </style>

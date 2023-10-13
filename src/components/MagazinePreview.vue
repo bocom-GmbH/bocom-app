@@ -2,8 +2,8 @@
      <div class="flex no-wrap items-center">
         <q-circular-progress
             show-value
-            class="text-accent q-ma-md"
-            :value="progress"
+            class="text-secondary  q-ma-md"
+            value="55"
             size="57px"
             color="bocom-lila"
         />
@@ -15,7 +15,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, toRefs, computed } from 'vue';
+import { defineComponent, toRefs } from 'vue';
 import { useFileStore } from 'stores/file-store';
 
 
@@ -29,7 +29,7 @@ export default defineComponent({
     },
     setup(props){
         const fileStore = useFileStore();
-        //const { getFileDataById } = storeToRefs(fileStore)
+
         const { id } = toRefs(props)
 
         const magazineLabel = fileStore.getFileDataById(id.value)

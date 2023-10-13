@@ -1,34 +1,36 @@
 <template>
     <div class="q-ma-sm flex items-center">
-        <span class="text-weight-bold article-heading">Preis angeben</span>
-        <q-space/>
-        <q-circular-progress
-          show-value
-          class="text-accent q-ma-md"
-          :value="progress"
-          size="32px"
-          color="primary"
-      />
         <q-card class="q-ma-sm q-pa-md bg-primary flex card">
            <div class="first-column flex">
-                <q-input rounded outlined :bg-color="text ? 'green' : 'blue'" v-model="text" label="Rounded outlined" />
-                <q-input rounded outlined :bg-color="text ? 'green' : 'blue'" v-model="text" label="Input" />
-                <q-input rounded outlined :bg-color="text ? 'green' : 'blue'" v-model="text" label="Input" />
-           </div>
-           <div class="second-column flex">
-                <q-input rounded outlined :bg-color="text ? 'green' : 'blue'" v-model="text" label="Input" />
-                <q-input rounded outlined :bg-color="text ? 'green' : 'blue'" v-model="text" label="Input" />
-                <q-input rounded outlined :bg-color="text ? 'green' : 'blue'" v-model="text" label="Input" />
+                <div v-for="(input, index) of element.filter((input: any) => input.label)" :key="index">
+                  <InputField
+                    :element="input"
+                  />
+                </div>
            </div>
         </q-card>
     </div>
 </template>
 
 <script lang="ts">
+
 import { defineComponent, ref } from 'vue'
+import InputField from 'src/components/configurator/cards/InputField.vue'
+
+
 export default defineComponent({
     name: 'InputFieldsCard',
+    props: {
+        element: {
+            type: Object,
+            required: true
+        }
+    },
+    components: {
+        InputField
+    },
     setup () {
+
         return {
             text: ref('Placeholder'),
             progress: ref(55)

@@ -1,39 +1,56 @@
 <template>
-    <div class="q-pa-sm">
-        <span class="text-weight-bold product-title">{{ element.label }}</span>
-        <div class="wrapper q-pl-sm">
-            <component
-                v-for="file in element.fileIds"
-                :is="element.label === 'Mitarbeiter' ? 'Mitarbeiter' : 'ProductCard'"
-                :key="file.elementId"
-                :id="file"
-            />
+    <div class="">
+        <div class="wrapper q-pl-sm" v-if="element">
+            <div
+                v-for="card in element.filter(element => element.label)"
+                :key="card.data.elementId"
+            >
+                <component
+                    :is="getComponentById(card.data[0].elementId)"
+                    :element="card.data"
+                    :numberToSelect="numberToSelect"
+                    :disable="!!(numberToSelect && selectedData.length >= numberToSelect) && selectedData.find(element => element === card.data[0].id) !== card.data[0].id"
+                />
+            </div>
         </div>
     </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
-import ProductCard from 'src/components/configurator/ProductCard.vue'
-import Mitarbeiter from 'src/components/configurator/MitarbeiterCard.vue'
+import { defineComponent, inject, onMounted, ref } from 'vue'
+import { useComponentStore } from 'stores/component-hub-store'
+
 export default defineComponent({
     name: 'CardCarousel',
-    components: {
-        ProductCard,
-        Mitarbeiter
-    },
-    props:{
+    props: {
         element: {
             type: Object,
             required: true
+        },
+        numberToSelect: {
+            type: Number,
+            required: false
         }
     },
-    setup() {
-        return {
+    setup(props){
+        const componentHub = useComponentStore()
+        const selectedData = inject('selectedData') as string[]
 
+        const getComponentById = (id: string) => {
+            return componentHub.getComponentById(id)
+        }
+
+        onMounted(() => {
+            console.log(props.element, 'element')
+        })
+
+        return {
+            selectedData,
+            getComponentById
         }
     }
 })
+
 </script>
 
 <style scoped>
