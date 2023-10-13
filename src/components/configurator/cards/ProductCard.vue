@@ -1,12 +1,12 @@
 <template>
     <q-card class="custom-card bg-primary q-my-md flex">
-        <q-img class="custom-img" :src="`https://images.bocom.at/${element.find((element: any) => element.label === 'Bild').value}`"></q-img>
+        <q-img class="custom-img" fit="scale-down" :src="`https://images.bocom.at/${element.find((element: any) => element.label === 'Bild').value}`"></q-img>
         <div class="flex-column q-pa-sm no-wrap">
             <div class="custom-text q-mb-none text-weight-bold text-left">
-                {{ element.find((element: any) => element.label === 'Titel').value }}
                 {{ element.find((element: any) => element.label === 'Name').value }}
             </div>
-            {{ element.find((element: any) => element.label === 'Position').value }}
+             € {{ element.find((element: any) => element.label === 'Preis').value }} <br>
+             {{ element.find((element: any) => element.label === 'Menge').value }}
         </div>
 
         <q-toggle
@@ -25,7 +25,7 @@ import { useFileStore } from 'stores/file-store'
 import { cloneDeep } from 'lodash';
 
 export default defineComponent({
-    name: 'MitartbeiterCard',
+    name: 'ProductCard',
     props: {
         element: {
             type: Object,

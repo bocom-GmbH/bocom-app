@@ -29,7 +29,7 @@ export default defineComponent({
     },
     setup () {
 
-        const selectedData = ref([])
+        const selectedData = ref<string[]>([])
 
         provide('selectedData',selectedData)
 

@@ -1,6 +1,5 @@
 <template>
 	<q-layout view="lHh Lpr lFf">
-
         <AppHeader />
 
         <q-page-container>
@@ -16,17 +15,18 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, ref, onMounted } from 'vue';
+import { defineComponent, computed, ref, onMounted, watch } from 'vue';
 import { useUserStore } from 'src/stores/authentication';
 import { useFileStore } from 'stores/file-store';
 
 import BottomMenu from 'src/components/BottomMenu.vue';
 import { bottomMenuList } from 'src/BottomMenuConfig';
-
+import { useQuasar } from 'quasar'
 
 import { useQuery } from '@vue/apollo-composable'
 import { getMagazine } from '../apollo/queries/files'
 import AppHeader from 'src/components/AppHeader.vue';
+
 
 export default defineComponent({
 	name: 'MainLayout',
@@ -35,6 +35,7 @@ export default defineComponent({
         AppHeader
     },
     setup(){
+        const $q = useQuasar()
         const store = useUserStore();
         const drawer = ref(false)
         if(window.localStorage.getItem('permissions')){

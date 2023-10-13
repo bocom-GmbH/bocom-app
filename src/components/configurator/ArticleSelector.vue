@@ -9,9 +9,12 @@
             class="carousel-styled bg-primary q-pa-md q-ma-sm"
             ref="carousel"
         >
-        <q-carousel-slide v-for="(slide, index) in element.slice(1)" :key="index" class="q-pa-none" :name="index">
-             <ArticleCard :slide="slide.data" />
-          </q-carousel-slide>
+            <q-carousel-slide v-for="(slide, index) in element.slice(1)" :key="index" class="q-pa-none" :name="index">
+                <ArticleCard
+                    :slide="slide.data"
+                    :disable="!!(numberToSelect && selectedData.length >= numberToSelect) && selectedData.find(element => element === slide.data[0].id) !== slide.data[0].id"
+                />
+            </q-carousel-slide>
             <template v-slot:control>
                 <q-carousel-control
                     position="bottom-left"
@@ -39,7 +42,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref } from 'vue'
+import { defineComponent, inject, ref } from 'vue'
 import ArticleCard from './cards/ArticleCard.vue'
 
 export default defineComponent({
@@ -48,15 +51,21 @@ export default defineComponent({
         element: {
             type: Object,
             required: true
+        },
+        numberToSelect: {
+            type: Number,
+            required: false
         }
     },
     components: {
         ArticleCard
     },
     setup() {
+        const selectedData = inject('selectedData') as string[]
 
         return {
             slide: ref(0),
+            selectedData
         };
     }
 })

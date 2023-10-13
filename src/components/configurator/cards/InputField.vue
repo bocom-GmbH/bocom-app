@@ -28,10 +28,6 @@ export default defineComponent({
         const fileStore = useFileStore()
         const elementsCopy = ref<any>({})
 
-        onMounted(() => {
-           console.log(props.element)
-        })
-
         onBeforeMount(() => {
             elementsCopy.value = cloneDeep(props.element)
         })
@@ -41,8 +37,12 @@ export default defineComponent({
         }, 300);
 
         watch(elementsCopy, () => {
-            debouncedUpdate(elementsCopy, fileStore, elementsCopy.value.data[0].id);
-        },{ deep: true })
+            if(JSON.stringify(elementsCopy.value) === JSON.stringify(props.element)) {
+                return;
+            } else {
+                debouncedUpdate(elementsCopy, fileStore, elementsCopy.value.data[0].id);
+            }
+        }, { deep: true })
 
         return {
             elementsCopy

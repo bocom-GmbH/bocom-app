@@ -1,40 +1,56 @@
 <template>
-    <div class="q-pa-sm">
+    <div class="">
         <div class="wrapper q-pl-sm" v-if="element">
             <div
-                v-for="card in element.slice(1)"
+                v-for="card in element.filter(element => element.label)"
                 :key="card.data.elementId"
             >
-
-            <component
-                :is="componentHub.getComponentById(card.data[0].elementId)"
-                :element="card.data"
-            />
+                <component
+                    :is="getComponentById(card.data[0].elementId)"
+                    :element="card.data"
+                    :numberToSelect="numberToSelect"
+                    :disable="!!(numberToSelect && selectedData.length >= numberToSelect) && selectedData.find(element => element === card.data[0].id) !== card.data[0].id"
+                />
+            </div>
         </div>
-    </div>
     </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, inject, onMounted, ref } from 'vue'
 import { useComponentStore } from 'stores/component-hub-store'
 
 export default defineComponent({
     name: 'CardCarousel',
-
-    props:{
+    props: {
         element: {
             type: Object,
             required: true
+        },
+        numberToSelect: {
+            type: Number,
+            required: false
         }
     },
-    setup() {
+    setup(props){
         const componentHub = useComponentStore()
+        const selectedData = inject('selectedData') as string[]
+
+        const getComponentById = (id: string) => {
+            return componentHub.getComponentById(id)
+        }
+
+        onMounted(() => {
+            console.log(props.element, 'element')
+        })
+
         return {
-            componentHub
+            selectedData,
+            getComponentById
         }
     }
 })
+
 </script>
 
 <style scoped>

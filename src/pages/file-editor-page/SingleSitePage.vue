@@ -14,6 +14,7 @@
                             v-if="components && component"
                             :element="component.data"
                             :is="componentHub.getComponentById(component.data[0].elementId)"
+                            :numberToSelect="component.data[0].numberToSelect"
                         />
                     </div>
                 </template>
@@ -67,6 +68,7 @@ export default defineComponent({
         watch(() => fileStore.getCurrentSiteComponents(), () => {
             components.value = fileStore.getCurrentSiteComponents()
         })
+
 
 
         const querySiteData = (siteById: string) => {

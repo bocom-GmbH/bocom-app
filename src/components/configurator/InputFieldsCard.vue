@@ -14,7 +14,7 @@
 
 <script lang="ts">
 
-import { defineComponent, onMounted, ref, watch, onBeforeMount } from 'vue'
+import { defineComponent, ref } from 'vue'
 import InputField from 'src/components/configurator/cards/InputField.vue'
 
 

@@ -4,14 +4,20 @@
         <div class="flex-column q-pa-sm no-wrap">
             <div class="custom-text q-mb-none text-weight-bold text-left"> {{ element[1].label }} </div>
         </div>
-        <q-toggle class="q-mt-xs" color="positive" v-model="elementsCopy[0].selected" size="70px"/>
+        <q-toggle
+            class="q-mt-xs"
+            color="positive"
+            v-model="elementsCopy[0].selected"
+            size="70px"
+            :disable="disable"
+        />
     </q-card>
 </template>
 
 <script lang="ts">
 import { defineComponent, onMounted, ref, inject, watch, onBeforeMount } from 'vue'
 import { useFileStore } from 'stores/file-store'
-import { cloneDeep } from 'lodash';
+import { cloneDeep } from 'lodash'
 
 export default defineComponent({
     name: 'ImageCard',
@@ -19,6 +25,10 @@ export default defineComponent({
         element: {
             type: Object,
             required: true
+        },
+        disable: {
+            type: Boolean,
+            required: false
         }
     },
     setup(props) {
@@ -28,7 +38,8 @@ export default defineComponent({
         onBeforeMount(() => {
             elementsCopy.value = cloneDeep(props.element)
         })
-        const selectedData = inject('selectedData')
+
+        const selectedData = inject('selectedData') as string[]
 
         watch(elementsCopy, () => {
             fileStore.update(props.element[0].id, elementsCopy.value)
@@ -38,7 +49,7 @@ export default defineComponent({
                 (selectedData as any).value = (selectedData as any).value.filter((item: any) => item !== props.element[0].id)
             }
 
-        },{ deep: true })
+        }, { deep: true })
 
         return {
             elementsCopy

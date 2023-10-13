@@ -3,9 +3,9 @@ import CardCarousel from 'src/components/configurator/CardCarousel.vue';
 import ImageCard from 'src/components/configurator/cards/ImageCard.vue';
 import ArticleSelector from 'src/components/configurator/ArticleSelector.vue';
 import InputFieldsCard from 'src/components/configurator/InputFieldsCard.vue';
-/* import GroupingComponent from 'src/components/configurator/GroupingComponent.vue'; */
+import GroupingComponent from 'src/components/configurator/GroupingComponent.vue';
 import MitarberiterCard from 'src/components/configurator/cards/MitarbeiterCard.vue';
-
+import ProductCard from 'src/components/configurator/cards/ProductCard.vue';
 
 interface ComponentPairs {
 	componentId: string;
@@ -38,7 +38,15 @@ export const useComponentStore = defineStore('componentHub', {
 		{
 			componentId: 'ca3f3f67-aafc-4c5d-96a1-9c3ca5d3f299',
 			component: CardCarousel,
-		}
+		},
+        {
+            componentId: 'b98ab93f-06fb-4bad-bd6d-217eadc20d3c',
+            component: GroupingComponent,
+        },
+        {
+            componentId: 'da0cea85-1eaf-425d-9ae2-9a3cf64ccbac',
+            component: ProductCard
+        }
 	] as ComponentPairs[],
 	}),
 
