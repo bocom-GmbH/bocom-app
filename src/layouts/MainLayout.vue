@@ -1,8 +1,7 @@
 <template>
-	<q-layout view="lHh Lpr lFf">
-
-		<q-header elevated>
-			<q-toolbar>
+    <q-layout view="lHh Lpr lFf">
+        <q-header elevated>
+            <q-toolbar>
                 <q-btn
                     color="primary"
                     icon="arrow_back"
@@ -10,18 +9,15 @@
                     @click="goBack"
                     round
                 />
+            </q-toolbar>
+        </q-header>
 
-			</q-toolbar>
-		</q-header>
+        <q-page-container>
+            <router-view />
+        </q-page-container>
 
-	<q-page-container>
-		<router-view />
-	</q-page-container>
-
-	<BottomMenu
-		:bottomMenuList="bottomMenu"
-	/>
-	</q-layout>
+        <BottomMenu :bottomMenuList="bottomMenu" />
+    </q-layout>
 </template>
 
 <script lang="ts">
@@ -30,49 +26,50 @@ import { Cookies } from 'quasar';
 import { useUserStore } from 'src/stores/authentication';
 import BottomMenu from 'src/components/BottomMenu.vue';
 
-
 import { useFileStore } from 'stores/file-store';
-import { useQuery } from '@vue/apollo-composable'
-import { getMagazine } from '../apollo/queries/files'
+import { useQuery } from '@vue/apollo-composable';
+import { getMagazine } from '../apollo/queries/files';
 
 export default defineComponent({
-	name: 'MainLayout',
+    name: 'MainLayout',
     components: {
-        BottomMenu
+        BottomMenu,
     },
-    setup(){
+    setup() {
         const store = useUserStore();
-        const drawer = ref(false)
-        store.setPermissions(window.localStorage.getItem('permissions')?.split(','))
+        const drawer = ref(false);
+        if (window.localStorage.getItem('permissions')) {
+            store.setPermissions(
+                window.localStorage.getItem('permissions')?.split(',')
+            );
+        }
         const fileStore = useFileStore();
-        const magazine = ref({})
+        const magazine = ref({});
 
         const goBack = () => {
-			history.back();
-		};
+            history.back();
+        };
         const queryFileData = () => {
             try {
                 const { onResult } = useQuery(
-                    getMagazine, () => ({
-
-                    }),
+                    getMagazine,
+                    () => ({}),
                     () => ({
                         errorPolicy: 'all',
                     })
-                )
+                );
                 onResult((result) => {
-                    magazine.value = result
-                    fileStore.setFileData(result.data?.Magazin)
-                })
-            } catch ( error) {
-                console.log(error)
+                    magazine.value = result;
+                    fileStore.setFileData(result.data?.Magazin);
+                });
+            } catch (error) {
+                console.log(error);
             }
-        }
+        };
 
-        onMounted( () => {
-            queryFileData()
-        })
-
+        onMounted(() => {
+            queryFileData();
+        });
 
         const bottomMenu = computed(() => [
             {
@@ -93,7 +90,7 @@ export default defineComponent({
             bottomMenu,
             drawer,
             goBack,
-        }
-    }
+        };
+    },
 });
 </script>
