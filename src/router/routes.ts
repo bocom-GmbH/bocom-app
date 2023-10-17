@@ -30,9 +30,13 @@ const routes: RouteRecordRaw[] = [
         path: '/HomePage/FileEditorPage',
         name: 'FileEditorPage',
         props: true,
-        component: MainLayout,
+        component: () => MainLayout,
         children: [
-            { path: ':magazineId', component: FileEditorPage, props: true },
+            {
+                path: ':magazineId',
+                component: () => FileEditorPage,
+                props: true,
+            },
         ],
     },
 

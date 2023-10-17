@@ -46,6 +46,10 @@ export const useComponentStore = defineStore('componentHub', {
         {
             componentId: 'da0cea85-1eaf-425d-9ae2-9a3cf64ccbac',
             component: ProductCard
+        },
+        {
+            componentId: 'f1d28863-d476-4fa1-856c-4640765a4807',
+            component: ProductCard
         }
 	] as ComponentPairs[],
 	}),
