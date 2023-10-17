@@ -29,7 +29,7 @@ import AppHeader from 'src/components/AppHeader.vue';
 
 
 export default defineComponent({
-	name: 'MainLayout',
+    name: 'MainLayout',
     components: {
         BottomMenu,
         AppHeader
@@ -45,30 +45,25 @@ export default defineComponent({
             store.setUserData(window.localStorage.getItem('apollo-token'))
         }
         const fileStore = useFileStore();
-        const magazine = ref({})
+        const magazine = ref({});
 
         const queryFileData = () => {
             try {
                 const { onResult } = useQuery(
-                    getMagazine, () => ({
-
-                    }),
+                    getMagazine,
+                    () => ({}),
                     () => ({
                         errorPolicy: 'all',
                     })
-                )
+                );
                 onResult((result) => {
-                    magazine.value = result
-                    fileStore.setFileData(result.data?.Magazin)
-                })
-            } catch ( error) {
-                console.log(error)
+                    magazine.value = result;
+                    fileStore.setFileData(result.data?.Magazin);
+                });
+            } catch (error) {
+                console.log(error);
             }
-        }
-
-        onMounted( () => {
-            queryFileData()
-        })
+        };
 
         return {
             bottomMenuList,
