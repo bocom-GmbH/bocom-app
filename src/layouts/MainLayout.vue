@@ -1,5 +1,5 @@
 <template>
-	<q-layout view="lHh Lpr lFf">
+    <q-layout view="lHh Lpr lFf">
         <AppHeader />
 
         <q-page-container>
@@ -8,10 +8,8 @@
             </keep-alive>
         </q-page-container>
 
-        <BottomMenu
-            :bottomMenuList="bottomMenuList"
-        />
-	</q-layout>
+        <BottomMenu :bottomMenuList="bottomMenuList" />
+    </q-layout>
 </template>
 
 <script lang="ts">
@@ -21,28 +19,29 @@ import { useFileStore } from 'stores/file-store';
 
 import BottomMenu from 'src/components/BottomMenu.vue';
 import { bottomMenuList } from 'src/BottomMenuConfig';
-import { useQuasar } from 'quasar'
+import { useQuasar } from 'quasar';
 
-import { useQuery } from '@vue/apollo-composable'
-import { getMagazine } from '../apollo/queries/files'
+import { useQuery } from '@vue/apollo-composable';
+import { getMagazine } from '../apollo/queries/files';
 import AppHeader from 'src/components/AppHeader.vue';
-
 
 export default defineComponent({
     name: 'MainLayout',
     components: {
         BottomMenu,
-        AppHeader
+        AppHeader,
     },
-    setup(){
-        const $q = useQuasar()
+    setup() {
+        const $q = useQuasar();
         const store = useUserStore();
-        const drawer = ref(false)
-        if(window.localStorage.getItem('permissions')){
-            store.setPermissions(window.localStorage.getItem('permissions')?.split(','))
+        const drawer = ref(false);
+        if (window.localStorage.getItem('permissions')) {
+            store.setPermissions(
+                window.localStorage.getItem('permissions')?.split(',')
+            );
         }
-        if(window.localStorage.getItem('apollo-token')) {
-            store.setUserData(window.localStorage.getItem('apollo-token'))
+        if (window.localStorage.getItem('apollo-token')) {
+            store.setUserData(window.localStorage.getItem('apollo-token'));
         }
         const fileStore = useFileStore();
         const magazine = ref({});
@@ -65,10 +64,14 @@ export default defineComponent({
             }
         };
 
+        onMounted(() => {
+            queryFileData();
+        });
+
         return {
             bottomMenuList,
-            drawer
-        }
-    }
+            drawer,
+        };
+    },
 });
 </script>

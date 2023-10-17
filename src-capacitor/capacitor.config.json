@@ -1,0 +1,10 @@
+{
+  "appId": "gmbh.bocom.apomarketing",
+  "appName": "Bocom",
+  "bundledWebRuntime": false,
+  "npmClient": "yarn",
+  "webDir": "www",
+  "server": {
+    "androidScheme": "https"
+  }
+}

@@ -1,0 +1,73 @@
+Title: Building an App with Quasar Framework and Cordova
+
+Introduction:
+In this tutorial, we will walk through the process of building a mobile application using the Quasar Framework and Cordova. A gentle reminder: it's advisable not to use lazy loads in the router for this setup.
+
+Let's dive in:
+
+Add Cordova Mode to Quasar:
+Begin by adding Cordova mode to your Quasar project with the following command:
+
+bash
+Copy code
+quasar mode add cordova
+Navigate to src-cordova Directory:
+Change your directory to src-cordova:
+
+bash
+Copy code
+cd src-cordova
+Create www Directory:
+Create a new directory named www within src-cordova:
+
+bash
+Copy code
+mkdir www
+Add iOS Platform:
+Now, add the iOS platform to your Cordova project:
+
+bash
+Copy code
+cordova platform add ios
+Check and Install Requirements:
+Run the following command to check for and install any necessary requirements:
+
+bash
+Copy code
+cordova requirements
+If prompted, install the required packages.
+Additional Dependency Installation:
+Sometimes, you might need to run yarn install in the src-cordova folder:
+
+bash
+Copy code
+yarn install
+Add Necessary Cordova Plugins:
+Add the Ionic WebView Cordova plugin:
+
+bash
+Copy code
+cordova plugin add cordova-plugin-ionic-webview
+If needed, you can install the "save areas" plugin.
+Build Your Quasar Project:
+Build your Quasar project for Cordova:
+
+bash
+Copy code
+quasar build -m cordova -T ios --ide
+Configure in Xcode:
+Once the build process completes, the rest of the configuration will be done in Xcode:
+
+Click on your project's .xcodeproj file to open it in Xcode.
+Select the target for your app, then set the signing with your bundle ID.
+Set the iOS version you wish to target.
+Remove iPad and macOS as target devices if not needed.
+Edit the config.xml File:
+In the config.xml file, add the following lines to enable scrolling on iOS:
+
+xml
+Copy code
+<platform name="ios">
+  <preference name="ScrollEnabled" value="true" />
+</platform>
+Your Quasar app is now configured and ready for further development and testing on iOS devices. Happy coding!
