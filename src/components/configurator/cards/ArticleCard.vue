@@ -1,11 +1,11 @@
 <template>
      <q-card flat class="card-styled q-pa-md q-pa-none text-center bg-primary">
         <span class="card-title text-h5"> {{ slide.find((element:any) => element.label === 'Titel').value }} </span> <br> <br>
-       <!--  <span class="card-title text-left"> {{ slide.find((element:any) => element.label === 'Untertitel').value }} </span> -->
-            <div class="synopsys text-left" v-html="slide.find((element:any) => element.label === 'Text').value">
+        <div class="synopsys">
+            <div ref="article" class="fixed-height text-left" v-html="slide.find((element:any) => element.label === 'Text').value">
             </div>
+        </div>
         <q-toggle
-            class="q-mt-xs"
             color="positive"
             size="70px"
             v-model="elementsCopy[0].selected"
@@ -17,7 +17,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onBeforeMount, ref, inject, watch } from 'vue'
+import { defineComponent, onBeforeMount, ref, inject, watch, onMounted } from 'vue'
 import { cloneDeep } from 'lodash';
 import { useFileStore } from 'stores/file-store'
 
@@ -37,12 +37,20 @@ export default defineComponent({
         const selected = ref<boolean>(false)
         const fileStore = useFileStore()
         const elementsCopy = ref<object>({})
-
+        const articleHeight = ref(inject('articleHeight'))
         const currentSlideId = ref(inject('currentSlideId'))
+        const divRef = ref(null);
+
+
 
         onBeforeMount(() => {
             elementsCopy.value = cloneDeep(props.slide)
             currentSlideId.value = elementsCopy.value[0].id
+        })
+        onMounted(()=> {
+            if (divRef.value) {
+                articleHeight.value = divRef.value.offsetHeight;
+            }
         })
 
         const selectedData = inject('selectedData')
@@ -73,3 +81,14 @@ export default defineComponent({
 })
 
 </script>
+
+<style scoped>
+.card-styled{
+    height: auto;
+}
+.synopsys {
+    height: 185px;
+    overflow: auto;
+    margin: 0 !important;
+}
+</style>

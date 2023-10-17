@@ -41,7 +41,7 @@ export default defineComponent({
         }
 
         onMounted(() => {
-            console.log(props.element, 'element')
+            //console.log(props.element, 'element')
         })
 
         return {

@@ -13,25 +13,25 @@ const routes: RouteRecordRaw[] = [
     },
     {
         path: '/HomePage',
-        component: () => (MainLayout),
-        children: [{ path: '', component: () => (HomePage) }],
+        component: MainLayout,
+        children: [{ path: '', component: HomePage }],
     },
     {
         path: '/login',
-        component: () => (LoginLayout),
-        children: [{ path: '', component: () => (LoginPage) }],
+        component: LoginLayout,
+        children: [{ path: '', component: LoginPage }],
     },
     {
         path: '/UserPage',
-        component: () => (MainLayout),
-        children: [{ path: '', component: () =>(UserPage) }],
+        component: MainLayout,
+        children: [{ path: '', component: UserPage }],
     },
     {
         path: '/HomePage/FileEditorPage',
         name: 'FileEditorPage',
         props: true,
-        component: () => (MainLayout),
-        children: [{ path: ':magazineId', component: () => (FileEditorPage), props: true }],
+        component: MainLayout,
+        children: [{ path: ':magazineId', component: FileEditorPage, props: true }],
     },
 
     // Always leave this as last one,
