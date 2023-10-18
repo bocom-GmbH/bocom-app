@@ -3,11 +3,12 @@
         <q-carousel
             animated
             v-model="slide"
-            navigation
+            :navigation="selectedData.length !== numberToSelect"
             transition-prev="slide-right"
             transition-next="slide-left"
-            class="carousel-styled bg-primary q-pa-md q-ma-sm"
+            class="carousel-styled bg-primary q-pa-md q-ma-sm q-pb-xl"
             ref="carousel"
+            :swipeable="selectedData.length !== numberToSelect"
         >
             <q-carousel-slide v-for="(slide, index) in element.slice(1)" :key="index" class="q-pa-none" :name="index">
                 <ArticleCard
@@ -15,7 +16,7 @@
                     :disable="!!(numberToSelect && selectedData.length >= numberToSelect) && selectedData.find(element => element === slide.data[0].id) !== slide.data[0].id"
                 />
             </q-carousel-slide>
-            <template v-slot:control>
+            <template v-if="numberToSelect !== selectedData.length" v-slot:control>
                 <q-carousel-control
                     position="bottom-left"
                     :offset="[18, 18]"

@@ -2,6 +2,8 @@ import { defineStore } from 'pinia';
 import { save } from 'app/src/functions/saveTemplate';
 import { cloneDeep, find, forEach } from 'lodash';
 
+import { IFileData } from 'src/types';
+
 function updateNestedObject(store: any, id: string, updatedObject: any): void {
     const clonedStore = cloneDeep(store);
 
@@ -31,7 +33,7 @@ function updateNestedObject(store: any, id: string, updatedObject: any): void {
 
 export const useFileStore = defineStore('file', {
     state: () => ({
-        fileData: [] as object[],
+        fileData: [] as IFileData[],
         currentSite: null
     }),
 
@@ -39,7 +41,7 @@ export const useFileStore = defineStore('file', {
         getFileData (state) {
             return state.fileData;
         },
-        getFileDataById: (state) => (id: string) => {
+        getFileDataById: (state) => (id: string) :IFileData | undefined => {
             return state.fileData?.find((file: any) => file.id === id);
         },
         getCurrentSiteComponents: (state) => () => {
@@ -47,7 +49,7 @@ export const useFileStore = defineStore('file', {
         }
     },
     actions: {
-        setFileData (singleFile: object[]): void {
+        setFileData (singleFile: IFileData[]): void {
             this.fileData = singleFile;
         },
         setCurrentSite (site: any): void {

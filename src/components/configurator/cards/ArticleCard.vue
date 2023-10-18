@@ -1,8 +1,8 @@
 <template>
-     <q-card flat class="card-styled q-pa-md q-pa-none text-center bg-primary">
+    <q-card flat class="card-styled q-pa-md q-pa-none text-center bg-primary">
         <span class="card-title text-h5"> {{ slide.find((element:any) => element.label === 'Titel').value }} </span> <br> <br>
-        <div class="synopsys">
-            <div ref="article" class="fixed-height text-left" v-html="slide.find((element:any) => element.label === 'Text').value">
+        <div  ref="divRef" class="synopsys">
+            <div class="fixed-height text-left" v-html="slide.find((element:any) => element.label === 'Text').value">
             </div>
         </div>
         <q-toggle
@@ -47,6 +47,7 @@ export default defineComponent({
             elementsCopy.value = cloneDeep(props.slide)
             currentSlideId.value = elementsCopy.value[0].id
         })
+
         onMounted(()=> {
             if (divRef.value) {
                 articleHeight.value = divRef.value.offsetHeight;
@@ -73,7 +74,8 @@ export default defineComponent({
 
         return {
             selected,
-            elementsCopy
+            elementsCopy,
+            divRef
         }
 
     }
@@ -87,8 +89,9 @@ export default defineComponent({
     height: auto;
 }
 .synopsys {
-    height: 185px;
+    max-height: 185px;
     overflow: auto;
     margin: 0 !important;
+
 }
 </style>

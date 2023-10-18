@@ -17,7 +17,7 @@
 <script lang="ts">
 import { defineComponent, toRefs } from 'vue';
 import { useFileStore } from 'stores/file-store';
-
+import { IFileData } from 'src/types/index';
 
 export default defineComponent({
     name: 'MagazineItem',
@@ -32,7 +32,7 @@ export default defineComponent({
 
         const { id } = toRefs(props)
 
-        const magazineLabel = fileStore.getFileDataById(id.value)
+        const magazineLabel = fileStore.getFileDataById(id.value) as IFileData
 
         return {
             label: magazineLabel.label

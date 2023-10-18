@@ -3,11 +3,13 @@
         <q-carousel
             animated
             v-model="slide"
-            navigation
+            :navigation="selectedArticle.length === 0"
             transition-prev="slide-right"
             transition-next="slide-left"
-            class="carousel-styled body"
+            class="carousel-styled body q-mb-lg q-pb-md"
             ref="carousel"
+            style="border-radius: 12px;"
+            :swipeable="selectedArticle.length === 0"
         >
         <q-carousel-slide v-for="(slide, index) in element[1].data.filter(element => element.label === 'Story')" :key="index" class="q-pa-none" :name="index">
                 <ArticleCard
@@ -43,7 +45,7 @@
             <template v-slot:control v-if="selectedArticle.length === 0">
                 <q-carousel-control
                     position="top-left"
-                    :offset="[18,270]"
+                    :offset="[18, articleHeight + 85]"
                     class="q-gutter-xs"
                 >
                 <q-btn
@@ -53,7 +55,7 @@
                 </q-carousel-control>
                 <q-carousel-control
                     position="top-right"
-                    :offset="[18,270]"
+                    :offset="[18, articleHeight + 85]"
                     class="q-gutter-xs"
                 >
                 <q-btn
