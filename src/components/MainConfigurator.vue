@@ -11,6 +11,7 @@
 <script lang="ts">
 import { defineComponent, provide, ref } from 'vue'
 import CircularProgress from 'src/components/configurator/CircularProgress.vue';
+import { selectedDataSymbol } from 'src/types/index';
 
 export default defineComponent({
     name: 'MainConfigurator',
@@ -31,7 +32,19 @@ export default defineComponent({
 
         const selectedData = ref<string[]>([])
 
-        provide('selectedData',selectedData)
+        const addElementToSelectedData = (element: string) => {
+            selectedData.value.push(element)
+        }
+
+        const removeElementFromSelectedData = (element: string) => {
+            selectedData.value = selectedData.value.filter(item => item !== element)
+        }
+
+        provide(selectedDataSymbol, {
+            selectedData,
+            addElementToSelectedData,
+            removeElementFromSelectedData
+        })
 
         return {
             selectedData

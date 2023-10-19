@@ -74,6 +74,7 @@ import ArticleCard from './cards/ArticleCard.vue'
 import { cloneDeep } from 'lodash'
 import CardCarousel from './CardCarousel.vue';
 import MainConfigurator from '../MainConfigurator.vue';
+import { selectedDataSymbol, IselectedData } from 'src/types/index'
 
 
 export default defineComponent({
@@ -95,7 +96,7 @@ export default defineComponent({
     },
     setup(props){
 
-        const selectedData = inject('selectedData') as string[]
+        const selectedData = inject(selectedDataSymbol).selectedData as string[]
         const elementsCopy = ref<object>({})
         const articleHeight = ref(0)
         const currentSlideId = ref('')
@@ -103,7 +104,7 @@ export default defineComponent({
         provide('currentSlideId', currentSlideId)
         provide('articleHeight', articleHeight)
 
-        const selectedArticle = inject('selectedData')
+        const selectedArticle = inject(selectedDataSymbol).selectedData
 
         onBeforeMount(() => {
             elementsCopy.value = cloneDeep(props.element)

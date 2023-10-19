@@ -23,6 +23,7 @@
 import { defineComponent, onBeforeMount, onMounted, ref, inject, watch } from 'vue'
 import { useFileStore } from 'stores/file-store'
 import { cloneDeep } from 'lodash';
+import { selectedDataSymbol, IselectedData } from 'src/types/index'
 
 export default defineComponent({
     name: 'ProductCard',
@@ -51,14 +52,14 @@ export default defineComponent({
             selected.value = props.element[0].selected
         })
 
-        const selectedData = inject('selectedData')
+        const data = inject(selectedDataSymbol) as IselectedData
 
         watch(elementsCopy, () => {
             fileStore.update(props.element[0].id, elementsCopy.value)
             if ((elementsCopy as any).value[0].selected) {
-                (selectedData as any).value.push(props.element[0].id)
+                data.addElementToSelectedData(props.element[0].id)
             } else {
-                (selectedData as any).value = (selectedData as any).value.filter((item: any) => item !== props.element[0].id)
+                data.removeElementFromSelectedData(props.element[0].id)
             }
 
         },{ deep: true })

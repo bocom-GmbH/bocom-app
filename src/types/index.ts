@@ -8,3 +8,12 @@ export interface IFileData {
 export interface IData {
     data: IData[];
 }
+
+export interface IselectedData {
+    selectedData: string[];
+    addElementToSelectedData: CallableFunction;
+    removeElementFromSelectedData: CallableFunction;
+}
+
+export const selectedDataSymbol = Symbol('selectedData');
+

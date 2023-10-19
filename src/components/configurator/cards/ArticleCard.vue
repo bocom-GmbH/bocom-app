@@ -20,6 +20,7 @@
 import { defineComponent, onBeforeMount, ref, inject, watch, onMounted } from 'vue'
 import { cloneDeep } from 'lodash';
 import { useFileStore } from 'stores/file-store'
+import { selectedDataSymbol, IselectedData } from 'src/types/index'
 
 export default defineComponent({
     name: 'ArticleCard',
@@ -37,7 +38,7 @@ export default defineComponent({
         const selected = ref<boolean>(false)
         const fileStore = useFileStore()
         const elementsCopy = ref<object>({})
-        const articleHeight = ref(inject('articleHeight'))
+        const articleHeight = ref<number | null>(inject('articleHeight', null));
         const currentSlideId = ref(inject('currentSlideId'))
         const divRef = ref(null);
 
@@ -54,7 +55,7 @@ export default defineComponent({
             }
         })
 
-        const selectedData = inject('selectedData')
+        const data = inject(selectedDataSymbol) as IselectedData
 
         watch(elementsCopy, () => {
             if(JSON.stringify(elementsCopy.value) === JSON.stringify(props.slide)) {
@@ -63,9 +64,9 @@ export default defineComponent({
 
                 fileStore.update(props.slide[0].id, elementsCopy.value)
                 if ((elementsCopy as any).value[0].selected) {
-                    (selectedData as any).value.push(props.slide[0].id)
+                    data.addElementToSelectedData(props.slide[0].id)
                 } else {
-                    (selectedData as any).value = (selectedData as any).value.filter((item: any) => item !== props.slide[0].id)
+                    data.removeElementFromSelectedData(props.slide[0].id)
                 }
 
             }

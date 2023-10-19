@@ -19,6 +19,7 @@
 <script lang="ts">
 import { defineComponent, inject, onMounted, ref } from 'vue'
 import { useComponentStore } from 'stores/component-hub-store'
+import { selectedDataSymbol } from 'src/types/index'
 
 export default defineComponent({
     name: 'CardCarousel',
@@ -34,7 +35,8 @@ export default defineComponent({
     },
     setup(props){
         const componentHub = useComponentStore()
-        const selectedData = inject('selectedData') as string[]
+        const data = inject(selectedDataSymbol) as object
+        const selectedData = data.selectedData
 
         const getComponentById = (id: string) => {
             return componentHub.getComponentById(id)
