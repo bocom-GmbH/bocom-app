@@ -1,5 +1,5 @@
 <template>
-    <div v-if="magazine?.TemplateIds">
+    <div v-if="magazine?.TemplateIds" ref="scrollArea">
        <SingleSitePage
             :siteId="magazine.TemplateIds[currentSite - 1]"
        />
@@ -25,7 +25,7 @@
 
 <script lang="ts">
 //import ArticleSelector from 'src/components/configurator/ArticleSelector.vue';
-import { defineComponent, onMounted, ref, watch } from 'vue';
+import { defineComponent, onMounted, ref, watch, inject } from 'vue';
 import { useFileStore } from 'stores/file-store';
 import { useRoute } from 'vue-router';
 import { storeToRefs } from 'pinia';
@@ -43,6 +43,7 @@ export default defineComponent({
         SingleSitePage
     },
     setup() {
+        const $q = inject('$q');
         const route = useRoute();
         const fileStore = useFileStore();
         const magazine = ref();
@@ -51,7 +52,6 @@ export default defineComponent({
 
         const currentSite = ref(1);
 
-
         onMounted(() => {
             magazine.value = fileStore.getFileDataById(route.params.magazineId);
         });
@@ -59,6 +59,7 @@ export default defineComponent({
         watch(getFileData, () => {
             magazine.value = fileStore.getFileDataById(route.params.magazineId);
         });
+
 
         return {
             magazine,

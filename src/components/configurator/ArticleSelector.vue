@@ -2,8 +2,8 @@
     <div class="q-ma-sm">
         <q-carousel
             animated
-            v-model="slide"
-            :navigation="navigation"
+            v-model="currentSlide"
+            :navigation="numberToSelect !== selectedData.length"
             transition-prev="slide-right"
             transition-next="slide-left"
             class="carousel-styled bg-primary q-pa-md q-ma-sm q-pb-xl"
@@ -11,6 +11,7 @@
             :swipeable="selectedData.length !== numberToSelect"
         >
             <q-carousel-slide v-for="(slide, index) in element.slice(1)" :key="index" class="q-pa-none" :name="index">
+
                 <ArticleCard
                     :slide="slide.data"
                     :disable="!!(numberToSelect && selectedData.length >= numberToSelect) && selectedData.find(element => element === slide.data[0].id) !== slide.data[0].id"
@@ -19,24 +20,26 @@
             <template v-slot:control>
                 <div v-if="numberToSelect !== selectedData.length">
                     <q-carousel-control
+                        v-if="currentSlide > 0"
                         position="bottom-left"
                         :offset="[18, 18]"
                         class="q-gutter-xs"
                     >
-                    <q-btn
-                        round dense color="white" text-color="black" icon="chevron_left"
-                        @click="$refs.carousel.previous()"
-                    />
+                        <q-btn
+                            round dense color="white" text-color="black" icon="chevron_left"
+                            @click="$refs.carousel.previous()"
+                        />
                     </q-carousel-control>
                     <q-carousel-control
+                        v-if="currentSlide < element.length -2"
                         position="bottom-right"
                         :offset="[18, 18]"
                         class="q-gutter-xs"
                     >
-                    <q-btn
-                        round dense color="white" text-color="black" icon="chevron_right"
-                        @click="$refs.carousel.next()"
-                    />
+                        <q-btn
+                            round dense color="white" text-color="black" icon="chevron_right"
+                            @click="$refs.carousel.next()"
+                        />
                     </q-carousel-control>
                 </div>
             </template>
@@ -76,12 +79,8 @@ export default defineComponent({
             navigation.value = selectedData.length !== props.numberToSelect
         })
 
-        watch(selectedData, () => {
-            navigation.value = selectedData.length !== props.numberToSelect
-        })
-
         return {
-            slide: ref(0),
+            currentSlide: ref(0),
             selectedData,
             navigation
         };

@@ -7,3 +7,7 @@ body {
     -webkit-hyphens: auto;
     hyphens: auto;
 }
+
+div.q-toggle.disabled {
+    opacity: 0.4 !important;
+}

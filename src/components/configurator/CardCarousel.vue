@@ -33,7 +33,7 @@ export default defineComponent({
             required: false
         }
     },
-    setup(props){
+    setup(){
         const componentHub = useComponentStore()
         const data = inject(selectedDataSymbol) as object
         const selectedData = data.selectedData

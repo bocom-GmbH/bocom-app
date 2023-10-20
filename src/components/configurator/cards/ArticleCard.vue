@@ -1,7 +1,7 @@
 <template>
     <q-card flat class="card-styled q-pa-md q-pa-none text-center bg-primary">
         <span class="card-title text-h5"> {{ slide.find((element:any) => element.label === 'Titel').value }} </span> <br> <br>
-        <div  ref="divRef" class="synopsys">
+        <div  ref="divRef" class="synopsys q-pr-sm">
             <div class="fixed-height text-left" v-html="slide.find((element:any) => element.label === 'Text').value">
             </div>
         </div>

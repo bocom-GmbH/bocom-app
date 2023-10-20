@@ -1,8 +1,8 @@
 <template>
-    <h6 class="seite-titel"> {{ components?.label }} </h6>
+    <div class="seite-titel"> {{ components?.label }} </div>
 
     <div v-if="components?.data">
-        <div v-for="(component) of components.data.filter(file => file.label)" :key="component.elementId">
+        <div v-for="(component) of components.data.filter(file => file.label)" :key="component.data[0].elementId">
             <main-configurator
                 v-if="components"
                 :label="component.label"
@@ -63,11 +63,15 @@ export default defineComponent({
 
         watch(() => props.siteId, () => {
             querySiteData(props.siteId)
+            scrollToTop()
         })
 
         watch(() => fileStore.getCurrentSiteComponents(), () => {
             components.value = fileStore.getCurrentSiteComponents()
         })
+        const scrollToTop = () => {
+            window.scrollTo(0, 0);
+        }
 
 
 
@@ -96,3 +100,12 @@ export default defineComponent({
 })
 
 </script>
+ <style scoped>
+.seite-titel {
+    margin: 0 auto;
+    margin-top: 20px;
+    font-size: 1.5rem;
+
+}
+
+</style>

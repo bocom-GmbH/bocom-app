@@ -1,9 +1,9 @@
 <template>
     <q-card class="custom-card bg-primary q-my-md flex">
         <q-img class="custom-img" :src="`https://images.bocom.at/${elementsCopy[1].value}`"></q-img>
-        <div class="flex-column q-pa-sm no-wrap">
+       <!--  <div class="flex-column q-pa-sm no-wrap">
             <div class="custom-text q-mb-none text-weight-bold text-left"> {{ element[1].label }} </div>
-        </div>
+        </div> -->
         <q-toggle
             class="q-mt-xs"
             color="positive"

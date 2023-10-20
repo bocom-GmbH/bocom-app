@@ -86,6 +86,7 @@ export default defineComponent({
 .custom-card {
   border-radius: 12px;
   min-width: 200px !important;
+  min-height: 350px;
 }
 .custom-img {
   height: 170px;

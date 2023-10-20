@@ -2,11 +2,11 @@
     <div class="">
         <q-carousel
             animated
-            v-model="slide"
+            v-model="currentSlide"
             :navigation="selectedArticle.length === 0"
             transition-prev="slide-right"
             transition-next="slide-left"
-            class="carousel-styled body q-mb-lg q-pb-md"
+            class="body q-mb-lg q-pb-md"
             ref="carousel"
             style="border-radius: 12px;"
             :swipeable="selectedArticle.length === 0"
@@ -16,7 +16,7 @@
                     :slide="slide.data"
                     :disable="!!(element[1].data[0].numberToSelect && selectedData.length >= element[1].data[0].numberToSelect) && selectedData.find(element => element === slide.data[0].id) !== slide.data[0].id"
                 />
-               <!--  {{ articleHeight }} -->
+
                 <div
                   v-if="selectedArticle.length > 0"
                 >
@@ -35,6 +35,7 @@
                                     <CardCarousel
                                         v-if="element.label"
                                         :element="elementsCopy[2].data.find(products => products.label === element.label).data.slice(1).filter(products => products.data[0].storyId === currentSlideId)"
+                                        :numberToSelect="elementsCopy[2].data[0].numberToSelect"
                                     />
                                 </div>
                             </template>
@@ -44,6 +45,7 @@
             </q-carousel-slide>
             <template v-slot:control v-if="selectedArticle.length === 0">
                 <q-carousel-control
+                    v-if="currentSlide > 0"
                     position="top-left"
                     :offset="[18, articleHeight + 85]"
                     class="q-gutter-xs"
@@ -54,6 +56,7 @@
                 />
                 </q-carousel-control>
                 <q-carousel-control
+                    v-if="currentSlide < element[1].data.length -2"
                     position="top-right"
                     :offset="[18, articleHeight + 85]"
                     class="q-gutter-xs"
@@ -115,7 +118,7 @@ export default defineComponent({
         })
 
         return {
-            slide: ref(0),
+            currentSlide: ref(0),
             selectedData,
             currentSlideId,
             elementsCopy,
@@ -130,6 +133,8 @@ export default defineComponent({
 
 .body {
     height: auto;
+    border-bottom-left-radius: 12px !important;
+    border-bottom-right-radius: 12px !important;
 }
 
 .label {
