@@ -1,10 +1,9 @@
 <template>
     <div class="seite-titel"> {{ components?.label }} </div>
-
     <div v-if="components?.data">
         <div v-for="(component) of components.data.filter(file => file.label)" :key="component.data[0].elementId">
             <main-configurator
-                v-if="components"
+                v-if="components && componentHub.getRequireMainConfigurator(component.data[0].elementId)"
                 :label="component.label"
                 :numberToSelect="component.data[0].numberToSelect"
             >
@@ -19,16 +18,22 @@
                     </div>
                 </template>
             </main-configurator>
-            <div v-else class="q-pa-md flex flex-center">
-                <q-circular-progress
-                    indeterminate
-                    rounded
-                    size="50px"
-                    color="primary"
-                    class="q-ma-md"
-                />
-            </div>
+            <component
+                v-if="components && !componentHub.getRequireMainConfigurator(component.data[0].elementId)"
+                :element="component"
+                :is="componentHub.getComponentById(component.data[0].elementId)"
+                :numberToSelect="component.data[0].numberToSelect"
+            />
         </div>
+    </div>
+    <div v-else class="q-pa-md flex flex-center">
+        <q-circular-progress
+            indeterminate
+            rounded
+            size="50px"
+            color="primary"
+            class="q-ma-md"
+        />
     </div>
 </template>
 
@@ -59,6 +64,7 @@ export default defineComponent({
 
         onMounted(() => {
             querySiteData(props.siteId)
+            components.value = fileStore.getCurrentSiteComponents()
         })
 
         watch(() => props.siteId, () => {
@@ -69,6 +75,7 @@ export default defineComponent({
         watch(() => fileStore.getCurrentSiteComponents(), () => {
             components.value = fileStore.getCurrentSiteComponents()
         })
+
         const scrollToTop = () => {
             window.scrollTo(0, 0);
         }
@@ -104,6 +111,7 @@ export default defineComponent({
 .seite-titel {
     margin: 0 auto;
     margin-top: 20px;
+    margin-bottom: 0px;
     font-size: 1.5rem;
 
 }

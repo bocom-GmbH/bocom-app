@@ -2,13 +2,14 @@
     <div>
         <q-circular-progress
           show-value
-          class="text-accent q-ma-md"
+          class="text-accent q-ma-sm q-mr-md"
           :value="fractionToPercent"
           size="48px"
           :color="progressColor"
         >
             <div
                 :style="{ color: `var(--q-${progressColor})`}"
+                v-if="denominator"
             >
                 {{ progress }}
             </div>
@@ -30,7 +31,7 @@ export default defineComponent({
         },
         denominator: {
             type: Number,
-            required: true
+            required: false
         }
     },
     setup(props) {

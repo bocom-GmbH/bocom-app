@@ -1,7 +1,7 @@
 <template>
     <q-card class="custom-card bg-primary q-my-md flex">
-        <q-img class="custom-img" fit="scale-down" :src="`https://images.bocom.at/${element.find((element: any) => element.label === 'Bild').value}`"></q-img>
-        <div class="flex-column q-pa-sm no-wrap">
+        <q-img class="custom-img q-mt-md" fit="scale-down" :src="`https://images.bocom.at/${element.find((element: any) => element.label === 'Bild').value}`"></q-img>
+        <div class="flex-column q-pa-none q-px-sm no-wrap">
             <div class="custom-text q-mb-none text-weight-bold text-left">
                 {{ element.find((element: any) => element.label === 'Name').value }}
             </div>
@@ -10,7 +10,7 @@
         </div>
 
         <q-toggle
-            class="q-mt-xs"
+            class="q-mt-none"
             color="positive"
             v-model="elementsCopy[0].selected"
             size="70px"
@@ -77,7 +77,6 @@ export default defineComponent({
 <style scoped>
 .no-wrap {
   width: 100%;
-  word-break: break-all;
 }
 .row.inline, .column.inline, .flex.inline {
   display: inline-flex;
@@ -86,6 +85,7 @@ export default defineComponent({
 .custom-card {
   border-radius: 12px;
   min-width: 200px !important;
+  min-height: 350px;
 }
 .custom-img {
   height: 170px;

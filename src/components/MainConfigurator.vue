@@ -1,8 +1,8 @@
 <template>
-    <div class="q-ma-sm">
-        <div class="flex justify-between items-center ">
-            <span class="text-weight-bold article-heading"> {{ label }} </span>
-            <CircularProgress v-if="numberToSelect" :denominator="numberToSelect" :numerator="selectedData.length"/>
+    <div class="">
+        <div class="flex justify-between items-center">
+            <span class="q-ml-md text-weight-bold article-heading"> {{ label }} </span>
+            <CircularProgress :denominator="numberToSelect" :numerator="selectedData.length"/>
         </div>
         <slot name="body"> </slot>
     </div>

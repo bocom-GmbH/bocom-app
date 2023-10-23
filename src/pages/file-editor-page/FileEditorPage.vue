@@ -60,7 +60,6 @@ export default defineComponent({
             magazine.value = fileStore.getFileDataById(route.params.magazineId);
         });
 
-
         return {
             magazine,
             sites,

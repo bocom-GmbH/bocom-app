@@ -5,6 +5,7 @@
            outlined
            :label="element.label"
            v-model="elementsCopy.data.find((element:any) => element.label === 'Preis').value"
+           color="secondary"
        />
    </div>
 </template>

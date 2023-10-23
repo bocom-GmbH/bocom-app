@@ -77,7 +77,7 @@ export default defineComponent({
 <style scoped>
 .no-wrap {
   width: 100%;
-  word-break: break-all;
+
 }
 .row.inline, .column.inline, .flex.inline {
   display: inline-flex;
@@ -92,7 +92,9 @@ export default defineComponent({
   height: 170px;
 }
 .custom-text {
-  font-size: large;
+    font-size: large;
+    -webkit-hyphens: auto;
+    hyphens: auto;
 }
 
 /* Import is not working here */

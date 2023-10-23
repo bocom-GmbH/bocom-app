@@ -44,7 +44,7 @@ export default defineComponent({
   font-size: 22px;
 }
 .first-column {
-    width: 70%;
+    width: 100% !important;
     gap: 15px;
 }
 .second-column {
