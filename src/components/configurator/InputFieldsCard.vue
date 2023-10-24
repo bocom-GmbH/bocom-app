@@ -17,7 +17,6 @@
 import { defineComponent, ref } from 'vue'
 import InputField from 'src/components/configurator/cards/InputField.vue'
 
-
 export default defineComponent({
     name: 'InputFieldsCard',
     props: {

@@ -7,13 +7,12 @@
         <q-carousel
             animated
             v-model="currentSlide"
-            :navigation="selectedData.length === 0"
             transition-prev="slide-right"
             transition-next="slide-left"
             class="body q-mb-lg q-pb-md"
             ref="carousel"
             style="border-radius: 12px;"
-            :swipeable="selectedData.length === 0"
+            :keep-alive="true"
         >
         <q-carousel-slide v-for="(slide, index) in element.data[1].data.filter(element => element.label === 'Story')" :key="index" class="q-pa-none" :name="index">
                 <ArticleCard
@@ -22,9 +21,9 @@
                     :slide="slide.data"
                     :disable="!!(element.data[1].data[0].numberToSelect && selectedData.length >= element.data[1].data[0].numberToSelect) && selectedData.find(element => element === slide.data[0].id) !== slide.data[0].id"
                 />
-
+               <!--  {{ selectedData }} -->
+                <!-- v-if="selectedData.length > 0" -->
                 <div
-                    v-if="selectedData.length > 0"
                 >
                     <div>
                         <MainConfigurator
@@ -109,7 +108,7 @@ export default defineComponent({
     },
     setup(props){
 
-        const selectedData = ref<string[]>([])
+        const selectedData = ref<IselectedData[]>([])
         const elementsCopy = ref<object>({})
         const articleHeight = ref(0)
         const currentSlideId = ref('')
@@ -124,20 +123,14 @@ export default defineComponent({
 
         provide('currentSlideId', currentSlideId)
         provide('articleHeight', articleHeight)
-
         provide(selectedDataSymbol, {
             selectedData,
             addElementToSelectedData,
             removeElementFromSelectedData
         })
 
-
         onBeforeMount(() => {
             elementsCopy.value = cloneDeep(props.element.data)
-        })
-
-        onMounted(() => {
-           //console.log(elementsCopy.value[2].data.find(element => element.label === 'Promotions').data.slice(1).filter(element => element.data[0].storyId === currentSlideId.value), 'props')
         })
 
         return {

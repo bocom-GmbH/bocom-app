@@ -1,7 +1,10 @@
 <template>
-    <q-card class="custom-card bg-primary q-my-md flex">
-        <q-img class="custom-img" :src="`https://images.bocom.at/${elementsCopy[1].value}`"></q-img>
-       <!--  <div class="flex-column q-pa-sm no-wrap">
+    <q-card :class="{'custom-card bg-primary q-my-md flex': true, 'disabled-bg': disable}">
+        <q-img class="custom-img" :src="`https://images.bocom.at/${elementsCopy[1].value}`">
+            <div v-if="disable" class="absolute-full text-subtitle2 flex flex-center">
+            </div>
+        </q-img>
+        <!--  <div class="flex-column q-pa-sm no-wrap">
             <div class="custom-text q-mb-none text-weight-bold text-left"> {{ element[1].label }} </div>
         </div> -->
         <q-toggle
@@ -61,7 +64,7 @@ export default defineComponent({
 })
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .no-wrap {
   width: 100%;
   word-break: break-all;
@@ -79,6 +82,10 @@ export default defineComponent({
 }
 .custom-text {
   font-size: large;
+}
+
+.disabled-bg {
+    background-color: $primary-disabled !important;
 }
 
 /* Import is not working here */

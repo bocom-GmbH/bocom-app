@@ -80,8 +80,6 @@ export default defineComponent({
             window.scrollTo(0, 0);
         }
 
-
-
         const querySiteData = (siteById: string) => {
             try {
                 const { onResult } = useQuery(

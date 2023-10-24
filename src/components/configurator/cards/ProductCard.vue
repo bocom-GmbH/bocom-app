@@ -1,12 +1,14 @@
 <template>
-    <q-card class="custom-card bg-primary q-my-md flex">
-        <q-img class="custom-img q-mt-md" fit="scale-down" :src="`https://images.bocom.at/${element.find((element: any) => element.label === 'Bild').value}`"></q-img>
+    <q-card :class="{'custom-card bg-primary q-my-md flex': true, 'disabled-bg': disable}">
+        <q-img style="border-radius: 0px;" class="custom-img q-mt-md bg-primary" fit="scale-down" :src="`https://images.bocom.at/${element.find((element: any) => element.label === 'Bild').value}`">
+            <div v-if="disable" class="absolute-full text-subtitle2 flex flex-center"></div>
+        </q-img>
         <div class="flex-column q-pa-none q-px-sm no-wrap">
             <div class="custom-text q-mb-none text-weight-bold text-left">
                 {{ element.find((element: any) => element.label === 'Name').value }}
             </div>
-             € {{ element.find((element: any) => element.label === 'Preis').value }} <br>
-             {{ element.find((element: any) => element.label === 'Menge').value }}
+                € {{ element.find((element: any) => element.label === 'Preis').value }} <br>
+                {{ element.find((element: any) => element.label === 'Menge').value }}
         </div>
 
         <q-toggle
@@ -47,7 +49,6 @@ export default defineComponent({
             elementsCopy.value = cloneDeep(props.element)
         })
 
-
         onMounted(() => {
             selected.value = props.element[0].selected
         })
@@ -74,7 +75,7 @@ export default defineComponent({
 })
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .no-wrap {
   width: 100%;
 }
@@ -93,6 +94,11 @@ export default defineComponent({
 .custom-text {
   font-size: large;
 }
+
+.disabled-bg {
+    background-color: $primary-disabled !important;
+}
+
 
 /* Import is not working here */
 /* @import '../../css/configurator/article-selector.scss'; */

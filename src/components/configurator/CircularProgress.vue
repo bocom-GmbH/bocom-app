@@ -20,8 +20,6 @@
 <script lang="ts">
 import { defineComponent, computed, onUnmounted } from 'vue'
 
-
-
 export default defineComponent({
     name: 'LimitIndicator',
     props: {
@@ -50,7 +48,6 @@ export default defineComponent({
                 return 'secondary';
             }
         });
-
 
         onUnmounted(() => {
             fractionToPercent.value = 0;

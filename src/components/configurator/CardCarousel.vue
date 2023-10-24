@@ -42,10 +42,6 @@ export default defineComponent({
             return componentHub.getComponentById(id)
         }
 
-        onMounted(() => {
-            //console.log(props.element, 'element')
-        })
-
         return {
             selectedData,
             getComponentById
