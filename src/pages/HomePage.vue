@@ -5,12 +5,16 @@
             style="text-decoration: none;"
             v-for="magazine in magazineList"
             :key="magazine.data?.Magazin[0]?.id"
-            :to="{ path: `/HomePage/FileEditorPage/${magazine.id}` }">
+            :to="{ path: `/HomePage/FileEditorPage/${magazine.id}` }"
+        >
             <MagazinePreview
                 :id="magazine.id"
             />
         </router-link>
 
+        <MagazinePreview
+            :id="magazineList[0]?.id"
+        />
     </q-page>
 </template>
 

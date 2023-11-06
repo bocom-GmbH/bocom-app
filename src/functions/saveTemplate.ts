@@ -17,6 +17,7 @@ const MAX_RETRIES = 2;
 const save = debounce((templateToSave: object) => {
     const performSave = (retries = 0) => {
         const { mutate: saveData, onDone, onError } = useMutation(saveTemplate);
+        console.log(templateToSave)
         saveData({ dataToSave: templateToSave });
         onError(() => {
             notify('Verbindungsfehler')

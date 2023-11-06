@@ -1,5 +1,6 @@
 <template>
     <q-card :class="{'custom-card bg-primary q-my-md flex': true, 'disabled-bg': disable}">
+        PROMOTIN CARD
         <q-img style="border-radius: 0px;" class="custom-img q-mt-md bg-primary" fit="scale-down" :src="`https://images.bocom.at/${element.find((element: any) => element.label === 'Bild').value}`">
             <div v-if="disable" class="absolute-full text-subtitle2 flex flex-center"></div>
         </q-img>
@@ -28,7 +29,7 @@ import { cloneDeep } from 'lodash';
 import { selectedDataSymbol, IselectedData } from 'src/types/index'
 
 export default defineComponent({
-    name: 'ProductCard',
+    name: 'PromotionCard',
     props: {
         element: {
             type: Object,

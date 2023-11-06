@@ -9,7 +9,7 @@
                     :is="getComponentById(card.data[0].elementId)"
                     :element="card.data"
                     :numberToSelect="numberToSelect"
-                    :disable="!!(numberToSelect && selectedData.length >= numberToSelect) && selectedData.find(element => element === card.data[0].id) !== card.data[0].id"
+                    :disable="!!(numberToSelect && selectedData.length >= numberToSelect) && selectedData.find(element => element === card.data[0].id) !== card.data[0].id && !disabledByParent"
                 />
             </div>
         </div>
@@ -30,6 +30,11 @@ export default defineComponent({
         },
         numberToSelect: {
             type: Number,
+            required: false
+        },
+        disabledByParent: {
+            type: Boolean,
+            default: false,
             required: false
         }
     },

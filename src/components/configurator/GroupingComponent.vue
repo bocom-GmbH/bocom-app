@@ -23,6 +23,11 @@
                 />
                <!--  {{ selectedData }} -->
                 <!-- v-if="selectedData.length > 0" -->
+                {{  currentSlide }}
+                {{  deisableCarousel }}
+                {{ currentSlideId }}
+                {{ selectedData }}
+                {{  element }}
                 <div
                 >
                     <div>
@@ -49,7 +54,7 @@
                     </div>
                 </div>
             </q-carousel-slide>
-            <template v-slot:control v-if="selectedData.length === 0">
+            <template v-slot:control>
                 <q-carousel-control
                     v-if="currentSlide > 0"
                     position="top-left"
@@ -78,7 +83,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, inject, ref, onBeforeMount, provide, watch } from 'vue';
+import { defineComponent, onMounted, inject, ref, onBeforeMount, provide, watch, computed } from 'vue';
 import ArticleCard from './cards/ArticleCard.vue'
 import CircularProgress from './CircularProgress.vue';
 import { cloneDeep } from 'lodash'
@@ -108,7 +113,7 @@ export default defineComponent({
     },
     setup(props){
 
-        const selectedData = ref<IselectedData[]>([])
+        const selectedData = ref<string[]>([])
         const elementsCopy = ref<object>({})
         const articleHeight = ref(0)
         const currentSlideId = ref('')
@@ -120,6 +125,14 @@ export default defineComponent({
         const removeElementFromSelectedData = (element: string) => {
             selectedData.value = selectedData.value.filter(item => item !== element)
         }
+
+        const deisableCarousel = computed(() => {
+            if (currentSlideId.value === selectedData.value[0]) {
+                return false
+            } else {
+                return true
+            }
+        })
 
         provide('currentSlideId', currentSlideId)
         provide('articleHeight', articleHeight)
@@ -138,7 +151,8 @@ export default defineComponent({
             selectedData,
             currentSlideId,
             elementsCopy,
-            articleHeight
+            articleHeight,
+            deisableCarousel
         }
     }
 })

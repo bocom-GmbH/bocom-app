@@ -1,16 +1,43 @@
 <template>
      <div class="flex no-wrap items-center">
-        <q-circular-progress
+        <!-- <q-circular-progress
             show-value
-            class="text-secondary  q-ma-md"
+            class="text-secondary q-ma-md"
             value="55"
             size="57px"
             color="bocom-lila"
-        />
-        <q-card class="card-styled full-width bg-primary q-pa-xs q-pr-xl q-ma-none flex relative">
+        /> -->
+        <q-list bordered class="rounded-borders">
+            <q-expansion-item
+                class="shadow-1 overflow-hidden"
+                style="border-radius: 12px"
+                icon="explore"
+                :label="label"
+                header-class="bg-primary text-white"
+                expand-icon-class="text-white"
+            >
+                <q-card class="q-mr-md">
+                    <q-card-section>
+                        Project details
+                    </q-card-section>
+                    <q-btn
+                        class="q-ma-md"
+                        style="width: 100%"
+                        color="primary"
+                        label="Open"
+                        :to="{ path: `/HomePage/FileEditorPage/${id}` }"
+                    />
+                </q-card>
+            </q-expansion-item>
+        </q-list>
+
+
+
+
+       <!--  <q-card class="card-styled full-width bg-primary q-pa-xs q-pr-xl q-ma-none flex relative">
             <span class="text-bold magazine-label"> {{ label }} </span>
             <q-icon class="icon-styled" color="white" size="24px" name="arrow_forward_ios"></q-icon>
-        </q-card>
+        </q-card> -->
     </div>
 </template>
 
@@ -35,7 +62,7 @@ export default defineComponent({
         const magazineLabel = fileStore.getFileDataById(id.value) as IFileData
 
         return {
-            label: magazineLabel.label
+            label: magazineLabel?.label
         }
     }
 

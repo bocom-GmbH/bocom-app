@@ -6,6 +6,7 @@ import InputFieldsCard from 'src/components/configurator/InputFieldsCard.vue';
 import GroupingComponent from 'src/components/configurator/GroupingComponent.vue';
 import MitarberiterCard from 'src/components/configurator/cards/MitarbeiterCard.vue';
 import ProductCard from 'src/components/configurator/cards/ProductCard.vue';
+import PromotionCard from 'src/components/configurator/cards/PromotionCard.vue';
 
 interface ComponentPairs {
 	componentId: string;
@@ -58,7 +59,7 @@ export const useComponentStore = defineStore('componentHub', {
             },
             {
                 componentId: 'f1d28863-d476-4fa1-856c-4640765a4807',
-                component: ProductCard,
+                component: PromotionCard,
                 requireMainConfigurator: true
             }
         ] as ComponentPairs[],
