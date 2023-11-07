@@ -3,22 +3,22 @@
         <q-carousel
             animated
             v-model="currentSlide"
-            :navigation="numberToSelect !== selectedData.length"
+            :navigation="true"
             transition-prev="slide-right"
             transition-next="slide-left"
             class="carousel-styled bg-primary q-pa-md q-ma-sm q-pb-xl"
             ref="carousel"
-            :swipeable="selectedData.length !== numberToSelect"
-        >
+            :swipeable="true"
+            >
             <q-carousel-slide v-for="(slide, index) in element.slice(1)" :key="index" class="q-pa-none" :name="index">
-
                 <ArticleCard
                     :slide="slide.data"
                     :disable="!!(numberToSelect && selectedData.length >= numberToSelect) && selectedData.find(element => element === slide.data[0].id) !== slide.data[0].id"
+                    :style="{ 'color':  !!(numberToSelect && selectedData.length >= numberToSelect) && slide && selectedData.find(element => element === slide.data[0].id) !== slide.data[0].id ? 'gray' : 'var(--q-color-primary)'}"
                 />
             </q-carousel-slide>
             <template v-slot:control>
-                <div v-if="numberToSelect !== selectedData.length">
+                <div>
                     <q-carousel-control
                         v-if="currentSlide > 0"
                         position="bottom-left"
@@ -72,15 +72,33 @@ export default defineComponent({
         const data = inject(selectedDataSymbol) as IselectedData
 
         const selectedData = data.selectedData
-
-        const navigation = ref(false)
+        const firstSelectedId = ref('')
+        const currentSlide = ref(0)
+        const navigation = ref(true)
 
         onMounted(() =>{
-            navigation.value = selectedData.length !== props.numberToSelect
+
+            let index = 0
+
+            for(let element of props.element) {
+                if(element.data){
+                    if(element?.data[0].selected){
+                        if(firstSelectedId.value === ''){
+                            firstSelectedId.value = element?.data[0].id
+                            currentSlide.value = index - 1
+                        }
+                        data.addElementToSelectedData(element?.data[0].id)
+                    } else {
+                        data.removeElementFromSelectedData(element?.data[0].id)
+                    }
+                }
+                index++
+            }
         })
 
         return {
-            currentSlide: ref(0),
+            firstSelectedId,
+            currentSlide,
             selectedData,
             navigation
         };

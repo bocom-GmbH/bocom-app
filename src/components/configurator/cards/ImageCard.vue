@@ -46,6 +46,7 @@ export default defineComponent({
         const data = inject(selectedDataSymbol) as IselectedData
 
         watch(elementsCopy, () => {
+            //console.log(props.element)
             fileStore.update(props.element[0].id, elementsCopy.value)
             if ((elementsCopy as any).value[0].selected) {
                 data.addElementToSelectedData(props.element[0].id)
