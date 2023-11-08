@@ -1,6 +1,7 @@
 <template>
     <div class="">
         <div class="flex justify-between items-center">
+            {{ selectedData }}
             <span class="q-ml-md text-weight-bold article-heading"> {{ label }} </span>
             <CircularProgress :denominator="numberToSelect" :numerator="selectedData.length"/>
         </div>
@@ -9,7 +10,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, provide, ref } from 'vue'
+import { defineComponent, provide, ref, onUnmounted } from 'vue'
 import CircularProgress from 'src/components/configurator/CircularProgress.vue';
 import { selectedDataSymbol } from 'src/types/index';
 
@@ -45,6 +46,12 @@ export default defineComponent({
             addElementToSelectedData,
             removeElementFromSelectedData
         })
+
+        onUnmounted(() => {
+            selectedData.value = []
+        })
+
+
 
         return {
             selectedData

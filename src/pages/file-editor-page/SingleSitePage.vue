@@ -38,7 +38,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref, watch } from 'vue'
+import { defineComponent, onMounted, onUnmounted, ref, watch } from 'vue'
 
 import MainConfigurator from 'src/components/MainConfigurator.vue';
 import { useQuery } from '@vue/apollo-composable'
@@ -67,6 +67,10 @@ export default defineComponent({
             components.value = fileStore.getCurrentSiteComponents()
         })
 
+        onUnmounted(() => {
+            fileStore.currentSite = []
+        })
+
         watch(() => props.siteId, () => {
             querySiteData(props.siteId)
             scrollToTop()
@@ -74,7 +78,7 @@ export default defineComponent({
 
         watch(() => fileStore.getCurrentSiteComponents(), () => {
             components.value = fileStore.getCurrentSiteComponents()
-        })
+        }, { deep: true })
 
         const scrollToTop = () => {
             window.scrollTo(0, 0);
@@ -92,6 +96,7 @@ export default defineComponent({
                     })
                 )
                 onResult((result) => {
+                    fileStore.currentSite = []
                     fileStore.setCurrentSite(result?.data?.Seite)
                 })
             } catch ( error) {

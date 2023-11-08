@@ -53,7 +53,7 @@ export const useFileStore = defineStore('file', {
             this.fileData = singleFile;
         },
         setCurrentSite (site: any): void {
-           this.currentSite = site;
+            this.currentSite = site;
         },
         update (id: string, updatedObject: any): void {
             if(JSON.stringify(this.currentSite) !== JSON.stringify(updateNestedObject(this.currentSite, updatedObject[0].path, updatedObject))){
