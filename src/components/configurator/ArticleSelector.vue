@@ -9,7 +9,7 @@
             class="carousel-styled bg-primary q-pa-md q-ma-sm q-pb-xl"
             ref="carousel"
             :swipeable="true"
-            >
+        >
             <q-carousel-slide v-for="(slide, index) in element.slice(1)" :key="index" class="q-pa-none" :name="index">
                 <ArticleCard
                     :slide="slide.data"
