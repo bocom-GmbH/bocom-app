@@ -53,6 +53,7 @@ export default defineComponent({
                     () => ({}),
                     () => ({
                         errorPolicy: 'all',
+                        fetchPolicy: 'no-cache',
                     })
                 );
                 onResult((result) => {
