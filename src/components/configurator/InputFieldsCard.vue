@@ -3,8 +3,9 @@
         <q-card class="q-ma-sm q-pa-md bg-primary flex card">
            <div class="first-column flex">
                 <div v-for="(input, index) of element.filter((input: any) => input.label)" :key="index">
-                  <InputField
-                    :element="input"
+                    <!-- {{ input.data }} -->
+                   <InputField
+                    :element="input.data"
                   />
                 </div>
            </div>
@@ -26,7 +27,7 @@ export default defineComponent({
         }
     },
     components: {
-        InputField
+       InputField
     },
     setup () {
 
@@ -43,8 +44,7 @@ export default defineComponent({
   font-size: 22px;
 }
 .first-column {
-    width: 100% !important;
-    gap: 15px;
+
 }
 .second-column {
     width: 30%;

@@ -1,11 +1,10 @@
 <template>
     <div class="">
         <div class="flex justify-between items-center">
-            {{ selectedData }}
             <span class="q-ml-md text-weight-bold article-heading"> {{ label }} </span>
             <CircularProgress :denominator="numberToSelect" :numerator="selectedData.length"/>
         </div>
-        <slot name="body"> </slot>
+        <slot name="body"></slot>
     </div>
 </template>
 
@@ -13,6 +12,7 @@
 import { defineComponent, provide, ref, onUnmounted } from 'vue'
 import CircularProgress from 'src/components/configurator/CircularProgress.vue';
 import { selectedDataSymbol } from 'src/types/index';
+import { Notify } from 'quasar'
 
 export default defineComponent({
     name: 'MainConfigurator',
@@ -31,6 +31,16 @@ export default defineComponent({
     },
     setup () {
 
+        const notify = (message: string) => {
+            Notify.create({
+                message: message,
+                position: 'top',
+                timeout: 1500,
+                color: 'red',
+                progress: true
+            });
+        }
+
         const selectedData = ref<string[]>([])
 
         const addElementToSelectedData = (element: string) => {
@@ -44,7 +54,8 @@ export default defineComponent({
         provide(selectedDataSymbol, {
             selectedData,
             addElementToSelectedData,
-            removeElementFromSelectedData
+            removeElementFromSelectedData,
+            notify
         })
 
         onUnmounted(() => {

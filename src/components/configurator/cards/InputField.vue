@@ -1,12 +1,23 @@
 <template>
-   <div>
+   <div class="flex row" style="width: 100%">
        <q-input
            rounded
            outlined
-           :label="element.label"
-           v-model="elementsCopy.data.find((element:any) => element.label === 'Preis').value"
+           :label="elementsCopy[1].label"
+           v-model="elementsCopy[1].value"
            color="secondary"
+           class="input"
        />
+       <q-input
+           rounded
+           outlined
+           :label="elementsCopy[2].label"
+           v-model="elementsCopy[2].value"
+           color="secondary"
+           class="input"
+       />
+
+       <!-- {{ elementsCopy }} -->
    </div>
 </template>
 
@@ -46,10 +57,17 @@ export default defineComponent({
         }, { deep: true })
 
         return {
-            elementsCopy
+            elementsCopy,
+            test: ref('')
         }
     }
 })
 
 
 </script>
+
+<style scoped>
+.input {
+    width:50%;
+}
+</style>

@@ -12,7 +12,8 @@
             color="positive"
             v-model="elementsCopy[0].selected"
             size="70px"
-            :disable="disable"
+            :disable="disable || !userStore.doIHavePermissionFor(elementsCopy[0]?.permissionId)"
+            @click="checkPermission(elementsCopy[0]?.permissionId)"
         />
     </q-card>
 </template>
@@ -20,6 +21,7 @@
 <script lang="ts">
 import { defineComponent, onMounted, ref, inject, watch, onBeforeMount } from 'vue'
 import { useFileStore } from 'stores/file-store'
+import { useUserStore } from 'stores/authentication'
 import { cloneDeep } from 'lodash'
 import { selectedDataSymbol, IselectedData } from 'src/types/index'
 
@@ -38,6 +40,7 @@ export default defineComponent({
     setup(props) {
         const fileStore = useFileStore()
         const elementsCopy = ref<object>({})
+        const userStore = useUserStore()
 
         onBeforeMount(() => {
             elementsCopy.value = cloneDeep(props.element)
@@ -56,8 +59,16 @@ export default defineComponent({
 
         }, { deep: true })
 
+        const checkPermission = (permissionId: string) => {
+            if(!userStore.doIHavePermissionFor(permissionId)){
+                data.notify('Keine Berechtigung')
+            }
+        }
+
         return {
-            elementsCopy
+            elementsCopy,
+            userStore,
+            checkPermission
         }
 
     }
