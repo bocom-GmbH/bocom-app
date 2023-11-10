@@ -16,7 +16,8 @@
             color="positive"
             v-model="elementsCopy[0].selected"
             size="70px"
-            :disable="disable"
+            :disable="disable || !checkPermission(elementsCopy[0]?.permissionId, false)"
+            @click="checkPermission(elementsCopy[0]?.permissionId, true)"
         />
     </q-card>
 </template>
@@ -68,7 +69,8 @@ export default defineComponent({
 
         return {
             selected,
-            elementsCopy
+            elementsCopy,
+            checkPermission: data.checkPermission
         }
 
     }

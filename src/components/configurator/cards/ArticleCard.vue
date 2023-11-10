@@ -11,14 +11,15 @@
             v-model="elementsCopy[0].selected"
             val="xl"
             label=""
-            :disable="disable"
+            :disable="disable || !checkPermission(elementsCopy[0]?.permissionId, false)"
+            @click="checkPermission(elementsCopy[0]?.permissionId, true)"
         />
     </q-card>
 </template>
 
 <script lang="ts">
 import { defineComponent, onBeforeMount, ref, inject, watch, onMounted } from 'vue'
-import { cloneDeep } from 'lodash';
+import { cloneDeep } from 'lodash'
 import { useFileStore } from 'stores/file-store'
 import { selectedDataSymbol, IselectedData } from 'src/types/index'
 
@@ -41,15 +42,21 @@ export default defineComponent({
         const articleHeight = ref<number | null>(inject('articleHeight', null));
         const currentSlideId = ref(inject('currentSlideId'))
         const divRef = ref(null);
+        const currentSlide = ref(inject('currentSlide'));
 
-
+        /* watch(currentSlide, () => {
+            console.log('watch')
+            currentSlideId.value = elementsCopy.value[0].id
+        }) */
 
         onBeforeMount(() => {
+            //console.log(currentSlideId,'slide changed')
             elementsCopy.value = cloneDeep(props.slide)
             currentSlideId.value = elementsCopy.value[0].id
         })
 
         onMounted(()=> {
+            //console.log('mounted', currentSlideId.value)
             if (divRef.value) {
                 articleHeight.value = divRef.value.offsetHeight;
             }
@@ -76,7 +83,8 @@ export default defineComponent({
         return {
             selected,
             elementsCopy,
-            divRef
+            divRef,
+            checkPermission: data.checkPermission
         }
 
     }

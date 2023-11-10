@@ -13,7 +13,7 @@ export interface IselectedData {
     selectedData: string[];
     addElementToSelectedData: CallableFunction;
     removeElementFromSelectedData: CallableFunction;
-    notify: CallableFunction;
+    checkPermission: CallableFunction;
 }
 
 export const selectedDataSymbol = Symbol('selectedData');

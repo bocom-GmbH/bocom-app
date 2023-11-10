@@ -13,6 +13,7 @@ import { defineComponent, provide, ref, onUnmounted } from 'vue'
 import CircularProgress from 'src/components/configurator/CircularProgress.vue';
 import { selectedDataSymbol } from 'src/types/index';
 import { Notify } from 'quasar'
+import { useUserStore } from 'stores/authentication'
 
 export default defineComponent({
     name: 'MainConfigurator',
@@ -30,6 +31,18 @@ export default defineComponent({
         }
     },
     setup () {
+        const userStore = useUserStore()
+
+        const checkPermission = (permissionId: string, notifyOnRun: boolean) => {
+            if(!userStore.doIHavePermissionFor(permissionId)){
+                if(notifyOnRun){
+                    notify('Keine Berechtigung')
+                }
+                return false
+            } else {
+                return true
+            }
+        }
 
         const notify = (message: string) => {
             Notify.create({
@@ -55,7 +68,7 @@ export default defineComponent({
             selectedData,
             addElementToSelectedData,
             removeElementFromSelectedData,
-            notify
+            checkPermission
         })
 
         onUnmounted(() => {

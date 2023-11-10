@@ -12,8 +12,8 @@
             color="positive"
             v-model="elementsCopy[0].selected"
             size="70px"
-            :disable="disable || !userStore.doIHavePermissionFor(elementsCopy[0]?.permissionId)"
-            @click="checkPermission(elementsCopy[0]?.permissionId)"
+            :disable="disable || !checkPermission(elementsCopy[0]?.permissionId, false)"
+            @click="checkPermission(elementsCopy[0]?.permissionId, true)"
         />
     </q-card>
 </template>
@@ -59,16 +59,10 @@ export default defineComponent({
 
         }, { deep: true })
 
-        const checkPermission = (permissionId: string) => {
-            if(!userStore.doIHavePermissionFor(permissionId)){
-                data.notify('Keine Berechtigung')
-            }
-        }
-
         return {
             elementsCopy,
             userStore,
-            checkPermission
+            checkPermission: data.checkPermission
         }
 
     }

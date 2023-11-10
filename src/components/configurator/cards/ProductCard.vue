@@ -9,6 +9,7 @@
             </div>
                 € {{ element.find((element: any) => element.label === 'Preis').value }} <br>
                 {{ element.find((element: any) => element.label === 'Menge').value }}
+                <!-- {{ element[0].storyId }} -->
         </div>
 
         <q-toggle

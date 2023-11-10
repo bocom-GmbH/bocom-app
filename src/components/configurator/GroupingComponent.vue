@@ -21,15 +21,8 @@
                     :slide="slide.data"
                     :disable="!!(element.data[1].data[0].numberToSelect && selectedData.length >= element.data[1].data[0].numberToSelect) && selectedData.find(element => element === slide.data[0].id) !== slide.data[0].id"
                 />
-               <!--  {{ selectedData }} -->
-                <!-- v-if="selectedData.length > 0" -->
-                {{  currentSlide }}
-                {{  deisableCarousel }}
-                {{ currentSlideId }}
-                {{ selectedData }}
-                {{  element }}
-                <div
-                >
+<!--                 {{ currentSlideId }} -->
+                <div>
                     <div>
                         <MainConfigurator
                             :numberToSelect="elementsCopy[2].data[0].numberToSelect"
@@ -83,14 +76,15 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, inject, ref, onBeforeMount, provide, watch, computed } from 'vue';
+import { defineComponent, onMounted, inject, ref, onBeforeMount, provide, watch, computed, onUnmounted } from 'vue';
 import ArticleCard from './cards/ArticleCard.vue'
 import CircularProgress from './CircularProgress.vue';
 import { cloneDeep } from 'lodash'
 import CardCarousel from './CardCarousel.vue';
 import MainConfigurator from '../MainConfigurator.vue';
 import { selectedDataSymbol, IselectedData } from 'src/types/index'
-
+import { useUserStore } from 'stores/authentication'
+import { Notify } from 'quasar'
 
 
 export default defineComponent({
@@ -112,11 +106,33 @@ export default defineComponent({
         CircularProgress
     },
     setup(props){
+        const userStore = useUserStore()
+
+        const checkPermission = (permissionId: string, notifyOnRun: boolean) => {
+            if(!userStore.doIHavePermissionFor(permissionId)){
+                if(notifyOnRun){
+                    notify('Keine Berechtigung')
+                }
+                return false
+            } else {
+                return true
+            }
+        }
+        const notify = (message: string) => {
+            Notify.create({
+                message: message,
+                position: 'top',
+                timeout: 1500,
+                color: 'red',
+                progress: true
+            });
+        }
 
         const selectedData = ref<string[]>([])
         const elementsCopy = ref<object>({})
         const articleHeight = ref(0)
         const currentSlideId = ref('')
+        const currentSlide = ref(0)
 
         const addElementToSelectedData = (element: string) => {
             selectedData.value.push(element)
@@ -134,20 +150,31 @@ export default defineComponent({
             }
         })
 
+        watch(currentSlide, () => {
+            currentSlideId.value = props.element.data[1].data.filter(element => element.label === 'Story')[currentSlide.value].data[0].id
+            //console.log(props.element.data[1].data.filter(element => element.label === 'Story')[currentSlide.value].data[0].id)
+        })
+
         provide('currentSlideId', currentSlideId)
+        provide('currentSlide', currentSlide)
         provide('articleHeight', articleHeight)
         provide(selectedDataSymbol, {
             selectedData,
             addElementToSelectedData,
-            removeElementFromSelectedData
+            removeElementFromSelectedData,
+            checkPermission
         })
 
         onBeforeMount(() => {
             elementsCopy.value = cloneDeep(props.element.data)
         })
 
+        onUnmounted(() => {
+            selectedData.value = []
+        })
+
         return {
-            currentSlide: ref(0),
+            currentSlide,
             selectedData,
             currentSlideId,
             elementsCopy,
