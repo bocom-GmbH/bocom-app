@@ -42,7 +42,7 @@ export default defineComponent({
     },
     setup(props) {
 
-        const selected = ref<boolean>(false)
+
         const fileStore = useFileStore()
         const elementsCopy = ref<object>({})
 
@@ -50,28 +50,23 @@ export default defineComponent({
             elementsCopy.value = cloneDeep(props.element)
         })
 
-        onMounted(() => {
-            selected.value = props.element[0].selected
-        })
-
         const data = inject(selectedDataSymbol) as IselectedData
 
         watch(elementsCopy, () => {
-            if(JSON.stringify(elementsCopy.value) === JSON.stringify(props.element)) {
+            /* if(JSON.stringify(elementsCopy.value) === JSON.stringify(props.element)) {
                 return
-            } else {
+            } else { */
                 fileStore.update(props.element[0].id, elementsCopy.value)
                 if ((elementsCopy as any).value[0].selected) {
                     data.addElementToSelectedData(props.element[0].id)
                 } else {
                     data.removeElementFromSelectedData(props.element[0].id)
                 }
-            }
+          /*   } */
 
         },{ deep: true })
 
         return {
-            selected,
             elementsCopy
         }
 

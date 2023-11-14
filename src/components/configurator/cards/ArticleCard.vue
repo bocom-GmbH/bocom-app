@@ -1,7 +1,7 @@
 <template>
     <q-card flat class="card-styled q-pa-md q-pa-none text-center bg-primary">
         <span class="card-title text-h5"> {{ slide.find((element:any) => element.label === 'Titel').value }} </span> <br> <br>
-        <div  ref="divRef" class="synopsys q-pr-sm">
+        <div ref="divRef" class="synopsys q-pr-sm">
             <div class="fixed-height text-left" v-html="slide.find((element:any) => element.label === 'Text').value">
             </div>
         </div>
@@ -18,7 +18,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onBeforeMount, ref, inject, watch, onMounted } from 'vue'
+import { defineComponent, onBeforeMount, ref, inject, watch, onMounted, onUnmounted } from 'vue'
 import { cloneDeep } from 'lodash'
 import { useFileStore } from 'stores/file-store'
 import { selectedDataSymbol, IselectedData } from 'src/types/index'
@@ -56,7 +56,6 @@ export default defineComponent({
         })
 
         onMounted(()=> {
-            //console.log('mounted', currentSlideId.value)
             if (divRef.value) {
                 articleHeight.value = divRef.value.offsetHeight;
             }
@@ -80,11 +79,22 @@ export default defineComponent({
 
         },{ deep: true })
 
+        watch(currentSlideId, () => {
+            //console.log(divRef.value.offsetHeight)
+            if (props.slide[0].id === currentSlideId.value) {
+                setTimeout(() => {
+                    articleHeight.value = divRef.value.offsetHeight;
+                }, 10);
+            }
+        })
+
         return {
             selected,
             elementsCopy,
             divRef,
-            checkPermission: data.checkPermission
+            checkPermission: data.checkPermission,
+            currentSlideId,
+            currentSlide
         }
 
     }

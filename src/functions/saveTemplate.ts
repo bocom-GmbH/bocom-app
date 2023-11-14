@@ -15,6 +15,7 @@ const saveTemplate = gql`
 const MAX_RETRIES = 2;
 
 const save = debounce((templateToSave: object) => {
+    console.log('save')
     const performSave = (retries = 0) => {
         const { mutate: saveData, onDone, onError } = useMutation(saveTemplate);
         console.log(templateToSave)
@@ -35,7 +36,7 @@ const save = debounce((templateToSave: object) => {
         });
     }
     try {
-        //performSave();
+        performSave();
     } catch (error) {
         console.log(error);
     }

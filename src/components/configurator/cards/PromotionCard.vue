@@ -57,16 +57,16 @@ export default defineComponent({
         const data = inject(selectedDataSymbol) as IselectedData
 
         watch(elementsCopy, () => {
-            if(JSON.stringify(elementsCopy.value) === JSON.stringify(props.element)) {
+            /* if(JSON.stringify(elementsCopy.value) === JSON.stringify(props.element)) {
                 return
-            } else {
+            } else { */
                 fileStore.update(props.element[0].id, elementsCopy.value)
                 if ((elementsCopy as any).value[0].selected) {
                     data.addElementToSelectedData(props.element[0].id)
                 } else {
                     data.removeElementFromSelectedData(props.element[0].id)
                 }
-            }
+            /* } */
 
         },{ deep: true })
 

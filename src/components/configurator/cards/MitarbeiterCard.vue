@@ -50,7 +50,6 @@ export default defineComponent({
             elementsCopy.value = cloneDeep(props.element)
         })
 
-
         onMounted(() => {
             selected.value = props.element[0].selected
         })

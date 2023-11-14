@@ -14,6 +14,7 @@
             style="border-radius: 12px;"
             :keep-alive="true"
         >
+
         <q-carousel-slide v-for="(slide, index) in element.data[1].data.filter(element => element.label === 'Story')" :key="index" class="q-pa-none" :name="index">
                 <ArticleCard
                     class="q-mx-md"
@@ -21,7 +22,6 @@
                     :slide="slide.data"
                     :disable="!!(element.data[1].data[0].numberToSelect && selectedData.length >= element.data[1].data[0].numberToSelect) && selectedData.find(element => element === slide.data[0].id) !== slide.data[0].id"
                 />
-<!--                 {{ currentSlideId }} -->
                 <div>
                     <div>
                         <MainConfigurator
