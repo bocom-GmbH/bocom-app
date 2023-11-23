@@ -77,7 +77,6 @@ export default defineComponent({
         const navigation = ref(true)
 
         onMounted(() =>{
-
             let index = 0
 
             for(let element of props.element) {

@@ -24,6 +24,7 @@
                 />
                 <div>
                     <div>
+                        {{ currentSlideId }} {{  selectedData }}
                         <MainConfigurator
                             :numberToSelect="elementsCopy[2].data[0].numberToSelect"
                             :label="elementsCopy[2].label"
@@ -40,6 +41,7 @@
                                         v-if="element.label"
                                         :element="elementsCopy[2].data.find(products => products.label === element.label).data.slice(1).filter(products => products.data[0].storyId === currentSlideId)"
                                         :numberToSelect="elementsCopy[2].data[0].numberToSelect"
+                                        :disabledByParent="selectedData[0] !== currentSlideId"
                                     />
                                 </div>
                             </template>
@@ -86,7 +88,6 @@ import { selectedDataSymbol, IselectedData } from 'src/types/index'
 import { useUserStore } from 'stores/authentication'
 import { Notify } from 'quasar'
 
-
 export default defineComponent({
     name: 'GroupingComponent',
     props: {
@@ -128,6 +129,7 @@ export default defineComponent({
             });
         }
 
+        const resetCardCarousel = ref(0);
         const selectedData = ref<string[]>([])
         const elementsCopy = ref<object>({})
         const articleHeight = ref(0)
@@ -155,9 +157,17 @@ export default defineComponent({
             //console.log(props.element.data[1].data.filter(element => element.label === 'Story')[currentSlide.value].data[0].id)
         })
 
+        watch(selectedData, (oldValue, newValue) => {
+            console.log('CHANGEASDASDASDASDASDADASDASDASD')
+            resetCardCarousel.value++
+            //console.log(oldValue, newValue)
+
+        } ,{ deep: true })
+
         provide('currentSlideId', currentSlideId)
         provide('currentSlide', currentSlide)
         provide('articleHeight', articleHeight)
+        provide('resetCardCarousel', resetCardCarousel)
         provide(selectedDataSymbol, {
             selectedData,
             addElementToSelectedData,
@@ -166,6 +176,16 @@ export default defineComponent({
         })
 
         onBeforeMount(() => {
+            const index = ref(0)
+            for(const story of props.element.data[1].data.filter(element => element.label === 'Story')) {
+                index.value++
+                if(story.data[0].selected){
+                    addElementToSelectedData(story.data[0].id)
+                    currentSlideId.value = story.data[0].id
+                    break;
+                }
+            }
+            currentSlide.value = index.value -1
             elementsCopy.value = cloneDeep(props.element.data)
         })
 

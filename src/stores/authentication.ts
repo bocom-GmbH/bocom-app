@@ -36,7 +36,7 @@ export const useUserStore = defineStore('user', {
 			this.permissionIds = []
 		},
 		doIHavePermissionFor(permissionId: string) :boolean {
-			return this.permissionIds.some(x => x === permissionId)
+            return permissionId ? true : this.permissionIds.some(x => x === permissionId)
 		},
         setUserData (token: string) :void {
             const base64Url = token.split('.')[1];

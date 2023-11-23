@@ -9,7 +9,7 @@
                     :is="getComponentById(card.data[0].elementId)"
                     :element="card.data"
                     :numberToSelect="numberToSelect"
-                    :disable="!!(numberToSelect && selectedData.length >= numberToSelect) && selectedData.find(element => element === card.data[0].id) !== card.data[0].id && !disabledByParent"
+                    :disable="(!!(numberToSelect && selectedData.length >= numberToSelect) && selectedData.find(element => element === card.data[0].id) !== card.data[0].id) || disabledByParent"
                 />
             </div>
         </div>
@@ -17,9 +17,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, inject, onMounted, ref } from 'vue'
+import { defineComponent, inject, onMounted, ref, watch } from 'vue'
 import { useComponentStore } from 'stores/component-hub-store'
 import { selectedDataSymbol } from 'src/types/index'
+
 
 export default defineComponent({
     name: 'CardCarousel',
@@ -41,7 +42,17 @@ export default defineComponent({
     setup(){
         const componentHub = useComponentStore()
         const data = inject(selectedDataSymbol) as object
-        const selectedData = data.selectedData
+        const selectedData = ref(data.selectedData)
+        const resetSelectedData = () => {
+           selectedData.value = []
+        }
+
+        const refreshCardCarousel = ref(inject('refreshCardCarousel'))
+
+        watch((refreshCardCarousel), () => {
+            console.log('watched')
+            resetSelectedData
+        })
 
         const getComponentById = (id: string) => {
             return componentHub.getComponentById(id)
