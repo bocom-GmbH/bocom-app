@@ -62,6 +62,7 @@ export default defineComponent({
         const fileStore = useFileStore()
         const components = ref<any[]>([])
 
+        //querying the site data
         onMounted(() => {
             querySiteData(props.siteId)
             components.value = fileStore.getCurrentSiteComponents()
@@ -71,11 +72,13 @@ export default defineComponent({
             fileStore.currentSite = []
         })
 
+        //if the siteId changes the site data should be queried again
         watch(() => props.siteId, () => {
             querySiteData(props.siteId)
             scrollToTop()
         })
 
+        //if the template changes the components should be updated
         watch(() => fileStore.getCurrentSiteComponents(), () => {
             components.value = fileStore.getCurrentSiteComponents()
         }, { deep: true })

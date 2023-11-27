@@ -34,6 +34,7 @@ export default defineComponent({
     },
     setup(props) {
 
+        //calculate a percentage from the numerator and denominator
         const fractionToPercent = computed(() => {
             if (!props.denominator) return 0;
             return (props.numerator / props.denominator) * 100;
@@ -53,6 +54,7 @@ export default defineComponent({
             fractionToPercent.value = 0;
         });
 
+        //showing the numerator and the denominator in the circle
         const progress = computed(() => `${props.numerator}/${props.denominator}`);
 
         return {

@@ -20,7 +20,7 @@
 import { defineComponent, inject, onMounted, ref, watch } from 'vue'
 import { useComponentStore } from 'stores/component-hub-store'
 import { selectedDataSymbol } from 'src/types/index'
-
+import { useFileStore } from 'stores/file-store'
 
 export default defineComponent({
     name: 'CardCarousel',
@@ -39,19 +39,23 @@ export default defineComponent({
             required: false
         }
     },
-    setup(){
+    setup(props){
+        const fileStore = useFileStore()
         const componentHub = useComponentStore()
         const data = inject(selectedDataSymbol) as object
         const selectedData = ref(data.selectedData)
+        const resetCardCarousel = ref(inject('resetCardCarousel'))
+
         const resetSelectedData = () => {
            selectedData.value = []
         }
 
-        const refreshCardCarousel = ref(inject('refreshCardCarousel'))
-
-        watch((refreshCardCarousel), () => {
-            console.log('watched')
+        // if the resetCardCarousel is triggered, reset the selectedData and call the resetSelectedData store function
+        watch((resetCardCarousel), () => {
             resetSelectedData
+            for(let element of props.element) {
+                fileStore.resetSelectedValues(element.path)
+            }
         })
 
         const getComponentById = (id: string) => {

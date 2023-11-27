@@ -41,20 +41,16 @@ export default defineComponent({
         const elementsCopy = ref<object>({})
         const articleHeight = ref<number | null>(inject('articleHeight', null));
         const currentSlideId = ref(inject('currentSlideId'))
-        const divRef = ref(null);
         const currentSlide = ref(inject('currentSlide'));
+        const divRef = ref(null);
 
-        /* watch(currentSlide, () => {
-            console.log('watch')
-            currentSlideId.value = elementsCopy.value[0].id
-        }) */
-
+        //on before mount clone the props.slide and set the currentSlideId
         onBeforeMount(() => {
-            //console.log(currentSlideId,'slide changed')
             elementsCopy.value = cloneDeep(props.slide)
             currentSlideId.value = elementsCopy.value[0].id
         })
 
+        //set the height of the article
         onMounted(()=> {
             if (divRef.value) {
                 articleHeight.value = divRef.value.offsetHeight;
@@ -63,24 +59,19 @@ export default defineComponent({
 
         const data = inject(selectedDataSymbol) as IselectedData
 
+        //if the selected state changes, update the filestore and the selectedData
         watch(elementsCopy, () => {
             if(JSON.stringify(elementsCopy.value) === JSON.stringify(props.slide)) {
                 return;
             } else {
-
-                fileStore.update(props.slide[0].id, elementsCopy.value)
-                if ((elementsCopy as any).value[0].selected) {
-                    data.addElementToSelectedData(props.slide[0].id)
-                } else {
-                    data.removeElementFromSelectedData(props.slide[0].id)
-                }
-
+                fileStore.update(props.slide[0].id, elementsCopy.value);
+                ((elementsCopy as any).value[0].selected) ? data.addElementToSelectedData(props.slide[0].id) : data.removeElementFromSelectedData(props.slide[0].id)
             }
 
         },{ deep: true })
 
+        //if the user changes a slide update the height of the article with delay
         watch(currentSlideId, () => {
-            //console.log(divRef.value.offsetHeight)
             if (props.slide[0].id === currentSlideId.value) {
                 setTimeout(() => {
                     articleHeight.value = divRef.value.offsetHeight;

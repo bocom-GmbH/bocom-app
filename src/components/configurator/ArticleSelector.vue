@@ -52,7 +52,6 @@ import { defineComponent, inject, onMounted, ref, watch } from 'vue'
 import ArticleCard from './cards/ArticleCard.vue'
 import { IselectedData, selectedDataSymbol } from 'src/types/index'
 
-
 export default defineComponent({
     name: 'ArticleSelector',
     props: {
@@ -72,20 +71,16 @@ export default defineComponent({
         const data = inject(selectedDataSymbol) as IselectedData
 
         const selectedData = data.selectedData
-        const firstSelectedId = ref('')
         const currentSlide = ref(0)
         const navigation = ref(true)
 
+        //set the current slide to the index of the selected element, so it will automatically slide to the selected article
         onMounted(() =>{
             let index = 0
-
             for(let element of props.element) {
                 if(element.data){
                     if(element?.data[0].selected){
-                        if(firstSelectedId.value === ''){
-                            firstSelectedId.value = element?.data[0].id
-                            currentSlide.value = index - 1
-                        }
+                        currentSlide.value = index - 1
                         data.addElementToSelectedData(element?.data[0].id)
                     } else {
                         data.removeElementFromSelectedData(element?.data[0].id)
@@ -96,7 +91,6 @@ export default defineComponent({
         })
 
         return {
-            firstSelectedId,
             currentSlide,
             selectedData,
             navigation

@@ -5,6 +5,14 @@ export interface IFileData {
     label: string;
 }
 
+export interface BottomMenuItem {
+	label: string,
+	icon: string,
+    name: string,
+	notification: number;
+	navigateToPath: string;
+}
+
 export interface IData {
     data: IData[];
 }

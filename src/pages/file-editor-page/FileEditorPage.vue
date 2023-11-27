@@ -24,7 +24,6 @@
 </template>
 
 <script lang="ts">
-//import ArticleSelector from 'src/components/configurator/ArticleSelector.vue';
 import { defineComponent, onMounted, ref, watch, inject } from 'vue';
 import { useFileStore } from 'stores/file-store';
 import { useRoute } from 'vue-router';
@@ -43,7 +42,6 @@ export default defineComponent({
         SingleSitePage
     },
     setup() {
-        const $q = inject('$q');
         const route = useRoute();
         const fileStore = useFileStore();
         const magazine = ref();

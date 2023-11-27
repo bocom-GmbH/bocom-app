@@ -33,6 +33,7 @@ export default defineComponent({
     setup () {
         const userStore = useUserStore()
 
+        //checking the permission for the user, with optional notification
         const checkPermission = (permissionId: string, notifyOnRun: boolean) => {
             if(!userStore.doIHavePermissionFor(permissionId)){
                 if(notifyOnRun){
@@ -56,14 +57,17 @@ export default defineComponent({
 
         const selectedData = ref<string[]>([])
 
+        //if the elmement is already selected, it will not be added again
         const addElementToSelectedData = (element: string) => {
-            selectedData.value.push(element)
+            selectedData.value.includes(element) ? null : selectedData.value.push(element);
         }
 
+        //if the element is not selected, it will not be removed from the selectedData
         const removeElementFromSelectedData = (element: string) => {
             selectedData.value = selectedData.value.filter(item => item !== element)
         }
 
+        //providing a package of functions and data to the children
         provide(selectedDataSymbol, {
             selectedData,
             addElementToSelectedData,
@@ -71,11 +75,10 @@ export default defineComponent({
             checkPermission
         })
 
+        //resetting the selectedData on unmount
         onUnmounted(() => {
             selectedData.value = []
         })
-
-
 
         return {
             selectedData

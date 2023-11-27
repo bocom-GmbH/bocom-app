@@ -9,7 +9,6 @@
             </div>
                 € {{ element.find((element: any) => element.label === 'Preis').value }} <br>
                 {{ element.find((element: any) => element.label === 'Menge').value }}
-                <!-- {{ element[0].storyId }} -->
         </div>
 
         <q-toggle
@@ -41,8 +40,6 @@ export default defineComponent({
         }
     },
     setup(props) {
-
-
         const fileStore = useFileStore()
         const elementsCopy = ref<object>({})
 
@@ -50,20 +47,17 @@ export default defineComponent({
             elementsCopy.value = cloneDeep(props.element)
         })
 
+        //if the template changes, update the element
+        watch(() => props.element, () => {
+            elementsCopy.value = cloneDeep(props.element)
+        }, { deep: true })
+
         const data = inject(selectedDataSymbol) as IselectedData
 
+        //if the user selects or deselects the element, update the element in the template and the selectedData
         watch(elementsCopy, () => {
-            /* if(JSON.stringify(elementsCopy.value) === JSON.stringify(props.element)) {
-                return
-            } else { */
-                fileStore.update(props.element[0].id, elementsCopy.value)
-                if ((elementsCopy as any).value[0].selected) {
-                    data.addElementToSelectedData(props.element[0].id)
-                } else {
-                    data.removeElementFromSelectedData(props.element[0].id)
-                }
-          /*   } */
-
+            fileStore.update(props.element[0].id, elementsCopy.value);
+            ((elementsCopy as any).value[0].selected) ? data.addElementToSelectedData(props.element[0].id) : data.removeElementFromSelectedData(props.element[0].id)
         },{ deep: true })
 
         return {

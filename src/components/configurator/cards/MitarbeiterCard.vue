@@ -46,24 +46,22 @@ export default defineComponent({
         const fileStore = useFileStore()
         const elementsCopy = ref<object>({})
 
+        //make a deep copy of the props.element on before mount
         onBeforeMount(() => {
             elementsCopy.value = cloneDeep(props.element)
         })
 
+        //set the selected value on mounted
         onMounted(() => {
             selected.value = props.element[0].selected
         })
 
         const data = inject(selectedDataSymbol) as IselectedData
 
+        //if the selected state of a card changed update the filestore and the selectedData
         watch(elementsCopy, () => {
-            fileStore.update(props.element[0].id, elementsCopy.value)
-            if ((elementsCopy as any).value[0].selected) {
-                data.addElementToSelectedData(props.element[0].id)
-            } else {
-                data.removeElementFromSelectedData(props.element[0].id)
-            }
-
+            fileStore.update(props.element[0].id, elementsCopy.value);
+            ((elementsCopy as any).value[0].selected) ? data.addElementToSelectedData(props.element[0].id) : data.removeElementFromSelectedData(props.element[0].id)
         },{ deep: true })
 
         return {

@@ -56,10 +56,22 @@ export const useFileStore = defineStore('file', {
             this.currentSite = site;
         },
         update (id: string, updatedObject: any): void {
+            //console.log('update run')
             if(JSON.stringify(this.currentSite) !== JSON.stringify(updateNestedObject(this.currentSite, updatedObject[0].path, updatedObject))){
                 this.currentSite = updateNestedObject(this.currentSite, updatedObject[0].path, updatedObject);
                 save(this.currentSite);
             }
+        },
+        resetSelectedValues(path: string) {
+            const fullPath = `this.currentSite.${path}`;
+            const target = eval(fullPath);
+            //console.log(target.data[0].selected)
+            if(target.data[0].selected) {
+                target.data[0].selected = false;
+            }
+            //console.log(target)
+            this.update('temp', target.data)
+            //console.log(this.$state.target)
         }
     }
 });

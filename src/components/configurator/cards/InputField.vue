@@ -40,14 +40,17 @@ export default defineComponent({
         const fileStore = useFileStore()
         const elementsCopy = ref<any>({})
 
+        //copy the props.element on before mount
         onBeforeMount(() => {
             elementsCopy.value = cloneDeep(props.element)
         })
 
+        //debounce the update of the filestore
         const debouncedUpdate = debounce((elementsCopy, fileStore, id) => {
             fileStore.update(id, elementsCopy.value);
         }, 300);
 
+        //watch the elementsCopy and if the content changes update the filestore
         watch(elementsCopy, () => {
             if(JSON.stringify(elementsCopy.value) === JSON.stringify(props.element)) {
                 return;

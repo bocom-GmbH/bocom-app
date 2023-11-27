@@ -29,7 +29,7 @@ import { defineComponent, ref, PropType, watch } from 'vue'
 import { useTabStore } from 'src/stores/navigation-store'
 
 //import interfaces
-import { BottomMenuItem } from './models'
+import { BottomMenuItem } from './../types/index'
 
 
 export default defineComponent({

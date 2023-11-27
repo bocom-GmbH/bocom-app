@@ -24,7 +24,6 @@
                 />
                 <div>
                     <div>
-                        {{ currentSlideId }} {{  selectedData }}
                         <MainConfigurator
                             :numberToSelect="elementsCopy[2].data[0].numberToSelect"
                             :label="elementsCopy[2].label"
@@ -108,7 +107,14 @@ export default defineComponent({
     },
     setup(props){
         const userStore = useUserStore()
+        const resetCardCarousel = ref(0);
+        const selectedData = ref<string[]>([])
+        const elementsCopy = ref<object>({})
+        const articleHeight = ref(0)
+        const currentSlideId = ref('')
+        const currentSlide = ref(0)
 
+        //checking the permission for the user, with optional notification
         const checkPermission = (permissionId: string, notifyOnRun: boolean) => {
             if(!userStore.doIHavePermissionFor(permissionId)){
                 if(notifyOnRun){
@@ -119,6 +125,7 @@ export default defineComponent({
                 return true
             }
         }
+
         const notify = (message: string) => {
             Notify.create({
                 message: message,
@@ -129,45 +136,45 @@ export default defineComponent({
             });
         }
 
-        const resetCardCarousel = ref(0);
-        const selectedData = ref<string[]>([])
-        const elementsCopy = ref<object>({})
-        const articleHeight = ref(0)
-        const currentSlideId = ref('')
-        const currentSlide = ref(0)
 
+        //if the elmement is already selected, it will not be added again
         const addElementToSelectedData = (element: string) => {
-            selectedData.value.push(element)
+            selectedData.value.includes(element) ? null : selectedData.value.push(element);
         }
 
         const removeElementFromSelectedData = (element: string) => {
             selectedData.value = selectedData.value.filter(item => item !== element)
         }
 
+        //make the carousel available if the parent is selected
         const deisableCarousel = computed(() => {
-            if (currentSlideId.value === selectedData.value[0]) {
-                return false
-            } else {
-                return true
-            }
+            return !(currentSlideId.value === selectedData.value[0])
         })
 
+        //updating the currentSlideId
         watch(currentSlide, () => {
-            currentSlideId.value = props.element.data[1].data.filter(element => element.label === 'Story')[currentSlide.value].data[0].id
-            //console.log(props.element.data[1].data.filter(element => element.label === 'Story')[currentSlide.value].data[0].id)
+            currentSlideId.value = props.element.data[1].data.filter((element:any) => element.label === 'Story')[currentSlide.value].data[0].id
         })
 
-        watch(selectedData, (oldValue, newValue) => {
-            console.log('CHANGEASDASDASDASDASDADASDASDASD')
-            resetCardCarousel.value++
-            //console.log(oldValue, newValue)
+        //if the props.element changes, the elementsCopy will be updated deeply
+        watch(() => props.element, () => {
+            elementsCopy.value = cloneDeep(props.element.data)
+        }, { deep: true })
 
+        watch(selectedData, (newValue, oldValue) => {
+            if (oldValue.length !== newValue.length) resetCardCarousel.value++;
         } ,{ deep: true })
 
+        //provideding the currentSlideId
         provide('currentSlideId', currentSlideId)
+        //provideding the currentSlide as a number
         provide('currentSlide', currentSlide)
+        //children must set the height of the article
         provide('articleHeight', articleHeight)
+        //providing the resetCardCarousel value as a trigger variable
         provide('resetCardCarousel', resetCardCarousel)
+
+        //providing a package of functions and data to the children
         provide(selectedDataSymbol, {
             selectedData,
             addElementToSelectedData,
@@ -175,6 +182,7 @@ export default defineComponent({
             checkPermission
         })
 
+        //loading the selected stories to the selectedData
         onBeforeMount(() => {
             const index = ref(0)
             for(const story of props.element.data[1].data.filter(element => element.label === 'Story')) {
@@ -186,6 +194,7 @@ export default defineComponent({
                 }
             }
             currentSlide.value = index.value -1
+            //on mount copy the props.element deeply to the elementsCopy
             elementsCopy.value = cloneDeep(props.element.data)
         })
 

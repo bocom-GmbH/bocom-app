@@ -4,9 +4,6 @@
             <div v-if="disable" class="absolute-full text-subtitle2 flex flex-center">
             </div>
         </q-img>
-        <!--  <div class="flex-column q-pa-sm no-wrap">
-            <div class="custom-text q-mb-none text-weight-bold text-left"> {{ element[1].label }} </div>
-        </div> -->
         <q-toggle
             class="q-mt-xs"
             color="positive"
@@ -42,20 +39,17 @@ export default defineComponent({
         const elementsCopy = ref<object>({})
         const userStore = useUserStore()
 
+        //on before mount clone the props.slide and set the currentSlideId
         onBeforeMount(() => {
             elementsCopy.value = cloneDeep(props.element)
         })
 
         const data = inject(selectedDataSymbol) as IselectedData
 
+        //if the selected state of an image changed update the filestore and the selectedData
         watch(elementsCopy, () => {
-            //console.log(props.element)
-            fileStore.update(props.element[0].id, elementsCopy.value)
-            if ((elementsCopy as any).value[0].selected) {
-                data.addElementToSelectedData(props.element[0].id)
-            } else {
-                data.removeElementFromSelectedData(props.element[0].id)
-            }
+            fileStore.update(props.element[0].id, elementsCopy.value);
+            ((elementsCopy as any).value[0].selected) ? data.addElementToSelectedData(props.element[0].id) : data.removeElementFromSelectedData(props.element[0].id)
 
         }, { deep: true })
 
