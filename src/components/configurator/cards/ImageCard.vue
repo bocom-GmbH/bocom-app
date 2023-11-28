@@ -39,7 +39,7 @@ export default defineComponent({
         const elementsCopy = ref<object>({})
         const userStore = useUserStore()
 
-        //on before mount clone the props.slide and set the currentSlideId
+        //make a deep copy of the props.element on before mount, so that we can manipulate the elements
         onBeforeMount(() => {
             elementsCopy.value = cloneDeep(props.element)
         })

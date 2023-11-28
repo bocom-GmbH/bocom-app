@@ -22,6 +22,7 @@ export default defineComponent({
     name: 'AppHeader',
     setup(){
         const tabStore = useTabStore();
+        //function that handle the history of the browser
         const goBack = () => {
 			history.back();
 		};

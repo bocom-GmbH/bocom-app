@@ -33,6 +33,7 @@ export default defineComponent({
             type: Number,
             required: false
         },
+        //the whole carousel can be disabled by the parent
         disabledByParent: {
             type: Boolean,
             default: false,
@@ -46,11 +47,12 @@ export default defineComponent({
         const selectedData = ref(data.selectedData)
         const resetCardCarousel = ref(inject('resetCardCarousel'))
 
+        // the function clears the selectedData array
         const resetSelectedData = () => {
            selectedData.value = []
         }
 
-        // if the resetCardCarousel is triggered, reset the selectedData and call the resetSelectedData store function
+        // if the resetCardCarousel is triggered, reset the selectedData and call the resetSelectedData store function witch resets the selected values in the template
         watch((resetCardCarousel), () => {
             resetSelectedData
             for(let element of props.element) {
@@ -58,6 +60,8 @@ export default defineComponent({
             }
         })
 
+        //using the component hub to get the component by id
+        //at this time the MitarbeiterCard, PorductCard or the PromotionCard
         const getComponentById = (id: string) => {
             return componentHub.getComponentById(id)
         }

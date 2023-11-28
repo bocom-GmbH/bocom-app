@@ -1,7 +1,7 @@
 import { computed } from 'vue'
 import { BottomMenuItem } from './components/models';
 
-
+//configuration file for the bottom menu
 
 const bottomMenuList = computed<BottomMenuItem[]>(() => [
     {
@@ -20,6 +20,7 @@ const bottomMenuList = computed<BottomMenuItem[]>(() => [
     },
 ]);
 
+//it returns the active tab (object) by path
 const getActiveTabByPath = (path: any) => {
     const newPath = '/' + path
     return bottomMenuList.value.find((tab) => tab.navigateToPath === newPath)?.label;

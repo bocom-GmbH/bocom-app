@@ -85,7 +85,7 @@ import CardCarousel from './CardCarousel.vue';
 import MainConfigurator from '../MainConfigurator.vue';
 import { selectedDataSymbol, IselectedData } from 'src/types/index'
 import { useUserStore } from 'stores/authentication'
-import { Notify } from 'quasar'
+import { notify } from './../../functions/notification'
 
 export default defineComponent({
     name: 'GroupingComponent',
@@ -107,12 +107,18 @@ export default defineComponent({
     },
     setup(props){
         const userStore = useUserStore()
+        //trigger variable to provide to the CardCarousel and reset the cards value
         const resetCardCarousel = ref(0);
+        //seelctedData is used to display the progress
         const selectedData = ref<string[]>([])
+        //elementsCopy is a copy of the props to be able to manipulate the data
         const elementsCopy = ref<object>({})
+        //this variable is provided to the articles to set the height of the article, so the buttons of the carousel can be set
         const articleHeight = ref(0)
-        const currentSlideId = ref('')
-        const currentSlide = ref(0)
+        //currentSlideId is the id of the current slide as a string
+        const currentSlideId = ref<string>('')
+        //currentSlide is the index of the current slide of the ArticleSelector as a number
+        const currentSlide = ref<number>(0)
 
         //checking the permission for the user, with optional notification
         const checkPermission = (permissionId: string, notifyOnRun: boolean) => {
@@ -125,17 +131,6 @@ export default defineComponent({
                 return true
             }
         }
-
-        const notify = (message: string) => {
-            Notify.create({
-                message: message,
-                position: 'top',
-                timeout: 1500,
-                color: 'red',
-                progress: true
-            });
-        }
-
 
         //if the elmement is already selected, it will not be added again
         const addElementToSelectedData = (element: string) => {
@@ -161,8 +156,10 @@ export default defineComponent({
             elementsCopy.value = cloneDeep(props.element.data)
         }, { deep: true })
 
+        //if the user removes an article from the selectedData, it means that the selected products cant be selected anymore
+        //it will reset the cards selected value
         watch(selectedData, (newValue, oldValue) => {
-            if (oldValue.length !== newValue.length) resetCardCarousel.value++;
+            if (oldValue.length > newValue.length) resetCardCarousel.value++;
         } ,{ deep: true })
 
         //provideding the currentSlideId
@@ -194,7 +191,7 @@ export default defineComponent({
                 }
             }
             currentSlide.value = index.value -1
-            //on mount copy the props.element deeply to the elementsCopy
+            //on mount copy the props.element deeply to the elementsCopy, so that the copy can be manipulated by the child components
             elementsCopy.value = cloneDeep(props.element.data)
         })
 

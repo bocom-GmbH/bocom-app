@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
 import { useMutation } from '@vue/apollo-composable'
 import debounce from 'lodash/debounce';
-import { Notify } from 'quasar'
+import { notify } from './notification'
 
 const saveTemplate = gql`
     mutation saveTemplate($dataToSave: JSON!) {
@@ -14,13 +14,16 @@ const saveTemplate = gql`
 `
 const MAX_RETRIES = 2;
 
+//save the template with maximal 2 retries
 const save = debounce((templateToSave: object) => {
     console.log('save')
     const performSave = (retries = 0) => {
         const { mutate: saveData, onDone, onError } = useMutation(saveTemplate);
         console.log(templateToSave)
         saveData({ dataToSave: templateToSave });
+        //on error make a notification
         onError(() => {
+            //imported external function to make a notification
             notify('Verbindungsfehler')
         })
         onDone((data: any) => {
@@ -29,7 +32,6 @@ const save = debounce((templateToSave: object) => {
                 if (retries < MAX_RETRIES - 1) {
                     performSave(retries + 1);
                 } else {
-
                    notify(data.data?.saveTemplate?.message)
                 }
             }
@@ -41,16 +43,6 @@ const save = debounce((templateToSave: object) => {
         console.log(error);
     }
 }, 1500);
-
-const notify = (message: string) => {
-    Notify.create({
-        message: message,
-        position: 'top',
-        timeout: 1500,
-        color: 'red',
-        progress: true
-    });
-}
 
 
 export {

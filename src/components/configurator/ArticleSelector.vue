@@ -73,7 +73,7 @@ export default defineComponent({
         const selectedData = data.selectedData
         const currentSlide = ref(0)
         const navigation = ref(true)
-
+        //the automatic button position is not implemented here
         //set the current slide to the index of the selected element, so it will automatically slide to the selected article
         onMounted(() =>{
             let index = 0

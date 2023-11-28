@@ -26,12 +26,14 @@ const routes: RouteRecordRaw[] = [
         component: MainLayout,
         children: [{ path: '', component: UserPage }],
     },
+    //The use of 'name' is not mandatory, but it facilitates routing. It is not yet in use anywhere for now.
     {
         path: '/HomePage/FileEditorPage',
         name: 'FileEditorPage',
         props: true,
         component: () => MainLayout,
         children: [
+            //this route contains the magazineId as query parameter
             {
                 path: ':magazineId',
                 component: () => FileEditorPage,

@@ -40,12 +40,15 @@ export default defineComponent({
         const store = useUserStore();
         const fileStore = useFileStore();
 
+        //if the user is logged out, redirect to the login page
         onMounted(() => {
             if(!store.isUserLoggedIn){
                 router.push('/login')
             }
         })
 
+
+        //displayes the megazines on the home screen
         const { getFileData } = storeToRefs(fileStore)
         const magazineList = ref(getFileData)
 

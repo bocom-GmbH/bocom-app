@@ -3,9 +3,9 @@
         <q-card class="q-ma-sm q-pa-md bg-primary flex card">
            <div class="first-column flex">
                 <div v-for="(input, index) of element.filter((input: any) => input.label)" :key="index">
-                    <!-- {{ input.data }} -->
+                    <!-- input fields must be refactored!!! -->
                    <InputField
-                    :element="input.data"
+                        :element="input.data"
                   />
                 </div>
            </div>
@@ -31,10 +31,7 @@ export default defineComponent({
     },
     setup () {
 
-        return {
-            text: ref('Placeholder'),
-            progress: ref(55)
-        }
+        return {}
     }
 })
 </script>

@@ -56,12 +56,14 @@ export default defineComponent({
     },
     setup(props){
         const fileStore = useFileStore();
-
+        //converting the prop id to a ref to be reactive
         const { id } = toRefs(props)
 
+        //getting the current magazine data from the store
         const magazineLabel = fileStore.getFileDataById(id.value) as IFileData
 
         return {
+            //return the magazine label
             label: magazineLabel?.label
         }
     }

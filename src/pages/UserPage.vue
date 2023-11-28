@@ -25,12 +25,18 @@ export default defineComponent({
 		const router = useRouter();
 		const store = useUserStore();
 
+        //the log out function deletes the token, permission ids and the cookies from the pinia store and from the local storage
+        //then redirect to the login page
         const logout = () => {
+            //remove apollo token from cookies
             Cookies.remove('apollo-token')
+            //store function to reset the userData and permissions
             store.resetUserAuthentication();
+            //remove permissions and apollo token from local storage
             window.localStorage.removeItem('permissions');
             window.localStorage.removeItem('apollo-token');
             router.push('/login')
+            //reset the pinia store
             store.$reset();
         }
 

@@ -4,6 +4,8 @@ import { cloneDeep, find, forEach } from 'lodash';
 
 import { IFileData } from 'src/types';
 
+
+//the function updates the template by the path and the changed object
 function updateNestedObject(store: any, path: string, updatedObject: any): void {
     const clonedStore = cloneDeep(store);
 
@@ -41,37 +43,39 @@ export const useFileStore = defineStore('file', {
         getFileData (state) {
             return state.fileData;
         },
+        //returns the desired magazine by id
         getFileDataById: (state) => (id: string) :IFileData | undefined => {
             return state.fileData?.find((file: any) => file.id === id);
         },
+        //returns the desired magazine site by site id
         getCurrentSiteComponents: (state) => () => {
             return state.currentSite
         }
     },
     actions: {
+        //store the magazines
         setFileData (singleFile: IFileData[]): void {
             this.fileData = singleFile;
         },
+        //store the current magazine site
         setCurrentSite (site: any): void {
             this.currentSite = site;
         },
+        //updates the template in the store (if there are any changes) and saves it
         update (id: string, updatedObject: any): void {
-            //console.log('update run')
             if(JSON.stringify(this.currentSite) !== JSON.stringify(updateNestedObject(this.currentSite, updatedObject[0].path, updatedObject))){
                 this.currentSite = updateNestedObject(this.currentSite, updatedObject[0].path, updatedObject);
                 save(this.currentSite);
             }
         },
+        //reset the 'selected' values by path and them saves the template
         resetSelectedValues(path: string) {
             const fullPath = `this.currentSite.${path}`;
             const target = eval(fullPath);
-            //console.log(target.data[0].selected)
             if(target.data[0].selected) {
                 target.data[0].selected = false;
             }
-            //console.log(target)
             this.update('temp', target.data)
-            //console.log(this.$state.target)
         }
     }
 });

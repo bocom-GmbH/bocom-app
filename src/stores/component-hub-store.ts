@@ -1,4 +1,6 @@
 import { defineStore } from 'pinia';
+
+//every used components should be imported here
 import CardCarousel from 'src/components/configurator/CardCarousel.vue';
 import ImageCard from 'src/components/configurator/cards/ImageCard.vue';
 import ArticleSelector from 'src/components/configurator/ArticleSelector.vue';
@@ -16,6 +18,8 @@ interface ComponentPairs {
 
 export const useComponentStore = defineStore('componentHub', {
 	state: () => ({
+        //this hub contains the components the front end should use by the component id
+        //it also contains if the component need to use the main configurator or not
         hub: [
             {
                 componentId: '19b85d2c-23f9-443c-878c-c3bb897e59fd',
@@ -66,6 +70,7 @@ export const useComponentStore = defineStore('componentHub', {
 	}),
 
 	getters: {
+        //returns the component by the component id
 		getComponentById: (state) => (componentId: string) => {
 			const componentPair = state.hub.find((pair) => pair.componentId === componentId);
 			if (componentPair) {
@@ -73,6 +78,7 @@ export const useComponentStore = defineStore('componentHub', {
 			}
 			return null;
 		},
+        //returns if the component needs the main configurator or not
         getRequireMainConfigurator: (state) => (componentId: string) => {
             const componentPair = state.hub.find((pair) => pair.componentId === componentId);
             if (componentPair) {
@@ -80,9 +86,5 @@ export const useComponentStore = defineStore('componentHub', {
             }
             return false;
         }
-	},
-
-	actions: {
-
-	},
+	}
 });

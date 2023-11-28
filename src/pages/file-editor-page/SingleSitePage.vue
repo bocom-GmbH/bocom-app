@@ -62,17 +62,20 @@ export default defineComponent({
         const fileStore = useFileStore()
         const components = ref<any[]>([])
 
-        //querying the site data
+        //querying the site data by the active site id
         onMounted(() => {
             querySiteData(props.siteId)
+            //get the components from the pinia store
             components.value = fileStore.getCurrentSiteComponents()
         })
 
+        //reset the current site before the next page opens
         onUnmounted(() => {
             fileStore.currentSite = []
         })
 
         //if the siteId changes the site data should be queried again
+        //and scroll to the top
         watch(() => props.siteId, () => {
             querySiteData(props.siteId)
             scrollToTop()
@@ -83,6 +86,7 @@ export default defineComponent({
             components.value = fileStore.getCurrentSiteComponents()
         }, { deep: true })
 
+        //it will scroll to the top
         const scrollToTop = () => {
             window.scrollTo(0, 0);
         }

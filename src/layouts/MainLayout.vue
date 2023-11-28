@@ -19,7 +19,6 @@ import { useFileStore } from 'stores/file-store';
 
 import BottomMenu from 'src/components/BottomMenu.vue';
 import { bottomMenuList } from 'src/BottomMenuConfig';
-import { useQuasar } from 'quasar';
 
 import { useQuery } from '@vue/apollo-composable';
 import { getMagazine } from '../apollo/queries/files';
@@ -32,14 +31,15 @@ export default defineComponent({
         AppHeader,
     },
     setup() {
-        const $q = useQuasar();
         const store = useUserStore();
         const drawer = ref(false);
+        //on starting the application. If the permissions are stored in local storage, load them into store
         if (window.localStorage.getItem('permissions')) {
             store.setPermissions(
                 window.localStorage.getItem('permissions')?.split(',')
             );
         }
+        //on starting the application. If the permissions are stored in local storage, load them into store
         if (window.localStorage.getItem('apollo-token')) {
             store.setUserData(window.localStorage.getItem('apollo-token'));
         }
@@ -65,6 +65,7 @@ export default defineComponent({
             }
         };
 
+        //get the magazines from the server on starting the application
         onMounted(() => {
             queryFileData();
         });

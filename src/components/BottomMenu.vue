@@ -42,8 +42,10 @@ export default defineComponent({
     },
         setup(){
         const tabStore = useTabStore();
+        //getting the active tab from the store
         const activeTab = ref(tabStore.getActiveTab)
 
+        //set the active tab in the store if it changes
         watch(() => activeTab.value, () => {
             tabStore.setActiveTab(activeTab.value)
         })

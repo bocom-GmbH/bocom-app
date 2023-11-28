@@ -46,6 +46,7 @@ export default defineComponent({
         const fileStore = useFileStore()
         const elementsCopy = ref<object>({})
 
+        //make a deep copy of the props.element on before mount, so that we can manipulate the elements
         onBeforeMount(() => {
             elementsCopy.value = cloneDeep(props.element)
         })
@@ -55,6 +56,7 @@ export default defineComponent({
             elementsCopy.value = cloneDeep(props.element)
         }, { deep: true })
 
+        //set the selected value
         onMounted(() => {
             selected.value = props.element[0].selected
         })

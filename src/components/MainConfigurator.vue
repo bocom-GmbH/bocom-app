@@ -12,7 +12,7 @@
 import { defineComponent, provide, ref, onUnmounted } from 'vue'
 import CircularProgress from 'src/components/configurator/CircularProgress.vue';
 import { selectedDataSymbol } from 'src/types/index';
-import { Notify } from 'quasar'
+import { notify } from './../functions/notification'
 import { useUserStore } from 'stores/authentication'
 
 export default defineComponent({
@@ -43,16 +43,6 @@ export default defineComponent({
             } else {
                 return true
             }
-        }
-
-        const notify = (message: string) => {
-            Notify.create({
-                message: message,
-                position: 'top',
-                timeout: 1500,
-                color: 'red',
-                progress: true
-            });
         }
 
         const selectedData = ref<string[]>([])

@@ -61,7 +61,10 @@ export default defineComponent({
             store,
         };
     },
+    //this is an outdated way to make a mutation, it should be refactored
     methods: {
+        //the login function stores the apollo token in the cookies and in the local storage
+        //it stores the permission ids and the user data in the pinia store
         async loginFunc() {
             const loginData = await this.login({
                 username: this.username,

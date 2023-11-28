@@ -40,6 +40,7 @@ export default defineComponent({
             return (props.numerator / props.denominator) * 100;
         });
 
+        //the computed value returns a color name by the numerator and denominator
         const progressColor = computed(() => {
             if (props.numerator === props.denominator) {
                 return 'positive';

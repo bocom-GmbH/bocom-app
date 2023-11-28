@@ -44,7 +44,8 @@ export default defineComponent({
         const currentSlide = ref(inject('currentSlide'));
         const divRef = ref(null);
 
-        //on before mount clone the props.slide and set the currentSlideId
+        //make a deep copy of the props.element on before mount, so that we can manipulate the elements
+        //and set the currentSlideId
         onBeforeMount(() => {
             elementsCopy.value = cloneDeep(props.slide)
             currentSlideId.value = elementsCopy.value[0].id

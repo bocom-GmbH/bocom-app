@@ -50,10 +50,12 @@ export default defineComponent({
 
         const currentSite = ref(1);
 
+        //get the magazine id by the route params and set the magazine
         onMounted(() => {
             magazine.value = fileStore.getFileDataById(route.params.magazineId);
         });
 
+        //if I refresh on the file editor page, set the magazine id by the route params
         watch(getFileData, () => {
             magazine.value = fileStore.getFileDataById(route.params.magazineId);
         });

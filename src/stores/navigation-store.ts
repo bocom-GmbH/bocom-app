@@ -12,21 +12,23 @@ export const useTabStore = defineStore('tabStore', {
         backButtonAvailable: false
 	}),
 
-	// define getters
 	getters: {
+        //returns the active tab string
 		getActiveTab(): string {
 			return this.activeTab;
 		},
+        //returns if the backbutton should be available
         isBackButtonAvailable(): boolean {
             return this.backButtonAvailable;
         }
 	},
 
-	// define actions
 	actions: {
+        //if another tab is selected, this function sets the active tab
 		setActiveTab(tab: string ) {
 			this.activeTab = tab;
 		},
+        //sets if the backbutton should be available
         setBackButtonAvailable(available: boolean) {
             this.backButtonAvailable = available;
         }
