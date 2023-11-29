@@ -1,5 +1,6 @@
 <template>
     <q-layout view="lHh Lpr lFf">
+        <!-- app header is always on the top of the screen -->
         <AppHeader />
 
         <q-page-container>
@@ -8,6 +9,7 @@
             </keep-alive>
         </q-page-container>
 
+        <!-- always showing the bottom menu -->
         <BottomMenu :bottomMenuList="bottomMenuList" />
     </q-layout>
 </template>
@@ -39,7 +41,7 @@ export default defineComponent({
                 window.localStorage.getItem('permissions')?.split(',')
             );
         }
-        //on starting the application. If the permissions are stored in local storage, load them into store
+        //on starting the application. If the apollo-token is stored in local storage, load it into store
         if (window.localStorage.getItem('apollo-token')) {
             store.setUserData(window.localStorage.getItem('apollo-token'));
         }
@@ -56,6 +58,7 @@ export default defineComponent({
                         fetchPolicy: 'no-cache',
                     })
                 );
+                /* on the result the data will be stored in the file store */
                 onResult((result) => {
                     magazine.value = result;
                     fileStore.setFileData(result.data?.Magazin);

@@ -10,13 +10,17 @@
             ref="carousel"
             :swipeable="true"
         >
+            <!-- slicing the first element of the array, because it contains the metadata -->
             <q-carousel-slide v-for="(slide, index) in element.slice(1)" :key="index" class="q-pa-none" :name="index">
+                <!-- disable the article card if the numberToSelect value reached or another article is selected as the displayed -->
+                <!-- set the color of the article card to gray if the numberToSelect value reached or another article is selected as the displayed -->
                 <ArticleCard
                     :slide="slide.data"
                     :disable="!!(numberToSelect && selectedData.length >= numberToSelect) && selectedData.find(element => element === slide.data[0].id) !== slide.data[0].id"
                     :style="{ 'color':  !!(numberToSelect && selectedData.length >= numberToSelect) && slide && selectedData.find(element => element === slide.data[0].id) !== slide.data[0].id ? 'gray' : 'var(--q-color-primary)'}"
                 />
             </q-carousel-slide>
+            <!-- this tmeplate contains the buttons for controlling the carousel -->
             <template v-slot:control>
                 <div>
                     <q-carousel-control

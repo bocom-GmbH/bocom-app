@@ -1,9 +1,11 @@
 <template>
     <div class="">
+        <!-- this div contains the label and the progressbar -->
         <div class="flex justify-between items-center">
             <span class="q-ml-md text-weight-bold article-heading"> {{ label }} </span>
             <CircularProgress :denominator="numberToSelect" :numerator="selectedData.length"/>
         </div>
+        <!-- every content with template = body from outside comes here -->
         <slot name="body"></slot>
     </div>
 </template>
@@ -37,6 +39,7 @@ export default defineComponent({
         const checkPermission = (permissionId: string, notifyOnRun: boolean) => {
             if(!userStore.doIHavePermissionFor(permissionId)){
                 if(notifyOnRun){
+                    //make a notification
                     notify('Keine Berechtigung')
                 }
                 return false

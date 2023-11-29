@@ -16,8 +16,6 @@
            color="secondary"
            class="input"
        />
-
-       <!-- {{ elementsCopy }} -->
    </div>
 </template>
 

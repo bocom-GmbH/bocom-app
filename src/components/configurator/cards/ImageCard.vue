@@ -1,8 +1,8 @@
 <template>
     <q-card :class="{'custom-card bg-primary q-my-md flex': true, 'disabled-bg': disable}">
         <q-img class="custom-img" :src="`https://images.bocom.at/${elementsCopy[1].value}`">
-            <div v-if="disable" class="absolute-full text-subtitle2 flex flex-center">
-            </div>
+            <!-- this div makes the picture gray if the card is disabled -->
+            <div v-if="disable" class="absolute-full text-subtitle2 flex flex-center"></div>
         </q-img>
         <q-toggle
             class="q-mt-xs"

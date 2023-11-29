@@ -1,12 +1,16 @@
 <template>
     <div class="seite-titel"> {{ components?.label }} </div>
+    <!-- if the data is ready to display -->
     <div v-if="components?.data">
+        <!-- filter the data object to get only the components with a label -->
         <div v-for="(component) of components.data.filter(file => file.label)" :key="component.data[0].elementId">
+            <!-- use the main configurator if the component is ready and requires it -->
             <main-configurator
                 v-if="components && componentHub.getRequireMainConfigurator(component.data[0].elementId)"
                 :label="component.label"
                 :numberToSelect="component.data[0].numberToSelect"
             >
+                <!-- the content goes to the body of the main configurator -->
                 <template v-slot:body>
                     <div v-if="component">
                         <component
@@ -18,6 +22,7 @@
                     </div>
                 </template>
             </main-configurator>
+            <!-- use the component if it is ready and does not require the main configurator -->
             <component
                 v-if="components && !componentHub.getRequireMainConfigurator(component.data[0].elementId)"
                 :element="component"
@@ -26,6 +31,7 @@
             />
         </div>
     </div>
+    <!-- if the data is not ready to display, showing the loading spinner -->
     <div v-else class="q-pa-md flex flex-center">
         <q-circular-progress
             indeterminate
@@ -93,23 +99,34 @@ export default defineComponent({
 
         const querySiteData = (siteById: string) => {
             try {
+                // 'getSiteById' is a gql query function.
                 const { onResult } = useQuery(
-                    getSiteById, () => ({
-                        templateId: siteById
+                    getSiteById,
+                    () => ({
+                        templateId: siteById // Parameters for the query function. 'siteById' is used as 'templateId'.
                     }),
                     () => ({
-                        errorPolicy: 'all',
-                        fetchPolicy: 'no-cache'
+                        errorPolicy: 'all', // Specifies error handling policy.
+                        fetchPolicy: 'no-cache' // Specifies the caching policy for this query.
                     })
                 )
+
+                // Handles the query result.
+                // The 'onResult' function is called when the query returns a result.
                 onResult((result) => {
+                    // Clears the current site data in the 'fileStore'.
                     fileStore.currentSite = []
+
+                    // Sets the current site data in 'fileStore' with the new data from the query result.
+                    // 'result?.data?.Seite' extracts the site data from the query result.
                     fileStore.setCurrentSite(result?.data?.Seite)
                 })
-            } catch ( error) {
+            } catch (error) {
+                // Catches and logs any errors that occur during the query process.
                 console.log(error)
             }
         }
+
         return {
             components,
             componentHub

@@ -12,21 +12,23 @@ const saveTemplate = gql`
         }
     }
 `
-const MAX_RETRIES = 2;
 
 //save the template with maximal 2 retries
+const MAX_RETRIES = 2;
+
 const save = debounce((templateToSave: object) => {
-    console.log('save')
+
     const performSave = (retries = 0) => {
         const { mutate: saveData, onDone, onError } = useMutation(saveTemplate);
-        console.log(templateToSave)
         saveData({ dataToSave: templateToSave });
         //on error make a notification
         onError(() => {
+            //when the client is offline
             //imported external function to make a notification
             notify('Verbindungsfehler')
         })
         onDone((data: any) => {
+            /* if the save was not successful due to a server error, make a notification and retry */
             if (data.data.saveTemplate?.success === false) {
 
                 if (retries < MAX_RETRIES - 1) {

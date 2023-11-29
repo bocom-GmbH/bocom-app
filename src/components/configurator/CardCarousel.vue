@@ -1,5 +1,6 @@
 <template>
     <div class="">
+        <!-- this is the wrapper for the carousel -->
         <div class="wrapper q-px-md" v-if="element">
             <div
                 v-for="card in element.filter(element => element.label)"

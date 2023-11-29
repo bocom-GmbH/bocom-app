@@ -1,6 +1,7 @@
 <template>
     <q-header class="bg-accent" elevated>
         <q-toolbar>
+            <!-- show the back button if it is needed -->
             <q-btn
                 v-if="tabStore.isBackButtonAvailable"
                 color="secondary"

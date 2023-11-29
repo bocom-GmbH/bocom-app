@@ -1,8 +1,10 @@
 <template>
     <div v-if="magazine?.TemplateIds" ref="scrollArea">
+        <!-- this is the content of a single site -->
        <SingleSitePage
             :siteId="magazine.TemplateIds[currentSite - 1]"
        />
+       <!-- this is the pagination under the content -->
         <div class="pagination">
             <q-pagination
                 class="q-ma-none"
@@ -12,6 +14,7 @@
             />
         </div>
     </div>
+    <!-- if the site is loading display the loading spinner -->
     <div v-else class="q-pa-md flex flex-center">
         <q-circular-progress
             indeterminate

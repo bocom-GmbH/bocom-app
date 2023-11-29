@@ -1,6 +1,5 @@
 <template>
     <q-card :class="{'custom-card bg-primary q-my-md flex': true, 'disabled-bg': disable}">
-        PROMOTIN CARD
         <q-img style="border-radius: 0px;" class="custom-img q-mt-md bg-primary" fit="scale-down" :src="`https://images.bocom.at/${element.find((element: any) => element.label === 'Bild').value}`">
             <div v-if="disable" class="absolute-full text-subtitle2 flex flex-center"></div>
         </q-img>
@@ -8,8 +7,24 @@
             <div class="custom-text q-mb-none text-weight-bold text-left">
                 {{ element.find((element: any) => element.label === 'Name').value }}
             </div>
-                € {{ element.find((element: any) => element.label === 'Preis').value }} <br>
-                {{ element.find((element: any) => element.label === 'Menge').value }}
+            Promotionwert: € {{ element.find((element: any) => element.label === 'Promotionwert').value }} <br> <br>
+            <q-input
+                :disable="!elementsCopy[0].selected"
+                v-model="elementsCopy.find((element: any) => element.label === 'Preis').value"
+                label="Wert"
+                outlined
+                rounded
+                color="secondary"
+            ></q-input>
+            <br>
+            <q-input
+                :disable="!elementsCopy[0].selected"
+                v-model="elementsCopy.find((element: any) => element.label === 'Menge').value"
+                label="Menge"
+                outlined
+                rounded
+                color="secondary"
+            ></q-input>
         </div>
 
         <q-toggle
@@ -46,6 +61,7 @@ export default defineComponent({
         const fileStore = useFileStore()
         const elementsCopy = ref<object>({})
 
+
         //make a deep copy of the props.element on before mount, so that we can manipulate the elements
         onBeforeMount(() => {
             elementsCopy.value = cloneDeep(props.element)
@@ -64,7 +80,12 @@ export default defineComponent({
         const data = inject(selectedDataSymbol) as IselectedData
 
         //if the user selects or deselects the element, update the element in the template and the selectedData
+        //if the user deselects the element, set the value of the input fields to empty
         watch(elementsCopy, () => {
+            if (!elementsCopy.value[0].selected) {
+                elementsCopy.value.find((element: any) => element.label === 'Menge').value = '';
+                elementsCopy.value.find((element: any) => element.label === 'Preis').value = '';
+            }
             fileStore.update(props.element[0].id, elementsCopy.value);
             ((elementsCopy as any).value[0].selected) ? data.addElementToSelectedData(props.element[0].id) : data.removeElementFromSelectedData(props.element[0].id)
 
@@ -72,7 +93,7 @@ export default defineComponent({
 
         return {
             selected,
-            elementsCopy
+            elementsCopy,
         }
 
     }
@@ -92,9 +113,10 @@ export default defineComponent({
   border-radius: 12px;
   min-width: 200px !important;
   min-height: 350px;
+  max-height: 500px !important;
 }
 .custom-img {
-  height: 170px;
+  max-height: 170px;
 }
 .custom-text {
   font-size: large;

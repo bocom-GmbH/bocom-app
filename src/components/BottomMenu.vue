@@ -8,6 +8,7 @@
             class="text-grey-8 footer-tabs"
             v-model="activeTab"
         >
+            <!-- this router wrapper is needed to make the bottom menu tabs clickable -->
             <q-route-tab
                 v-for="tab in bottomMenuList"
                 :key="tab.navigateToPath"

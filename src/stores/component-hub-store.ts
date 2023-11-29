@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 
-//every used components should be imported here
+//every used components are imported here
 import CardCarousel from 'src/components/configurator/CardCarousel.vue';
 import ImageCard from 'src/components/configurator/cards/ImageCard.vue';
 import ArticleSelector from 'src/components/configurator/ArticleSelector.vue';

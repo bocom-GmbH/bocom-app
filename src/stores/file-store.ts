@@ -6,28 +6,38 @@ import { IFileData } from 'src/types';
 
 
 //the function updates the template by the path and the changed object
-function updateNestedObject(store: any, path: string, updatedObject: any): void {
+function updateNestedObject(store: any, path: string, updatedObject: any): object | null {
+    // Clones the 'store' object to avoid modifying the original data directly.
     const clonedStore = cloneDeep(store);
 
+    // Defines a function to recursively traverse and update the cloned store.
     function traverseAndUpdate(currentObj: any) {
-        forEach(currentObj, (value, key) => {
+        // Iterates over each property or element in the current object or array.
+        forEach(currentObj, (value) => {
+            // Checks if the current value is an array.
             if (Array.isArray(value)) {
-                value.forEach((item, index) => {
+                // Iterates over each item in the array.
+                value.forEach((item) => {
+                    // Checks if the item's path matches the specified path and updates it.
                     if (item.path === path) {
                         currentObj.data = cloneDeep(updatedObject);
                         return false;
                     } else if (typeof item === 'object') {
+                        // Recursively calls the function for nested objects.
                         traverseAndUpdate(item);
                     }
                 });
             } else if (typeof value === 'object') {
+                // Recursively calls the function for nested objects.
                 traverseAndUpdate(value);
             }
         });
     }
 
+    // Starts the recursive traversal and update process from the cloned store.
     traverseAndUpdate(clonedStore);
 
+    // Returns the cloned and possibly updated store object.
     return clonedStore;
 }
 
@@ -62,7 +72,7 @@ export const useFileStore = defineStore('file', {
             this.currentSite = site;
         },
         //updates the template in the store (if there are any changes) and saves it
-        update (id: string, updatedObject: any): void {
+        update (id: string, updatedObject: any):void {
             if(JSON.stringify(this.currentSite) !== JSON.stringify(updateNestedObject(this.currentSite, updatedObject[0].path, updatedObject))){
                 this.currentSite = updateNestedObject(this.currentSite, updatedObject[0].path, updatedObject);
                 save(this.currentSite);

@@ -7,6 +7,7 @@
           size="48px"
           :color="progressColor"
         >
+        <!-- the inside of the progress -->
             <div
                 :style="{ color: `var(--q-${progressColor})`}"
                 v-if="denominator"

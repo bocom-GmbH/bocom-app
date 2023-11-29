@@ -1,5 +1,6 @@
 <template>
     <div class="">
+        <!-- giving numberToSelect and the selectedData.length to the CircularProgress component -->
         <div class="flex justify-between items-center">
             <span class="q-ml-md q-mb-md text-weight-bold article-heading"> {{ element.data[1].label}} </span>
             <CircularProgress :denominator="element.data[1].data[0].numberToSelect" :numerator="selectedData.length"/>
@@ -14,8 +15,9 @@
             style="border-radius: 12px;"
             :keep-alive="true"
         >
-
+        <!-- filter the data, only display the slides that have a label of Story -->
         <q-carousel-slide v-for="(slide, index) in element.data[1].data.filter(element => element.label === 'Story')" :key="index" class="q-pa-none" :name="index">
+                <!-- disable the article card if the numberToSelect value reached or another article is selected as the displayed -->
                 <ArticleCard
                     class="q-mx-md"
                     style="border-radius: 12px;"
@@ -24,18 +26,20 @@
                 />
                 <div>
                     <div>
+                        <!-- calling the main configurator to display the content in his body -->
                         <MainConfigurator
                             :numberToSelect="elementsCopy[2].data[0].numberToSelect"
                             :label="elementsCopy[2].label"
                             class="q-mt-sm"
                         >
                             <template v-slot:body>
+                                <!-- displaying the products and promotions -->
                                 <div
                                     v-for="( element, index ) in elementsCopy[2].data"
                                     :key="index"
                                 >
                                     <span class="label q-ml-md">{{ element.label }}</span>
-
+                                    <!-- displaying only the products that have the same storyId as the current slide -->
                                     <CardCarousel
                                         v-if="element.label"
                                         :element="elementsCopy[2].data.find(products => products.label === element.label).data.slice(1).filter(products => products.data[0].storyId === currentSlideId)"
@@ -48,7 +52,9 @@
                     </div>
                 </div>
             </q-carousel-slide>
+            <!-- this tmeplate contains the buttons for controlling the carousel -->
             <template v-slot:control>
+                <!-- the article height comes from the articleCard -->
                 <q-carousel-control
                     v-if="currentSlide > 0"
                     position="top-left"
