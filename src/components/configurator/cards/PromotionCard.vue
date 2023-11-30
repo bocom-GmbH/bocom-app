@@ -87,6 +87,7 @@ export default defineComponent({
                 elementsCopy.value.find((element: any) => element.label === 'Preis').value = '';
             }
             fileStore.update(props.element[0].id, elementsCopy.value);
+            //if the element is selected, add it to the selectedData, if not remove it
             ((elementsCopy as any).value[0].selected) ? data.addElementToSelectedData(props.element[0].id) : data.removeElementFromSelectedData(props.element[0].id)
 
         },{ deep: true })

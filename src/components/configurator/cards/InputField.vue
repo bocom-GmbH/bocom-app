@@ -1,30 +1,28 @@
 <template>
-   <div class="flex row" style="width: 100%">
-       <q-input
-           rounded
-           outlined
-           :label="elementsCopy[1].label"
-           v-model="elementsCopy[1].value"
-           color="secondary"
-           class="input"
-       />
-       <q-input
-           rounded
-           outlined
-           :label="elementsCopy[2].label"
-           v-model="elementsCopy[2].value"
-           color="secondary"
-           class="input"
-       />
+   <div class="" >
+       <div>
+           <q-input
+               v-for="(input, index) of elementsCopy.filter((element: any) => element.label)" :key="index"
+               class="q-mb-sm"
+               rounded
+               outlined
+               :label="input.label"
+               v-model="input.value"
+               color="secondary"
+           />
+       </div>
    </div>
+
 </template>
 
 <script lang="ts">
 
-import { defineComponent, onMounted, ref, watch, onBeforeMount } from 'vue'
+import { defineComponent, inject, ref, watch, onBeforeMount } from 'vue'
 import { useFileStore } from 'stores/file-store'
 import { cloneDeep } from 'lodash';
 import debounce from 'lodash/debounce';
+import { selectedDataSymbol, IselectedData } from 'src/types/index';
+
 
 export default defineComponent({
     mame: 'InputField',
@@ -37,6 +35,7 @@ export default defineComponent({
     setup(props){
         const fileStore = useFileStore()
         const elementsCopy = ref<any>({})
+        const selectedData = inject(selectedDataSymbol) as IselectedData
 
         //make a deep copy of the props.element on before mount, so that we can manipulate the elements
         onBeforeMount(() => {
@@ -44,16 +43,21 @@ export default defineComponent({
         })
 
         //debounce the update of the filestore
-        const debouncedUpdate = debounce((elementsCopy, fileStore, id) => {
+        const debouncedUpdate = debounce((elementsCopy: any, fileStore, id: string) => {
             fileStore.update(id, elementsCopy.value);
         }, 300);
 
         //watch the elementsCopy and if the content changes update the filestore
         watch(elementsCopy, () => {
+            if(elementsCopy.value.filter(element => element.label).every(element => element.value)){
+                selectedData.addElementToSelectedData(elementsCopy.value[0].id)
+            } else {
+                selectedData.removeElementFromSelectedData(elementsCopy.value[0].id)
+            }
             if(JSON.stringify(elementsCopy.value) === JSON.stringify(props.element)) {
                 return;
             } else {
-                debouncedUpdate(elementsCopy, fileStore, elementsCopy.value.data[0].id);
+                debouncedUpdate(elementsCopy, fileStore, elementsCopy.value[0].id);
             }
         }, { deep: true })
 
@@ -68,7 +72,5 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.input {
-    width:50%;
-}
+
 </style>

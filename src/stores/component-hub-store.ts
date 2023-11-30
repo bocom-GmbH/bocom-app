@@ -37,6 +37,11 @@ export const useComponentStore = defineStore('componentHub', {
                 requireMainConfigurator: true
             },
             {
+                componentId: '633e8656-3db5-46fc-99f6-e02bf6a16183',
+                component: InputFieldsCard,
+                requireMainConfigurator: true
+            },
+            {
                 componentId: '04775f1c-135d-410d-bda6-9c234202742d',
                 component: CardCarousel,
                 requireMainConfigurator: true

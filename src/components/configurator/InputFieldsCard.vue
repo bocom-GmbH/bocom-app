@@ -1,14 +1,14 @@
 <template>
-    <div class="q-ma-sm flex items-center">
-        <q-card class="q-ma-sm q-pa-md bg-primary flex card">
-           <div class="first-column flex">
-                <div v-for="(input, index) of element.filter((input: any) => input.label)" :key="index">
-                    <!-- input fields must be refactored!!! -->
-                   <InputField
-                        :element="input.data"
-                  />
-                </div>
-           </div>
+    <div class="q-ma-sm">
+        <q-card flat class="q-ma-sm q-pt-lg q-pa-md bg-primary card" style="display: flex; flex-direction: column; gap: 10px;">
+            <div v-for="(input, index) of element.filter((input: any) => input.label)" :key="index">
+
+                <div class="q-mb-sm text-weight-bold input-title"> {{ input.label }} </div>
+                <InputField
+                    :element="input.data"
+                />
+            </div>
+
         </q-card>
     </div>
 </template>
@@ -37,18 +37,12 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.article-heading {
-  font-size: 22px;
-}
-.first-column {
-
-}
-.second-column {
-    width: 30%;
-    gap: 15px;
-}
 .card {
     border-radius: 12px;
+}
+.input-title {
+    font-size: 1.1rem;
+    color: black;
 }
 
 /* Import is not working here */
