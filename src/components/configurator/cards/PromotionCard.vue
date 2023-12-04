@@ -8,23 +8,7 @@
                 {{ element.find((element: any) => element.label === 'Name').value }}
             </div>
             Promotionwert: € {{ element.find((element: any) => element.label === 'Promotionwert').value }} <br> <br>
-            <q-input
-                :disable="!elementsCopy[0].selected"
-                v-model="elementsCopy.find((element: any) => element.label === 'Preis').value"
-                label="Wert"
-                outlined
-                rounded
-                color="secondary"
-            ></q-input>
-            <br>
-            <q-input
-                :disable="!elementsCopy[0].selected"
-                v-model="elementsCopy.find((element: any) => element.label === 'Menge').value"
-                label="Menge"
-                outlined
-                rounded
-                color="secondary"
-            ></q-input>
+
         </div>
 
         <q-toggle
@@ -82,10 +66,7 @@ export default defineComponent({
         //if the user selects or deselects the element, update the element in the template and the selectedData
         //if the user deselects the element, set the value of the input fields to empty
         watch(elementsCopy, () => {
-            if (!elementsCopy.value[0].selected) {
-                elementsCopy.value.find((element: any) => element.label === 'Menge').value = '';
-                elementsCopy.value.find((element: any) => element.label === 'Preis').value = '';
-            }
+
             fileStore.update(props.element[0].id, elementsCopy.value);
             //if the element is selected, add it to the selectedData, if not remove it
             ((elementsCopy as any).value[0].selected) ? data.addElementToSelectedData(props.element[0].id) : data.removeElementFromSelectedData(props.element[0].id)

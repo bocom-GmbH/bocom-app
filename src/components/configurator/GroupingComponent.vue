@@ -147,11 +147,6 @@ export default defineComponent({
             selectedData.value = selectedData.value.filter(item => item !== element)
         }
 
-        //make the carousel available if the parent is selected
-        const deisableCarousel = computed(() => {
-            return !(currentSlideId.value === selectedData.value[0])
-        })
-
         //updating the currentSlideId
         watch(currentSlide, () => {
             currentSlideId.value = props.element.data[1].data.filter((element:any) => element.label === 'Story')[currentSlide.value].data[0].id
@@ -210,8 +205,7 @@ export default defineComponent({
             selectedData,
             currentSlideId,
             elementsCopy,
-            articleHeight,
-            deisableCarousel
+            articleHeight
         }
     }
 })

@@ -1,20 +1,22 @@
 <template>
-	<q-page>
+	<q-page padding>
 
-         <router-link
+       <!--   <router-link
             style="text-decoration: none;"
             v-for="magazine in magazineList"
             :key="magazine.data?.Magazin[0]?.id"
             :to="{ path: `/HomePage/FileEditorPage/${magazine.id}` }"
+        > -->
+        <div
+            style="width: 100%"
+            v-for="magazine in magazineList"
+            :key="magazine.data?.Magazin[0]?.id"
         >
             <MagazinePreview
                 :id="magazine.id"
             />
-        </router-link>
-
-        <MagazinePreview
-            :id="magazineList[0]?.id"
-        />
+        </div>
+       <!--  </router-link> -->
     </q-page>
 </template>
 
@@ -60,5 +62,6 @@ export default defineComponent({
 });
 </script>
 <style scoped>
+
 
 </style>
