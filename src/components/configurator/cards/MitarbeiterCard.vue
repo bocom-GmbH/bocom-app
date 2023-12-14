@@ -61,7 +61,8 @@ export default defineComponent({
         //if the selected state of a card changed update the filestore and the selectedData
         watch(elementsCopy, () => {
             fileStore.update(props.element[0].id, elementsCopy.value);
-            ((elementsCopy as any).value[0].selected) ? data.addElementToSelectedData(props.element[0].id) : data.removeElementFromSelectedData(props.element[0].id)
+            data.updateElementInSelectedData({id: props.element[0].id, button: elementsCopy.value[0].selected})
+            data.controlGroupInSelectedData(props.element[0].id, ['button']);
         },{ deep: true })
 
         return {

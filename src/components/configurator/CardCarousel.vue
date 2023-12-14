@@ -10,7 +10,7 @@
                     :is="getComponentById(card.data[0].elementId)"
                     :element="card.data"
                     :numberToSelect="numberToSelect"
-                    :disable="(!!(numberToSelect && selectedData.length >= numberToSelect) && selectedData.find(element => element === card.data[0].id) !== card.data[0].id) || disabledByParent"
+                    :disable="setDisabled(card)"
                 />
             </div>
         </div>
@@ -18,7 +18,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, inject, onMounted, ref, watch } from 'vue'
+import { defineComponent, inject, ref, watch } from 'vue'
 import { useComponentStore } from 'stores/component-hub-store'
 import { selectedDataSymbol } from 'src/types/index'
 import { useFileStore } from 'stores/file-store'
@@ -53,11 +53,26 @@ export default defineComponent({
            selectedData.value = []
         }
 
+        const setDisabled = (card: object): boolean => {
+            return (isNumberToSelectReached() && !isCardAlreadySelected(card)) || props.disabledByParent
+        }
+
+        const isCardAlreadySelected = (card: object): boolean => {
+            return !!selectedData.value.find((element: any) => element.id === card.data[0].id)?.button
+        }
+
+        const isNumberToSelectReached = (): boolean => {
+            const selectedElementsInSelectedData = selectedData.value.filter((element: any) => element.button)
+            return !!props.numberToSelect && selectedElementsInSelectedData.length >= props.numberToSelect
+        }
+
         // if the resetCardCarousel is triggered, reset the selectedData and call the resetSelectedData store function witch resets the selected values in the template
         watch((resetCardCarousel), () => {
-            resetSelectedData
-            for(let element of props.element) {
-                fileStore.resetSelectedValues(element.path)
+            if(resetCardCarousel.value < 1){
+                resetSelectedData
+                for(let element of props.element) {
+                    fileStore.resetSelectedValues(element.path)
+                }
             }
         })
 
@@ -69,7 +84,10 @@ export default defineComponent({
 
         return {
             selectedData,
-            getComponentById
+            getComponentById,
+            setDisabled,
+            isNumberToSelectReached,
+            isCardAlreadySelected
         }
     }
 })

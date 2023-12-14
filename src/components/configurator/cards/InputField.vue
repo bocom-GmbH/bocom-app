@@ -35,11 +35,11 @@ export default defineComponent({
     setup(props){
         const fileStore = useFileStore()
         const elementsCopy = ref<any>({})
-        const selectedData = inject(selectedDataSymbol) as IselectedData
-
+        const data = inject(selectedDataSymbol) as IselectedData
         //make a deep copy of the props.element on before mount, so that we can manipulate the elements
         onBeforeMount(() => {
             elementsCopy.value = cloneDeep(props.element)
+            /* console.log(elementsCopy.value, 'inputFiled') */
         })
 
         //debounce the update of the filestore
@@ -47,18 +47,24 @@ export default defineComponent({
             fileStore.update(id, elementsCopy.value);
         }, 300);
 
+        const getSelectedDataObject = () => {
+            let dataObject = {
+                id: elementsCopy.value[0].id
+            }
+            for(const element of elementsCopy.value.filter(element => element.label)){
+                if(!dataObject[element.label]){
+                    dataObject[element.label] = element.value
+                }
+            }
+            return dataObject
+        }
+
+
         //watch the elementsCopy and if the content changes update the filestore
         watch(elementsCopy, () => {
-            if(elementsCopy.value.filter(element => element.label).every(element => element.value)){
-                selectedData.addElementToSelectedData(elementsCopy.value[0].id)
-            } else {
-                selectedData.removeElementFromSelectedData(elementsCopy.value[0].id)
-            }
-            if(JSON.stringify(elementsCopy.value) === JSON.stringify(props.element)) {
-                return;
-            } else {
-                debouncedUpdate(elementsCopy, fileStore, elementsCopy.value[0].id);
-            }
+            data.updateElementInSelectedData(getSelectedDataObject());
+            data.controlGroupInSelectedData(props.element[0].id ,Object.keys(getSelectedDataObject()).filter(key => key !== 'id'));
+            debouncedUpdate(elementsCopy, fileStore, elementsCopy.value[0].id);
         }, { deep: true })
 
         return {

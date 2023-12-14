@@ -17,11 +17,21 @@ export interface IData {
     data: IData[];
 }
 
-export interface IselectedData {
-    selectedData: string[];
-    addElementToSelectedData: CallableFunction;
+export interface ISingleSelectedData {
+    id: string;
+    button: boolean;
+    wert?: string;
+    menge?: string;
+    beschreibung?: string;
+    group: boolean;
+}
+
+export interface ISelectedData {
+    selectedData: ISingleSelectedData[];
+    updateElementInSelectedData: CallableFunction;
     removeElementFromSelectedData: CallableFunction;
     checkPermission: CallableFunction;
+    controlGroupInSelectedData: CallableFunction;
 }
 
 export const selectedDataSymbol = Symbol('selectedData');

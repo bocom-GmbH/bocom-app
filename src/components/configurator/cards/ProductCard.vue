@@ -12,7 +12,7 @@
             <q-input
                 :disable="!elementsCopy[0].selected"
                 v-model="elementsCopy.find((element: any) => element.label === 'Preis').value"
-                label="Wert"
+                label="Preis"
                 outlined
                 rounded
                 color="secondary"
@@ -59,6 +59,7 @@ export default defineComponent({
     setup(props) {
         const fileStore = useFileStore()
         const elementsCopy = ref<object>({})
+        const data = inject(selectedDataSymbol) as IselectedData
 
         //make a deep copy of the props.element on before mount, so that we can manipulate the elements
         onBeforeMount(() => {
@@ -70,18 +71,29 @@ export default defineComponent({
             elementsCopy.value = cloneDeep(props.element)
         }, { deep: true })
 
-        const data = inject(selectedDataSymbol) as IselectedData
+        const setDisaabled = () => {
+            if(data.selectedData.value.filter(data => data.group === true).length >= 2){
+                return true
+            } else {
+                return false
+            }
+        }
+
 
         //if the user selects or deselects the element, update the element in the template and the selectedData
         watch(elementsCopy, (newValue, oldValue) => {
             if (!elementsCopy.value[0].selected) {
                 elementsCopy.value.find((element: any) => element.label === 'Menge').value = '';
                 elementsCopy.value.find((element: any) => element.label === 'Preis').value = '';
-                data.removeElementFromSelectedData(props.element[0].id)
-            } else if (elementsCopy.value[0].selected && elementsCopy.value.find((element: any) => element.label === 'Menge').value && elementsCopy.value.find((element: any) => element.label === 'Preis').value) {
-                data.addElementToSelectedData(props.element[0].id)
+                data.updateElementInSelectedData({id: props.element[0].id, button: elementsCopy.value[0].selected, Menge: '', Preis: '' });
+            } else if (elementsCopy.value[0].selected && elementsCopy.value.find((element: any) => element.label === 'Menge').value !== '' && elementsCopy.value.find((element: any) => element.label === 'Preis').value !== '') {
+                data.updateElementInSelectedData({id: props.element[0].id, button: elementsCopy.value[0].selected, Menge: elementsCopy.value.find((element: any) => element.label === 'Menge').value, Preis: elementsCopy.value.find((element: any) => element.label === 'Preis').value });
+            } else if (elementsCopy.value.find((element: any) => element.label === 'Menge').value === '') {
+                data.updateElementInSelectedData({id: props.element[0].id, button: elementsCopy.value[0].selected, Menge: '', Preis: elementsCopy.value.find((element: any) => element.label === 'Preis').value });
+            } else if (elementsCopy.value.find((element: any) => element.label === 'Preis').value === '') {
+                data.updateElementInSelectedData({id: props.element[0].id, button: elementsCopy.value[0].selected, Menge: elementsCopy.value.find((element: any) => element.label === 'Menge').value , Preis: ''});
             }
-
+            data.controlGroupInSelectedData(props.element[0].id ,['button', 'Menge', 'Preis']);
             fileStore.update(props.element[0].id, elementsCopy.value);
 
             //console.log(elementsCopy.value.filter(element => element.label === 'Preis' || 'Menge'))
@@ -89,7 +101,8 @@ export default defineComponent({
         },{ deep: true })
 
         return {
-            elementsCopy
+            elementsCopy,
+            setDisaabled
         }
 
     }

@@ -16,11 +16,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref, inject, watch, onBeforeMount } from 'vue'
+import { defineComponent, onBeforeMount, ref, inject, watch } from 'vue'
 import { useFileStore } from 'stores/file-store'
 import { useUserStore } from 'stores/authentication'
 import { cloneDeep } from 'lodash'
-import { selectedDataSymbol, IselectedData } from 'src/types/index'
+import { selectedDataSymbol, ISelectedData } from 'src/types/index'
 
 export default defineComponent({
     name: 'ImageCard',
@@ -42,15 +42,16 @@ export default defineComponent({
         //make a deep copy of the props.element on before mount, so that we can manipulate the elements
         onBeforeMount(() => {
             elementsCopy.value = cloneDeep(props.element)
+            data.updateElementInSelectedData({id: props.element[0].id, button: elementsCopy.value[0].selected})
         })
 
-        const data = inject(selectedDataSymbol) as IselectedData
+        const data = inject(selectedDataSymbol) as ISelectedData
 
         //if the selected state of an image changed update the filestore and the selectedData
         watch(elementsCopy, () => {
             fileStore.update(props.element[0].id, elementsCopy.value);
-            ((elementsCopy as any).value[0].selected) ? data.addElementToSelectedData(props.element[0].id) : data.removeElementFromSelectedData(props.element[0].id)
-
+            data.updateElementInSelectedData({id: props.element[0].id, button: elementsCopy.value[0].selected})
+            data.controlGroupInSelectedData(props.element[0].id, ['button'])
         }, { deep: true })
 
         return {

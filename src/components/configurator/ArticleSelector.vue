@@ -16,8 +16,8 @@
                 <!-- set the color of the article card to gray if the numberToSelect value reached or another article is selected as the displayed -->
                 <ArticleCard
                     :slide="slide.data"
-                    :disable="!!(numberToSelect && selectedData.length >= numberToSelect) && selectedData.find(element => element === slide.data[0].id) !== slide.data[0].id"
-                    :style="{ 'color':  !!(numberToSelect && selectedData.length >= numberToSelect) && slide && selectedData.find(element => element === slide.data[0].id) !== slide.data[0].id ? 'gray' : 'var(--q-color-primary)'}"
+                    :disable="setDisabled(slide)"
+                    :style="{ 'color':  setDisabled(slide) ? 'gray' : 'var(--q-color-primary)'}"
                 />
             </q-carousel-slide>
             <!-- this tmeplate contains the buttons for controlling the carousel -->
@@ -52,7 +52,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, inject, onMounted, ref, watch } from 'vue'
+import { defineComponent, inject, onBeforeMount, ref, watch } from 'vue'
 import ArticleCard from './cards/ArticleCard.vue'
 import { IselectedData, selectedDataSymbol } from 'src/types/index'
 
@@ -79,25 +79,39 @@ export default defineComponent({
         const navigation = ref(true)
         //the automatic button position is not implemented here
         //set the current slide to the index of the selected element, so it will automatically slide to the selected article
-        onMounted(() =>{
-            let index = 0
-            for(let element of props.element) {
-                if(element.data){
-                    if(element?.data[0].selected){
-                        currentSlide.value = index - 1
-                        data.addElementToSelectedData(element?.data[0].id)
-                    } else {
-                        data.removeElementFromSelectedData(element?.data[0].id)
-                    }
+
+        let index = 0
+        for(let element of props.element) {
+            console.log(element)
+            if(element.data){
+                data.updateElementInSelectedData({id: element.data[0].id, button: element.data[0].selected})
+                if(element.data[0].selected){
+                    currentSlide.value = index - 1
                 }
-                index++
+                data.controlGroupInSelectedData(element.data[0].id, ['button'])
             }
-        })
+            index++
+        }
+
+
+        const setDisabled = (card: object): boolean => {
+            return (isNumberToSelectReached() && isCardAlreadySelected(card))
+        }
+
+        const isCardAlreadySelected = (card: object): boolean => {
+            return !selectedData.value.find((element: any) => element.id === card.data[0].id)?.group
+        }
+
+        const isNumberToSelectReached = (): boolean => {
+            const selectedElementsInSelectedData = selectedData.value.filter((element: any) => element.group)
+            return !!props.numberToSelect && selectedElementsInSelectedData.length >= props.numberToSelect
+        }
 
         return {
             currentSlide,
             selectedData,
-            navigation
+            navigation,
+            setDisabled
         };
     }
 })

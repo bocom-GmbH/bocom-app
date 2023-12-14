@@ -36,11 +36,11 @@ export default defineComponent({
         }
     },
     setup(props) {
-        const selected = ref<boolean>(false)
-        const fileStore = useFileStore()
-        const elementsCopy = ref<object>({})
+        const selected = ref<boolean>(false);
+        const fileStore = useFileStore();
+        const elementsCopy = ref<object>({});
         const articleHeight = ref<number | null>(inject('articleHeight', null));
-        const currentSlideId = ref(inject('currentSlideId'))
+        const currentSlideId = ref(inject('currentSlideId'));
         const currentSlide = ref(inject('currentSlide'));
         const divRef = ref(null);
 
@@ -49,6 +49,7 @@ export default defineComponent({
         onBeforeMount(() => {
             elementsCopy.value = cloneDeep(props.slide)
             currentSlideId.value = elementsCopy.value[0].id
+            //data.updateElementInSelectedData({id: props.slide[0].id, button: elementsCopy.value[0].selected})
         })
 
         //set the height of the article
@@ -65,8 +66,9 @@ export default defineComponent({
             if(JSON.stringify(elementsCopy.value) === JSON.stringify(props.slide)) {
                 return;
             } else {
+                data.updateElementInSelectedData({id: props.slide[0].id, button: elementsCopy.value[0].selected});
+                data.controlGroupInSelectedData(props.slide[0].id, ['button']);
                 fileStore.update(props.slide[0].id, elementsCopy.value);
-                ((elementsCopy as any).value[0].selected) ? data.addElementToSelectedData(props.slide[0].id) : data.removeElementFromSelectedData(props.slide[0].id)
             }
 
         },{ deep: true })

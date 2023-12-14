@@ -3,7 +3,7 @@
         <!-- giving numberToSelect and the selectedData.length to the CircularProgress component -->
         <div class="flex justify-between items-center">
             <span class="q-ml-md q-mb-md text-weight-bold article-heading"> {{ element.data[1].label}} </span>
-            <CircularProgress :denominator="element.data[1].data[0].numberToSelect" :numerator="selectedData.length"/>
+            <CircularProgress :denominator="element.data[1].data[0].numberToSelect" :numerator="selectedData.filter(element => element.group).length"/>
         </div>
         <q-carousel
             animated
@@ -13,7 +13,6 @@
             class="body q-mb-lg q-pb-md"
             ref="carousel"
             style="border-radius: 12px;"
-            :keep-alive="true"
         >
         <!-- filter the data, only display the slides that have a label of Story -->
         <q-carousel-slide v-for="(slide, index) in element.data[1].data.filter(element => element.label === 'Story')" :key="index" class="q-pa-none" :name="index">
@@ -22,7 +21,7 @@
                     class="q-mx-md"
                     style="border-radius: 12px;"
                     :slide="slide.data"
-                    :disable="!!(element.data[1].data[0].numberToSelect && selectedData.length >= element.data[1].data[0].numberToSelect) && selectedData.find(element => element === slide.data[0].id) !== slide.data[0].id"
+                    :disable="setDisabled(slide)"
                 />
                 <div>
                     <div>
@@ -44,7 +43,7 @@
                                         v-if="element.label"
                                         :element="elementsCopy[2].data.find(products => products.label === element.label).data.slice(1).filter(products => products.data[0].storyId === currentSlideId)"
                                         :numberToSelect="elementsCopy[2].data[0].numberToSelect"
-                                        :disabledByParent="selectedData[0] !== currentSlideId"
+                                        :disabledByParent="selectedData.find(singleSelectedData => singleSelectedData.group === true)?.id !== currentSlideId"
                                     />
                                 </div>
                             </template>
@@ -92,6 +91,7 @@ import MainConfigurator from '../MainConfigurator.vue';
 import { selectedDataSymbol, IselectedData } from 'src/types/index'
 import { useUserStore } from 'stores/authentication'
 import { notify } from './../../functions/notification'
+import { ISingleSelectedData } from 'src/types/index'
 
 export default defineComponent({
     name: 'GroupingComponent',
@@ -113,10 +113,9 @@ export default defineComponent({
     },
     setup(props){
         const userStore = useUserStore()
-        //trigger variable to provide to the CardCarousel and reset the cards value
-        const resetCardCarousel = ref(0);
+
         //seelctedData is used to display the progress
-        const selectedData = ref<string[]>([])
+        const selectedData = ref<ISingleSelectedData[]>([])
         //elementsCopy is a copy of the props to be able to manipulate the data
         const elementsCopy = ref<object>({})
         //this variable is provided to the articles to set the height of the article, so the buttons of the carousel can be set
@@ -138,14 +137,40 @@ export default defineComponent({
             }
         }
 
-        //if the elmement is already selected, it will not be added again
-        const addElementToSelectedData = (element: string) => {
-            selectedData.value.includes(element) ? null : selectedData.value.push(element);
+
+
+        const setDisabled = (card: object): boolean => {
+            return (isNumberToSelectReached() && isCardAlreadySelected(card))
         }
 
-        const removeElementFromSelectedData = (element: string) => {
-            selectedData.value = selectedData.value.filter(item => item !== element)
+        const isCardAlreadySelected = (card: object): boolean => {
+            return !selectedData.value.find((element: any) => element.id === card.data[0].id)?.group
         }
+
+        const isNumberToSelectReached = (): boolean => {
+            const selectedElementsInSelectedData = selectedData.value.filter((element: any) => element.group)
+            return !!props.element.data[1].data[0].numberToSelect && selectedElementsInSelectedData.length >= props.element.data[1].data[0].numberToSelect
+        }
+
+        const updateElementInSelectedData = (element: ISingleSelectedData) => {
+            const foundIndex = selectedData.value.findIndex(singleSelectedData => singleSelectedData.id === element.id);
+            if (foundIndex !== -1) {
+                // Replace the element at the found index using splice
+                selectedData.value.splice(foundIndex, 1, element);
+            } else {
+                // Add the element if it's not found
+                selectedData.value.push(element)
+            }
+        };
+
+        const controlGroupInSelectedData = (singleSelectedDataId: string ,props: string[]) => {
+
+            // Check if every prop in props is true in singleSelectedData
+            const singleSelectedData = selectedData.value.find(element => element.id === singleSelectedDataId)
+            singleSelectedData.group = !props.every(prop => singleSelectedData[prop] === false || singleSelectedData[prop] == '');
+            //console.log(singleSelectedData, props, props.every(prop => singleSelectedData[prop] === false), props.every(prop => singleSelectedData[prop] == ''));
+
+        };
 
         //updating the currentSlideId
         watch(currentSlide, () => {
@@ -159,9 +184,10 @@ export default defineComponent({
 
         //if the user removes an article from the selectedData, it means that the selected products cant be selected anymore
         //it will reset the cards selected value
-        watch(selectedData, (newValue, oldValue) => {
-            if (oldValue.length > newValue.length) resetCardCarousel.value++;
-        } ,{ deep: true })
+
+        const resetCardCarousel = computed(() => {
+            return selectedData.value.filter(element => element.group).length
+        })
 
         //provideding the currentSlideId
         provide('currentSlideId', currentSlideId)
@@ -175,8 +201,8 @@ export default defineComponent({
         //providing a package of functions and data to the children
         provide(selectedDataSymbol, {
             selectedData,
-            addElementToSelectedData,
-            removeElementFromSelectedData,
+            updateElementInSelectedData,
+            controlGroupInSelectedData,
             checkPermission
         })
 
@@ -186,12 +212,12 @@ export default defineComponent({
             for(const story of props.element.data[1].data.filter(element => element.label === 'Story')) {
                 index.value++
                 if(story.data[0].selected){
-                    addElementToSelectedData(story.data[0].id)
                     currentSlideId.value = story.data[0].id
-                    break;
+                    currentSlide.value = index.value -1
                 }
+                updateElementInSelectedData({id: story.data[0].id, button: story.data[0].selected} as ISingleSelectedData)
+                controlGroupInSelectedData(story.data[0].id, ['button']);
             }
-            currentSlide.value = index.value -1
             //on mount copy the props.element deeply to the elementsCopy, so that the copy can be manipulated by the child components
             elementsCopy.value = cloneDeep(props.element.data)
         })
@@ -205,7 +231,9 @@ export default defineComponent({
             selectedData,
             currentSlideId,
             elementsCopy,
-            articleHeight
+            articleHeight,
+            setDisabled,
+            resetCardCarousel
         }
     }
 })

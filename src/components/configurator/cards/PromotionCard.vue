@@ -65,12 +65,13 @@ export default defineComponent({
 
         //if the user selects or deselects the element, update the element in the template and the selectedData
         //if the user deselects the element, set the value of the input fields to empty
-        watch(elementsCopy, () => {
-
+        watch(elementsCopy, (newValue, oldValue) => {
+            if(newValue !== oldValue){
+                data.updateElementInSelectedData({id: props.element[0].id, button: elementsCopy.value[0].selected});
+                data.controlGroupInSelectedData(props.element[0].id, ['button']);
+                //if the element is selected, add it to the selectedData, if not remove it
+            }
             fileStore.update(props.element[0].id, elementsCopy.value);
-            //if the element is selected, add it to the selectedData, if not remove it
-            ((elementsCopy as any).value[0].selected) ? data.addElementToSelectedData(props.element[0].id) : data.removeElementFromSelectedData(props.element[0].id)
-
         },{ deep: true })
 
         return {

@@ -3,7 +3,7 @@
         <!-- this div contains the label and the progressbar -->
         <div class="flex justify-between items-center">
             <span class="q-ml-md text-weight-bold article-heading"> {{ label }} </span>
-            <CircularProgress :denominator="numberToSelect" :numerator="selectedData.length"/>
+            <CircularProgress :denominator="numberToSelect" :numerator="selectedData.filter(element => element.group ).length"/>
         </div>
         <!-- every content with template = body from outside comes here -->
         <slot name="body"></slot>
@@ -11,9 +11,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, provide, ref, onUnmounted } from 'vue'
+import { defineComponent, provide, ref } from 'vue'
 import CircularProgress from 'src/components/configurator/CircularProgress.vue';
-import { selectedDataSymbol } from 'src/types/index';
+import { selectedDataSymbol, ISingleSelectedData } from 'src/types/index';
 import { notify } from './../functions/notification'
 import { useUserStore } from 'stores/authentication'
 
@@ -42,35 +42,48 @@ export default defineComponent({
                     //make a notification
                     notify('Keine Berechtigung')
                 }
-                return false
+                return false;
             } else {
-                return true
+                return true;
             }
         }
 
-        const selectedData = ref<string[]>([])
+        const selectedData = ref<ISingleSelectedData[]>([])
 
         //if the elmement is already selected, it will not be added again
-        const addElementToSelectedData = (element: string) => {
-            selectedData.value.includes(element) ? null : selectedData.value.push(element);
-        }
+        const updateElementInSelectedData = (element: ISingleSelectedData) => {
+            const foundIndex = selectedData.value.findIndex(singleSelectedData => singleSelectedData.id === element.id);
+            if (foundIndex !== -1) {
+                // Replace the element at the found index using splice
+                selectedData.value.splice(foundIndex, 1, element);
+            } else {
+                // Add the element if it's not found
+                selectedData.value.push(element)
+            }
+        };
+
+        const controlGroupInSelectedData = (singleSelectedDataId: string, props: string[]) => {
+
+            // Check if every prop in props is true in singleSelectedData
+            const singleSelectedData = selectedData.value.find(element => element.id === singleSelectedDataId)
+            singleSelectedData.group = !props.some(prop => {
+                const value = singleSelectedData[prop] === false || singleSelectedData[prop] == ''
+                return value
+            });
+        };
 
         //if the element is not selected, it will not be removed from the selectedData
-        const removeElementFromSelectedData = (element: string) => {
-            selectedData.value = selectedData.value.filter(item => item !== element)
+        const removeElementFromSelectedData = (id: string) => {
+            selectedData.value = selectedData.value.filter( singleSelectedData => singleSelectedData.id != id)
         }
 
         //providing a package of functions and data to the children
         provide(selectedDataSymbol, {
             selectedData,
-            addElementToSelectedData,
+            updateElementInSelectedData,
             removeElementFromSelectedData,
-            checkPermission
-        })
-
-        //resetting the selectedData on unmount
-        onUnmounted(() => {
-            selectedData.value = []
+            checkPermission,
+            controlGroupInSelectedData
         })
 
         return {
