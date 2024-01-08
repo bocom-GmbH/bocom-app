@@ -25,7 +25,7 @@
 import { defineComponent, onBeforeMount, onMounted, ref, inject, watch } from 'vue'
 import { useFileStore } from 'stores/file-store'
 import { cloneDeep } from 'lodash';
-import { selectedDataSymbol, IselectedData } from 'src/types/index'
+import { selectedDataSymbol, ISelectedData } from 'src/types/index'
 
 export default defineComponent({
     name: 'PromotionCard',
@@ -61,7 +61,7 @@ export default defineComponent({
             selected.value = props.element[0].selected
         })
 
-        const data = inject(selectedDataSymbol) as IselectedData
+        const data = inject(selectedDataSymbol) as ISelectedData
 
         //if the user selects or deselects the element, update the element in the template and the selectedData
         //if the user deselects the element, set the value of the input fields to empty

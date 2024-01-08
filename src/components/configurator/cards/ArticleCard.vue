@@ -18,10 +18,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onBeforeMount, ref, inject, watch, onMounted, onUnmounted } from 'vue'
+import { defineComponent, onBeforeMount, ref, inject, watch, onMounted } from 'vue'
 import { cloneDeep } from 'lodash'
 import { useFileStore } from 'stores/file-store'
-import { selectedDataSymbol, IselectedData } from 'src/types/index'
+import { selectedDataSymbol, ISelectedData } from 'src/types/index'
 
 export default defineComponent({
     name: 'ArticleCard',
@@ -59,7 +59,7 @@ export default defineComponent({
             }
         })
 
-        const data = inject(selectedDataSymbol) as IselectedData
+        const data = inject(selectedDataSymbol) as ISelectedData
 
         //if the selected state changes, update the filestore and the selectedData
         watch(elementsCopy, () => {

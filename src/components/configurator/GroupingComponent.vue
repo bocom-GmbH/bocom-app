@@ -168,8 +168,6 @@ export default defineComponent({
             // Check if every prop in props is true in singleSelectedData
             const singleSelectedData = selectedData.value.find(element => element.id === singleSelectedDataId)
             singleSelectedData.group = !props.every(prop => singleSelectedData[prop] === false || singleSelectedData[prop] == '');
-            //console.log(singleSelectedData, props, props.every(prop => singleSelectedData[prop] === false), props.every(prop => singleSelectedData[prop] == ''));
-
         };
 
         //updating the currentSlideId

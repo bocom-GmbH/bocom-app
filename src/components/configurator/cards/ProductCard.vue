@@ -39,7 +39,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onBeforeMount, onMounted, ref, inject, watch } from 'vue'
+import { defineComponent, onBeforeMount, ref, inject, watch } from 'vue'
 import { useFileStore } from 'stores/file-store'
 import { cloneDeep } from 'lodash';
 import { selectedDataSymbol, IselectedData } from 'src/types/index'
@@ -82,23 +82,30 @@ export default defineComponent({
 
         //if the user selects or deselects the element, update the element in the template and the selectedData
         watch(elementsCopy, (newValue, oldValue) => {
-            if (!elementsCopy.value[0].selected) {
-                elementsCopy.value.find((element: any) => element.label === 'Menge').value = '';
-                elementsCopy.value.find((element: any) => element.label === 'Preis').value = '';
-                data.updateElementInSelectedData({id: props.element[0].id, button: elementsCopy.value[0].selected, Menge: '', Preis: '' });
-            } else if (elementsCopy.value[0].selected && elementsCopy.value.find((element: any) => element.label === 'Menge').value !== '' && elementsCopy.value.find((element: any) => element.label === 'Preis').value !== '') {
-                data.updateElementInSelectedData({id: props.element[0].id, button: elementsCopy.value[0].selected, Menge: elementsCopy.value.find((element: any) => element.label === 'Menge').value, Preis: elementsCopy.value.find((element: any) => element.label === 'Preis').value });
-            } else if (elementsCopy.value.find((element: any) => element.label === 'Menge').value === '') {
-                data.updateElementInSelectedData({id: props.element[0].id, button: elementsCopy.value[0].selected, Menge: '', Preis: elementsCopy.value.find((element: any) => element.label === 'Preis').value });
-            } else if (elementsCopy.value.find((element: any) => element.label === 'Preis').value === '') {
-                data.updateElementInSelectedData({id: props.element[0].id, button: elementsCopy.value[0].selected, Menge: elementsCopy.value.find((element: any) => element.label === 'Menge').value , Preis: ''});
+            const firstElementSelected = elementsCopy.value[0].selected;
+            const mengeElement = elementsCopy.value.find((element) => element.label === 'Menge');
+            const preisElement = elementsCopy.value.find((element) => element.label === 'Preis');
+            const mengeValue = mengeElement ? mengeElement.value : '';
+            const preisValue = preisElement ? preisElement.value : '';
+
+            if (!firstElementSelected) {
+                mengeElement.value = '';
+                preisElement.value = '';
+                data.updateElementInSelectedData({ id: props.element[0].id, button: firstElementSelected, Menge: '', Preis: '' });
+            } else {
+                if (mengeValue !== '' && preisValue !== '') {
+                    data.updateElementInSelectedData({ id: props.element[0].id, button: firstElementSelected, Menge: mengeValue, Preis: preisValue });
+                } else if (mengeValue === '') {
+                    data.updateElementInSelectedData({ id: props.element[0].id, button: firstElementSelected, Menge: '', Preis: preisValue });
+                } else if (preisValue === '') {
+                    data.updateElementInSelectedData({ id: props.element[0].id, button: firstElementSelected, Menge: mengeValue, Preis: '' });
+                }
             }
-            data.controlGroupInSelectedData(props.element[0].id ,['button', 'Menge', 'Preis']);
+
+            data.controlGroupInSelectedData(props.element[0].id, ['button', 'Menge', 'Preis']);
             fileStore.update(props.element[0].id, elementsCopy.value);
 
-            //console.log(elementsCopy.value.filter(element => element.label === 'Preis' || 'Menge'))
-            //((elementsCopy as any).value[0].selected) ? data.addElementToSelectedData(props.element[0].id) : data.removeElementFromSelectedData(props.element[0].id)
-        },{ deep: true })
+        }, { deep: true });
 
         return {
             elementsCopy,

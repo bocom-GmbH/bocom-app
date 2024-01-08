@@ -39,7 +39,6 @@ export default defineComponent({
         //make a deep copy of the props.element on before mount, so that we can manipulate the elements
         onBeforeMount(() => {
             elementsCopy.value = cloneDeep(props.element)
-            /* console.log(elementsCopy.value, 'inputFiled') */
         })
 
         //debounce the update of the filestore

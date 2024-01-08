@@ -52,9 +52,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, inject, onBeforeMount, ref, watch } from 'vue'
+import { defineComponent, inject, ref } from 'vue'
 import ArticleCard from './cards/ArticleCard.vue'
-import { IselectedData, selectedDataSymbol } from 'src/types/index'
+import { ISelectedData, selectedDataSymbol } from 'src/types/index'
 
 export default defineComponent({
     name: 'ArticleSelector',
@@ -72,7 +72,7 @@ export default defineComponent({
         ArticleCard
     },
     setup(props) {
-        const data = inject(selectedDataSymbol) as IselectedData
+        const data = inject(selectedDataSymbol) as ISelectedData
 
         const selectedData = data.selectedData
         const currentSlide = ref(0)
