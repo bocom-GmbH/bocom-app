@@ -1,67 +1,35 @@
 <template>
-	<q-page padding>
-
-       <!--   <router-link
-            style="text-decoration: none;"
-            v-for="magazine in magazineList"
-            :key="magazine.data?.Magazin[0]?.id"
-            :to="{ path: `/HomePage/FileEditorPage/${magazine.id}` }"
-        > -->
+    <q-page padding>
         <div
             style="width: 100%"
-            v-for="magazine in magazineList"
+            v-for="magazine in fileStore.getFileData"
             :key="magazine.data?.Magazin[0]?.id"
         >
-            <MagazinePreview
-                :id="magazine.id"
-            />
+            <MagazinePreview :id="magazine.id" />
         </div>
-       <!--  </router-link> -->
     </q-page>
 </template>
 
-<script lang="ts">
-
-
-import { defineComponent, onMounted, ref } from 'vue';
-import { useRouter } from 'vue-router'
+<script setup lang="ts">
+import { ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 import { useUserStore } from 'stores/authentication';
 import { useFileStore } from 'stores/file-store';
+import MagazinePreview from 'src/components/MagazinePreview.vue';
 
-import { storeToRefs } from 'pinia';
-import MagazinePreview from 'src/components/MagazinePreview.vue'
+const router = useRouter();
+const userStore = useUserStore();
+const fileStore = useFileStore();
 
-export default defineComponent({
-    name: 'HomePage',
-    components: {
-        MagazinePreview,
-    },
-    setup () {
-
-        const router = useRouter();
-        const store = useUserStore();
-        const fileStore = useFileStore();
-
-        //if the user is logged out, redirect to the login page
-        onMounted(() => {
-            if(!store.isUserLoggedIn){
-                router.push('/login')
-            }
-        })
-
-
-        //displayes the megazines on the home screen
-        const { getFileData } = storeToRefs(fileStore)
-        const magazineList = ref(getFileData)
-
-        return {
-            magazineList
-        }
-    },
-
+// If the user is logged out, redirect to the login page
+onMounted(() => {
+    if (!userStore.isUserLoggedIn) {
+        router.push('/login');
+    }
 });
+
 </script>
+
 <style scoped>
-
-
+/* Add specific styles here */
 </style>

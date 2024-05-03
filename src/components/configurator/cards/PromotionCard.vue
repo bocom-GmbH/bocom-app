@@ -1,16 +1,14 @@
 <template>
     <q-card :class="{'custom-card bg-primary q-my-md flex': true, 'disabled-bg': disable}">
-        <q-img style="border-radius: 0px;" class="custom-img q-mt-md bg-primary" fit="scale-down" :src="`https://images.bocom.at/${element.find((element: any) => element.label === 'Bild').value}`">
+        <q-img style="border-radius: 0px;" class="custom-img q-mt-md bg-primary" fit="scale-down" :src="`https://images.bocom.at/${element.find((element) => element.label === 'Bild').value}`">
             <div v-if="disable" class="absolute-full text-subtitle2 flex flex-center"></div>
         </q-img>
         <div class="flex-column q-pa-none q-px-sm no-wrap">
             <div class="custom-text q-mb-none text-weight-bold text-left">
-                {{ element.find((element: any) => element.label === 'Name').value }}
+                {{ element.find((element) => element.label === 'Name').value }}
             </div>
-            Promotionwert: € {{ element.find((element: any) => element.label === 'Promotionwert').value }} <br> <br>
-
+            Promotionwert: € {{ element.find((element) => element.label === 'Promotionwert').value }} <br> <br>
         </div>
-
         <q-toggle
             class="q-mt-none"
             color="positive"
@@ -21,67 +19,48 @@
     </q-card>
 </template>
 
-<script lang="ts">
-import { defineComponent, onBeforeMount, onMounted, ref, inject, watch } from 'vue'
-import { useFileStore } from 'stores/file-store'
+<script setup lang="ts">
+import { ref, onBeforeMount, onMounted, watch, inject } from 'vue';
 import { cloneDeep } from 'lodash';
-import { selectedDataSymbol, ISelectedData } from 'src/types/index'
+import { useFileStore } from 'stores/file-store';
+import { selectedDataSymbol, ISelectedData } from 'src/types/index';
 
-export default defineComponent({
-    name: 'PromotionCard',
-    props: {
-        element: {
-            type: Object,
-            required: true
-        },
-        disable: {
-            type: Boolean,
-            required: false
-        }
+const props = defineProps({
+    element: {
+        type: Object,
+        required: true
     },
-    setup(props) {
-
-        const selected = ref<boolean>(false)
-        const fileStore = useFileStore()
-        const elementsCopy = ref<object>({})
-
-
-        //make a deep copy of the props.element on before mount, so that we can manipulate the elements
-        onBeforeMount(() => {
-            elementsCopy.value = cloneDeep(props.element)
-        })
-
-        //if the template changes, update the element
-        watch(() => props.element, () => {
-            elementsCopy.value = cloneDeep(props.element)
-        }, { deep: true })
-
-        //set the selected value
-        onMounted(() => {
-            selected.value = props.element[0].selected
-        })
-
-        const data = inject(selectedDataSymbol) as ISelectedData
-
-        //if the user selects or deselects the element, update the element in the template and the selectedData
-        //if the user deselects the element, set the value of the input fields to empty
-        watch(elementsCopy, (newValue, oldValue) => {
-            if(newValue !== oldValue){
-                data.updateElementInSelectedData({id: props.element[0].id, button: elementsCopy.value[0].selected});
-                data.controlGroupInSelectedData(props.element[0].id, ['button']);
-                //if the element is selected, add it to the selectedData, if not remove it
-            }
-            fileStore.update(props.element[0].id, elementsCopy.value);
-        },{ deep: true })
-
-        return {
-            selected,
-            elementsCopy,
-        }
-
+    disable: {
+        type: Boolean,
+        default: false
     }
+});
 
-})
+const elementsCopy = ref(cloneDeep(props.element));
+const selected = ref(props.element[0]?.selected); // Assuming 'selected' is directly on the first index
+const fileStore = useFileStore();
+const data = inject(selectedDataSymbol) as ISelectedData;
+
+onBeforeMount(() => {
+    elementsCopy.value = cloneDeep(props.element);
+});
+
+watch(() => props.element, (newVal) => {
+    elementsCopy.value = cloneDeep(newVal);
+}, { deep: true });
+
+onMounted(() => {
+    selected.value = props.element[0]?.selected;
+});
+
+watch(elementsCopy, (newValue, oldValue) => {
+    data.updateElementInSelectedData({
+        id: props.element[0].id,
+        button: elementsCopy.value[0].selected
+    });
+    data.controlGroupInSelectedData(props.element[0].id, ['button']);
+    fileStore.update(props.element[0].id, elementsCopy.value);
+}, { deep: true });
 </script>
 
 <style lang="scss" scoped>
@@ -104,12 +83,7 @@ export default defineComponent({
 .custom-text {
   font-size: large;
 }
-
 .disabled-bg {
     background-color: $primary-disabled !important;
 }
-
-
-/* Import is not working here */
-/* @import '../../css/configurator/article-selector.scss'; */
 </style>

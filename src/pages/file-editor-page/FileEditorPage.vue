@@ -1,10 +1,6 @@
 <template>
     <div v-if="magazine?.TemplateIds" ref="scrollArea">
-        <!-- this is the content of a single site -->
-       <SingleSitePage
-            :siteId="magazine.TemplateIds[currentSite - 1]"
-       />
-       <!-- this is the pagination under the content -->
+        <SingleSitePage :siteId="magazine.TemplateIds[currentSite - 1]" />
         <div class="pagination">
             <q-pagination
                 class="q-ma-none"
@@ -14,7 +10,6 @@
             />
         </div>
     </div>
-    <!-- if the site is loading display the loading spinner -->
     <div v-else class="q-pa-md flex flex-center">
         <q-circular-progress
             indeterminate
@@ -26,56 +21,32 @@
     </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, onMounted, ref, watch, inject } from 'vue';
-import { useFileStore } from 'stores/file-store';
+<script setup lang="ts">
+import { ref, onMounted, watch } from 'vue';
 import { useRoute } from 'vue-router';
-import { storeToRefs } from 'pinia';
+import { useFileStore } from 'stores/file-store';
 import SingleSitePage from './SingleSitePage.vue';
 
-export default defineComponent({
-    name: 'FileEditorPage',
-    props: {
-        magazineId: {
-            type: String,
-            required: true
-        }
-    },
-    components: {
-        SingleSitePage
-    },
-    setup() {
-        const route = useRoute();
-        const fileStore = useFileStore();
-        const magazine = ref();
-        const sites = ref<string[]>(['']);
-        const { getFileData } = storeToRefs(fileStore);
+const route = useRoute();
+const fileStore = useFileStore();
 
-        const currentSite = ref(1);
+const magazineId = ref(route.params.magazineId);
+const magazine = ref(null);
+const currentSite = ref(1);
 
-        //get the magazine id by the route params and set the magazine
-        onMounted(() => {
-            magazine.value = fileStore.getFileDataById(route.params.magazineId);
-        });
+// Watch for route changes and magazine data updates
+onMounted(async () => {
+    magazine.value = await fileStore.getFileDataById(magazineId.value);
+});
 
-        //if I refresh on the file editor page, set the magazine id by the route params
-        watch(getFileData, () => {
-            magazine.value = fileStore.getFileDataById(route.params.magazineId);
-        });
-
-        return {
-            magazine,
-            sites,
-            currentSite
-        };
-    }
-})
-
+watch(() => route.params.magazineId, (newId) => {
+    magazine.value = fileStore.getFileDataById(newId);
+});
 
 </script>
 
-<style>
-.seite-titel{
+<style scoped>
+.seite-titel {
     width: 100%;
     text-align: center;
 }

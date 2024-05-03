@@ -22,7 +22,8 @@ const save = debounce((templateToSave: object) => {
         const { mutate: saveData, onDone, onError } = useMutation(saveTemplate);
         saveData({ dataToSave: templateToSave });
         //on error make a notification
-        onError(() => {
+        onError((error) => {
+            console.error(error)
             //when the client is offline
             //imported external function to make a notification
             notify('Verbindungsfehler')

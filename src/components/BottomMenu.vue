@@ -8,61 +8,45 @@
             class="text-grey-8 footer-tabs"
             v-model="activeTab"
         >
-            <!-- this router wrapper is needed to make the bottom menu tabs clickable -->
             <q-route-tab
                 v-for="tab in bottomMenuList"
                 :key="tab.navigateToPath"
-                :name= tab.name
+                :name="tab.name"
                 :to="tab.navigateToPath"
                 :icon="tab.icon"
             >
-                <div class="text-black"> {{ tab.label }}</div>
+                <div class="text-black">{{ tab.label }}</div>
             </q-route-tab>
         </q-tabs>
     </q-footer>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
+import { ref, watch } from 'vue';
+import { useTabStore } from 'src/stores/navigation-store';
+import type { BottomMenuItem } from './../types/index';
 
-import { defineComponent, ref, PropType, watch } from 'vue'
-
-//import stores
-import { useTabStore } from 'src/stores/navigation-store'
-
-//import interfaces
-import { BottomMenuItem } from './../types/index'
-
-
-export default defineComponent({
-    name: 'BottomMenu',
-    props:{
-        bottomMenuList:{
-            type: Array as PropType<BottomMenuItem[]>,
-            required: true
-        }
-    },
-        setup(){
-        const tabStore = useTabStore();
-        //getting the active tab from the store
-        const activeTab = ref(tabStore.getActiveTab)
-
-        //set the active tab in the store if it changes
-        watch(() => activeTab.value, () => {
-            tabStore.setActiveTab(activeTab.value)
-        })
-
-        return {
-            activeTab,
-            tabStore,
-        }
+const props = defineProps({
+    bottomMenuList: {
+        type: Array as PropType<BottomMenuItem[]>,
+        required: true
     }
-})
+});
+
+const tabStore = useTabStore();
+const activeTab = ref(tabStore.getActiveTab);
+
+watch(activeTab, (newValue) => {
+    tabStore.setActiveTab(newValue);
+});
 </script>
 
-<style>
-
-/* .svg-icon{
-  stroke-width: 10px;
-} */
-
+<style scoped>
+/* Example of a scoped style */
+.footer {
+    /* Styles specific to footer */
+}
+.text-black {
+    color: black;
+}
 </style>

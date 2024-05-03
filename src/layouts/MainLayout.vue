@@ -1,82 +1,63 @@
 <template>
     <q-layout view="lHh Lpr lFf">
-        <!-- app header is always on the top of the screen -->
         <AppHeader />
-
         <q-page-container>
             <keep-alive>
                 <router-view />
             </keep-alive>
         </q-page-container>
-
-        <!-- always showing the bottom menu -->
         <BottomMenu :bottomMenuList="bottomMenuList" />
     </q-layout>
 </template>
 
-<script lang="ts">
-import { defineComponent, computed, ref, onMounted, watch } from 'vue';
+<script setup lang="ts">
+import { ref, onMounted } from 'vue';
 import { useUserStore } from 'src/stores/authentication';
 import { useFileStore } from 'stores/file-store';
-
-import BottomMenu from 'src/components/BottomMenu.vue';
-import { bottomMenuList } from 'src/BottomMenuConfig';
-
 import { useQuery } from '@vue/apollo-composable';
 import { getMagazine } from '../apollo/queries/files';
+import BottomMenu from 'src/components/BottomMenu.vue';
 import AppHeader from 'src/components/AppHeader.vue';
+import { bottomMenuList } from 'src/BottomMenuConfig';
 
-export default defineComponent({
-    name: 'MainLayout',
-    components: {
-        BottomMenu,
-        AppHeader,
-    },
-    setup() {
-        const store = useUserStore();
-        const drawer = ref(false);
-        //on starting the application. If the permissions are stored in local storage, load them into store
-        if (window.localStorage.getItem('permissions')) {
-            store.setPermissions(
-                window.localStorage.getItem('permissions')?.split(',')
-            );
-        }
-        //on starting the application. If the apollo-token is stored in local storage, load it into store
-        if (window.localStorage.getItem('apollo-token')) {
-            store.setUserData(window.localStorage.getItem('apollo-token'));
-        }
-        const fileStore = useFileStore();
-        const magazine = ref({});
+const userStore = useUserStore();
+const fileStore = useFileStore();
 
-        const queryFileData = () => {
-            try {
-                const { onResult } = useQuery(
-                    getMagazine,
-                    () => ({}),
-                    () => ({
-                        errorPolicy: 'all',
-                        fetchPolicy: 'no-cache',
-                    })
-                );
-                /* on the result the data will be stored in the file store */
-                onResult((result) => {
-                    magazine.value = result;
-                    fileStore.setFileData(result.data?.Magazin);
-                });
-            } catch (error) {
-                console.log(error);
-            }
-        };
+// Initializing states
+const magazine = ref({});
+const drawer = ref(false);
 
-        //get the magazines from the server on starting the application
-        onMounted(() => {
-            queryFileData();
+// Handling local storage data for permissions
+if (window.localStorage.getItem('permissions')) {
+    userStore.setPermissions(
+        window.localStorage.getItem('permissions')?.split(',')
+    );
+}
+
+// Handling local storage data for Apollo token
+if (window.localStorage.getItem('apollo-token')) {
+    userStore.setUserData(window.localStorage.getItem('apollo-token'));
+}
+
+// Define a function to query magazine data
+const queryFileData = () => {
+    try {
+        const { onResult } = useQuery(
+            getMagazine,
+            () => ({}),
+            { errorPolicy: 'all', fetchPolicy: 'no-cache' }
+        );
+        onResult((result) => {
+            magazine.value = result;
+            fileStore.setFileData(result.data?.Magazin);
         });
+    } catch (error) {
+        console.error(error);
+    }
+};
 
-        return {
-            bottomMenuList,
-            drawer,
-        };
-    },
+// Fetch magazine data on component mount
+onMounted(() => {
+    queryFileData();
 });
 </script>

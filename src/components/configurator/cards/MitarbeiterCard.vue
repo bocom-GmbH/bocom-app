@@ -1,16 +1,15 @@
 <template>
     <q-card :class="{'custom-card bg-primary q-my-md flex': true, 'disabled-bg': disable}">
-        <q-img class="custom-img" :src="`https://images.bocom.at/${element.find((element: any) => element.label === 'Bild').value}`">
+        <q-img class="custom-img" :src="`https://images.bocom.at/${element.find((element) => element.label === 'Bild').value}`">
             <div v-if="disable" class="absolute-full text-subtitle2 flex flex-center"></div>
         </q-img>
         <div class="flex-column q-pa-sm no-wrap">
             <div class="custom-text q-mb-none text-weight-bold text-left">
-                {{ element.find((element: any) => element.label === 'Titel').value }}
-                {{ element.find((element: any) => element.label === 'Name').value }}
+                {{ element.find((element) => element.label === 'Titel').value }}
+                {{ element.find((element) => element.label === 'Name').value }}
             </div>
-            {{ element.find((element: any) => element.label === 'Position').value }}
+            {{ element.find((element) => element.label === 'Position').value }}
         </div>
-
         <q-toggle
             class="q-mt-xs"
             color="positive"
@@ -22,64 +21,50 @@
     </q-card>
 </template>
 
-<script lang="ts">
-import { defineComponent, onBeforeMount, onMounted, ref, inject, watch } from 'vue'
-import { useFileStore } from 'stores/file-store'
+<script setup lang="ts">
+import { ref, onBeforeMount, onMounted, watch, inject } from 'vue';
 import { cloneDeep } from 'lodash';
-import { selectedDataSymbol, IselectedData } from 'src/types/index'
+import { useFileStore } from 'stores/file-store';
+import { selectedDataSymbol, IselectedData } from 'src/types/index';
 
-export default defineComponent({
-    name: 'MitartbeiterCard',
-    props: {
-        element: {
-            type: Object,
-            required: true
-        },
-        disable: {
-            type: Boolean,
-            required: false
-        }
+const props = defineProps({
+    element: {
+        type: Object,
+        required: true
     },
-    setup(props) {
-
-        const selected = ref<boolean>(false)
-        const fileStore = useFileStore()
-        const elementsCopy = ref<object>({})
-
-        //make a deep copy of the props.element on before mount, so that we can manipulate the elements
-        onBeforeMount(() => {
-            elementsCopy.value = cloneDeep(props.element)
-        })
-
-        //set the selected value on mounted
-        onMounted(() => {
-            selected.value = props.element[0].selected
-        })
-
-        const data = inject(selectedDataSymbol) as IselectedData
-
-        //if the selected state of a card changed update the filestore and the selectedData
-        watch(elementsCopy, () => {
-            fileStore.update(props.element[0].id, elementsCopy.value);
-            data.updateElementInSelectedData({id: props.element[0].id, button: elementsCopy.value[0].selected})
-            data.controlGroupInSelectedData(props.element[0].id, ['button']);
-        },{ deep: true })
-
-        return {
-            selected,
-            elementsCopy,
-            checkPermission: data.checkPermission
-        }
-
+    disable: {
+        type: Boolean,
+        default: false
     }
+});
 
-})
+const elementsCopy = ref(cloneDeep(props.element));
+const selected = ref(props.element[0].selected); // Assuming 'selected' is a part of your element object structure
+const fileStore = useFileStore();
+const data = inject(selectedDataSymbol) as IselectedData;
+
+onBeforeMount(() => {
+    elementsCopy.value = cloneDeep(props.element);
+});
+
+onMounted(() => {
+    selected.value = props.element[0].selected;
+});
+
+watch(elementsCopy, () => {
+    fileStore.update(props.element[0].id, elementsCopy.value);
+    data.updateElementInSelectedData({id: props.element[0].id, button: elementsCopy.value[0].selected});
+    data.controlGroupInSelectedData(props.element[0].id, ['button']);
+}, { deep: true });
+
+const checkPermission = (id: string, emitEvent: boolean) => {
+    return data.checkPermission(id, emitEvent);
+};
 </script>
 
 <style lang="scss" scoped>
 .no-wrap {
   width: 100%;
-
 }
 .row.inline, .column.inline, .flex.inline {
   display: inline-flex;
@@ -94,15 +79,11 @@ export default defineComponent({
   height: 170px;
 }
 .custom-text {
-    font-size: large;
-    -webkit-hyphens: auto;
-    hyphens: auto;
+  font-size: large;
+  -webkit-hyphens: auto;
+  hyphens: auto;
 }
-
 .disabled-bg {
-    background-color: $primary-disabled !important; /* or any darker color you prefer */
+    background-color: $primary-disabled !important;
 }
-
-/* Import is not working here */
-/* @import '../../css/configurator/article-selector.scss'; */
 </style>

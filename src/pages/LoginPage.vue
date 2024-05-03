@@ -34,57 +34,44 @@
     </q-page>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script lang="ts" setup>
+import { ref } from 'vue';
 import { useMutation } from '@vue/apollo-composable';
 import { useUserStore } from 'stores/authentication';
 import { Cookies } from 'quasar';
 import { loginWithTokenMutation } from 'src/apollo/mutations/user';
+import { useRouter } from 'vue-router'
 
-export default defineComponent({
-    name: 'LoginPage',
-    data() {
-        return {
-            username: '',
-            password: '',
-        };
-    },
-    setup() {
-        let {
-            mutate: login,
-            error: loginError,
-            loading: loading,
-        } = useMutation(loginWithTokenMutation);
-        const store = useUserStore();
-        return {
-            login,
-            store,
-        };
-    },
-    //this is an outdated way to make a mutation, it should be refactored
-    methods: {
-        //the login function stores the apollo token in the cookies and in the local storage
-        //it stores the permission ids and the user data in the pinia store
-        async loginFunc() {
-            const loginData = await this.login({
-                username: this.username,
-                password: this.password,
-            });
-            Cookies.set('apollo-token', loginData?.data.login.token);
-            window.localStorage.setItem(
-                'permissions',
-                loginData?.data.login.permissions
-            );
-            window.localStorage.setItem(
-                'apollo-token',
-                loginData?.data.login.token
-            );
-            this.store.setUserData(loginData?.data.login.token);
-            this.store.setPermissions(
-                window.localStorage.getItem('permissions')?.split(',')
-            );
-            this.$router.push('/');
-        },
-    },
-});
+const router = useRouter();
+
+const username = ref('');
+const password = ref('');
+
+const {
+    mutate: login,
+    error: loginError,
+    loading: loading,
+} = useMutation(loginWithTokenMutation);
+const store = useUserStore();
+
+const loginFunc = async () => {
+    const loginData = await login({
+        username: username.value,
+        password: password.value,
+    });
+    Cookies.set('apollo-token', loginData?.data.login.token);
+    window.localStorage.setItem(
+        'permissions',
+        loginData?.data.login.permissions
+    );
+    window.localStorage.setItem(
+        'apollo-token',
+        loginData?.data.login.token
+    );
+    store.setUserData(loginData?.data.login.token);
+    store.setPermissions(
+        window.localStorage.getItem('permissions')?.split(',')
+    );
+    router.push('/');
+}
 </script>

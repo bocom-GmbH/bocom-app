@@ -1,71 +1,58 @@
 <template>
     <div>
         <q-circular-progress
-          show-value
-          class="text-accent q-ma-sm q-mr-md"
-          :value="fractionToPercent"
-          size="48px"
-          :color="progressColor"
+            show-value
+            class="text-accent q-ma-sm q-mr-md"
+            :value="fractionToPercent"
+            size="48px"
+            :color="progressColor"
         >
-        <!-- the inside of the progress -->
-            <div
-                :style="{ color: `var(--q-${progressColor})`}"
-                v-if="denominator"
-            >
+            <div :style="{ color: `var(--q-${progressColor})`}" v-if="denominator">
                 {{ progress }}
             </div>
         </q-circular-progress>
     </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, computed, onUnmounted } from 'vue'
+<script setup lang="ts">
+import { computed, onUnmounted } from 'vue';
 
-export default defineComponent({
-    name: 'LimitIndicator',
-    props: {
-        numerator: {
-            type: Number,
-            required: true
-        },
-        denominator: {
-            type: Number,
-            required: false
-        }
+const props = defineProps({
+    numerator: {
+        type: Number,
+        required: true
     },
-    setup(props) {
-
-        //calculate a percentage from the numerator and denominator
-        const fractionToPercent = computed(() => {
-            if (!props.denominator) return 0;
-            return (props.numerator / props.denominator) * 100;
-        });
-
-        //the computed value returns a color name by the numerator and denominator
-        const progressColor = computed(() => {
-            if (props.numerator === props.denominator) {
-                return 'positive';
-            } else if( props.numerator > props.denominator) {
-                return 'negative';
-            } else {
-                return 'secondary';
-            }
-        });
-
-        onUnmounted(() => {
-            fractionToPercent.value = 0;
-        });
-
-        //showing the numerator and the denominator in the circle
-        const progress = computed(() => `${props.numerator}/${props.denominator}`);
-
-        return {
-            fractionToPercent,
-            progress,
-            progressColor
-        }
+    denominator: {
+        type: Number,
+        default: 1 // set a default to avoid division by zero
     }
-})
+});
+
+// Calculate a percentage from the numerator and denominator
+const fractionToPercent = computed(() => {
+    if (!props.denominator) return 0;
+    return (props.numerator / props.denominator) * 100;
+});
+
+// Determine the progress color based on the relationship between numerator and denominator
+const progressColor = computed(() => {
+    if (props.numerator === props.denominator) {
+        return 'positive';
+    } else if (props.numerator > props.denominator) {
+        return 'negative';
+    } else {
+        return 'secondary';
+    }
+});
+
+// Cleanup on component unmount
+onUnmounted(() => {
+    // reset logic if needed, though setting fractionToPercent here won't have any effect since it's computed
+});
+
+// Show the numerator and denominator in the circle
+const progress = computed(() => `${props.numerator}/${props.denominator}`);
+
 </script>
 
 <style scoped>

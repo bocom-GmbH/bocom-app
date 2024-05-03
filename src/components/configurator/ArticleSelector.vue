@@ -10,17 +10,13 @@
             ref="carousel"
             :swipeable="true"
         >
-            <!-- slicing the first element of the array, because it contains the metadata -->
             <q-carousel-slide v-for="(slide, index) in element.slice(1)" :key="index" class="q-pa-none" :name="index">
-                <!-- disable the article card if the numberToSelect value reached or another article is selected as the displayed -->
-                <!-- set the color of the article card to gray if the numberToSelect value reached or another article is selected as the displayed -->
                 <ArticleCard
                     :slide="slide.data"
                     :disable="setDisabled(slide)"
-                    :style="{ 'color':  setDisabled(slide) ? 'gray' : 'var(--q-color-primary)'}"
+                    :style="{ 'color': setDisabled(slide) ? 'gray' : 'var(--q-color-primary)'}"
                 />
             </q-carousel-slide>
-            <!-- this tmeplate contains the buttons for controlling the carousel -->
             <template v-slot:control>
                 <div>
                     <q-carousel-control
@@ -31,18 +27,18 @@
                     >
                         <q-btn
                             round dense color="white" text-color="black" icon="chevron_left"
-                            @click="$refs.carousel.previous()"
+                            @click="previousSlide"
                         />
                     </q-carousel-control>
                     <q-carousel-control
-                        v-if="currentSlide < element.length -2"
+                        v-if="currentSlide < element.length - 2"
                         position="bottom-right"
                         :offset="[18, 18]"
                         class="q-gutter-xs"
                     >
                         <q-btn
                             round dense color="white" text-color="black" icon="chevron_right"
-                            @click="$refs.carousel.next()"
+                            @click="nextSlide"
                         />
                     </q-carousel-control>
                 </div>
@@ -51,70 +47,65 @@
     </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, inject, ref } from 'vue'
-import ArticleCard from './cards/ArticleCard.vue'
-import { ISelectedData, selectedDataSymbol } from 'src/types/index'
+<script setup lang="ts">
+import { ref, inject, onMounted } from 'vue';
+import ArticleCard from './cards/ArticleCard.vue';
+import { ISelectedData, selectedDataSymbol } from 'src/types/index';
 
-export default defineComponent({
-    name: 'ArticleSelector',
-    props: {
-        element: {
-            type: Object,
-            required: true
-        },
-        numberToSelect: {
-            type: Number,
-            required: false
-        }
+const props = defineProps({
+    element: {
+        type: Object,
+        required: true
     },
-    components: {
-        ArticleCard
-    },
-    setup(props) {
-        const data = inject(selectedDataSymbol) as ISelectedData
-
-        const selectedData = data.selectedData
-        const currentSlide = ref(0)
-        const navigation = ref(true)
-        //the automatic button position is not implemented here
-        //set the current slide to the index of the selected element, so it will automatically slide to the selected article
-
-        let index = 0
-        for(let element of props.element) {
-            console.log(element)
-            if(element.data){
-                data.updateElementInSelectedData({id: element.data[0].id, button: element.data[0].selected})
-                if(element.data[0].selected){
-                    currentSlide.value = index - 1
-                }
-                data.controlGroupInSelectedData(element.data[0].id, ['button'])
-            }
-            index++
-        }
-
-
-        const setDisabled = (card: object): boolean => {
-            return (isNumberToSelectReached() && isCardAlreadySelected(card))
-        }
-
-        const isCardAlreadySelected = (card: object): boolean => {
-            return !selectedData.value.find((element: any) => element.id === card.data[0].id)?.group
-        }
-
-        const isNumberToSelectReached = (): boolean => {
-            const selectedElementsInSelectedData = selectedData.value.filter((element: any) => element.group)
-            return !!props.numberToSelect && selectedElementsInSelectedData.length >= props.numberToSelect
-        }
-
-        return {
-            currentSlide,
-            selectedData,
-            navigation,
-            setDisabled
-        };
+    numberToSelect: {
+        type: Number,
+        default: 0
     }
-})
+});
+
+const carousel = ref(null);
+const currentSlide = ref(0);
+const data = inject(selectedDataSymbol) as ISelectedData;
+const selectedData = data.selectedData;
+
+onMounted(() => {
+    let index = 0;
+    for (let element of props.element.slice(1)) {
+        if (element.data) {
+            data.updateElementInSelectedData({id: element.data[0].id, button: element.data[0].selected});
+            if (element.data[0].selected) {
+                currentSlide.value = index;
+            }
+            data.controlGroupInSelectedData(element.data[0].id, ['button']);
+        }
+        index++;
+    }
+});
+
+const setDisabled = (card: any): boolean => {
+    return isNumberToSelectReached() && !isCardAlreadySelected(card);
+};
+
+const isCardAlreadySelected = (card: any): boolean => {
+    return !!selectedData.value.find((item: any) => item.id === card.data[0].id)?.group;
+};
+
+const isNumberToSelectReached = (): boolean => {
+    const selectedCount = selectedData.value.filter((item: any) => item.group).length;
+    return props.numberToSelect && selectedCount >= props.numberToSelect;
+};
+
+const previousSlide = () => {
+    if (carousel.value) {
+        carousel.value.previous();
+    }
+};
+
+const nextSlide = () => {
+    if (carousel.value) {
+        carousel.value.next();
+    }
+};
 </script>
 
 <style scoped>

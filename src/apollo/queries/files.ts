@@ -37,5 +37,4 @@ const getSiteById = gql`
     }
 `
 
-
 export { queryFileData, getMagazine, getSiteById }

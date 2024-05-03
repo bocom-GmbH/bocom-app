@@ -1,17 +1,14 @@
 <template>
-	<q-layout>
-		<q-page-container>
-			<router-view />
-    	</q-page-container>
-	</q-layout>
+    <q-layout>
+        <q-page-container>
+            <router-view />
+        </q-page-container>
+    </q-layout>
 </template>
 
-<script lang="ts">
-
-import { defineComponent } from 'vue'
-
-//this is a login layout for the login page
-export default defineComponent({
-	name: 'LoginLayout'
-})
+<script setup lang="ts">
+// No additional JavaScript or TypeScript code is required if you're not defining
+// any reactive data or methods for this component.
 </script>
+
+<!-- Add any styles if necessary -->

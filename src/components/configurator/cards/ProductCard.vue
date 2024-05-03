@@ -1,17 +1,15 @@
 <template>
     <q-card :class="{'custom-card bg-primary q-my-md flex': true, 'disabled-bg': disable}">
-        <q-img style="border-radius: 0px;" class="custom-img q-mt-md bg-primary" fit="scale-down" :src="`https://images.bocom.at/${element.find((element: any) => element.label === 'Bild').value}`">
+        <q-img style="border-radius: 0px;" class="custom-img q-mt-md bg-primary" fit="scale-down" :src="`https://images.bocom.at/${element.find((element) => element.label === 'Bild').value}`">
             <div v-if="disable" class="absolute-full text-subtitle2 flex flex-center"></div>
         </q-img>
         <div class="flex-column q-pa-none q-px-sm no-wrap">
             <div class="custom-text q-mb-none text-weight-bold text-left">
-                {{ element.find((element: any) => element.label === 'Name').value }}
+                {{ element.find((element) => element.label === 'Name').value }}
             </div>
-               <!--  € {{ element.find((element: any) => element.label === 'Preis').value }} <br>
-                {{ element.find((element: any) => element.label === 'Menge').value }} -->
             <q-input
                 :disable="!elementsCopy[0].selected"
-                v-model="elementsCopy.find((element: any) => element.label === 'Preis').value"
+                v-model="elementsCopy.find((element) => element.label === 'Preis').value"
                 label="Preis"
                 outlined
                 rounded
@@ -20,14 +18,13 @@
             <br>
             <q-input
                 :disable="!elementsCopy[0].selected"
-                v-model="elementsCopy.find((element: any) => element.label === 'Menge').value"
+                v-model="elementsCopy.find((element) => element.label === 'Menge').value"
                 label="Menge"
                 outlined
                 rounded
                 color="secondary"
             ></q-input>
         </div>
-
         <q-toggle
             class="q-mt-none"
             color="positive"
@@ -38,83 +35,58 @@
     </q-card>
 </template>
 
-<script lang="ts">
-import { defineComponent, onBeforeMount, ref, inject, watch } from 'vue'
-import { useFileStore } from 'stores/file-store'
+<script setup lang="ts">
+import { ref, onBeforeMount, watch, inject } from 'vue';
 import { cloneDeep } from 'lodash';
-import { selectedDataSymbol, IselectedData } from 'src/types/index'
+import { useFileStore } from 'stores/file-store';
+import { selectedDataSymbol, IselectedData } from 'src/types/index';
 
-export default defineComponent({
-    name: 'ProductCard',
-    props: {
-        element: {
-            type: Object,
-            required: true
-        },
-        disable: {
-            type: Boolean,
-            required: false
-        }
+const props = defineProps({
+    element: {
+        type: Object,
+        required: true
     },
-    setup(props) {
-        const fileStore = useFileStore()
-        const elementsCopy = ref<object>({})
-        const data = inject(selectedDataSymbol) as IselectedData
+    disable: {
+        type: Boolean,
+        default: false
+    }
+});
 
-        //make a deep copy of the props.element on before mount, so that we can manipulate the elements
-        onBeforeMount(() => {
-            elementsCopy.value = cloneDeep(props.element)
-        })
+const elementsCopy = ref(cloneDeep(props.element));
+const fileStore = useFileStore();
+const data = inject(selectedDataSymbol) as IselectedData;
 
-        //if the template changes, update the element
-        watch(() => props.element, () => {
-            elementsCopy.value = cloneDeep(props.element)
-        }, { deep: true })
+onBeforeMount(() => {
+    elementsCopy.value = cloneDeep(props.element);
+});
 
-        const setDisaabled = () => {
-            if(data.selectedData.value.filter(data => data.group === true).length >= 2){
-                return true
-            } else {
-                return false
-            }
-        }
+watch(() => props.element, (newVal) => {
+    elementsCopy.value = cloneDeep(newVal);
+}, { deep: true });
 
+const setDisabled = () => {
+    return data.selectedData.value.filter(data => data.group === true).length >= 2;
+};
 
-        //if the user selects or deselects the element, update the element in the template and the selectedData
-        watch(elementsCopy, (newValue, oldValue) => {
-            const firstElementSelected = elementsCopy.value[0].selected;
-            const mengeElement = elementsCopy.value.find((element) => element.label === 'Menge');
-            const preisElement = elementsCopy.value.find((element) => element.label === 'Preis');
-            const mengeValue = mengeElement ? mengeElement.value : '';
-            const preisValue = preisElement ? preisElement.value : '';
+watch(elementsCopy, (newValue, oldValue) => {
+    const { selected, id } = elementsCopy.value[0];
+    const mengeElement = elementsCopy.value.find((element) => element.label === 'Menge');
+    const preisElement = elementsCopy.value.find((element) => element.label === 'Preis');
 
-            if (!firstElementSelected) {
-                mengeElement.value = '';
-                preisElement.value = '';
-                data.updateElementInSelectedData({ id: props.element[0].id, button: firstElementSelected, Menge: '', Preis: '' });
-            } else {
-                if (mengeValue !== '' && preisValue !== '') {
-                    data.updateElementInSelectedData({ id: props.element[0].id, button: firstElementSelected, Menge: mengeValue, Preis: preisValue });
-                } else if (mengeValue === '') {
-                    data.updateElementInSelectedData({ id: props.element[0].id, button: firstElementSelected, Menge: '', Preis: preisValue });
-                } else if (preisValue === '') {
-                    data.updateElementInSelectedData({ id: props.element[0].id, button: firstElementSelected, Menge: mengeValue, Preis: '' });
-                }
-            }
-
-            data.controlGroupInSelectedData(props.element[0].id, ['button', 'Menge', 'Preis']);
-            fileStore.update(props.element[0].id, elementsCopy.value);
-
-        }, { deep: true });
-
-        return {
-            elementsCopy,
-            setDisaabled
-        }
-
+    if (!selected) {
+        mengeElement.value = '';
+        preisElement.value = '';
+        data.updateElementInSelectedData({ id, button: selected, Menge: '', Preis: '' });
+    } else {
+        const mengeValue = mengeElement.value;
+        const preisValue = preisElement.value;
+        data.updateElementInSelectedData({ id, button: selected, Menge: mengeValue, Preis: preisValue });
     }
 
-})
+    data.controlGroupInSelectedData(id, ['button', 'Menge', 'Preis']);
+    fileStore.update(id, elementsCopy.value);
+
+}, { deep: true });
 </script>
 
 <style lang="scss" scoped>
@@ -136,12 +108,7 @@ export default defineComponent({
 .custom-text {
   font-size: large;
 }
-
 .disabled-bg {
     background-color: $primary-disabled !important;
 }
-
-
-/* Import is not working here */
-/* @import '../../css/configurator/article-selector.scss'; */
 </style>
