@@ -10,7 +10,7 @@
             transition-prev="slide-right"
             transition-next="slide-left"
             class="body q-mb-lg q-pb-md"
-            ref="carouselRef"
+            ref="carousel"
             style="border-radius: 12px;"
         >
             <q-carousel-slide v-for="(slide, index) in stories" :key="index" class="q-pa-none" :name="index">
@@ -24,11 +24,11 @@
                     <MainConfigurator :numberToSelect="elementsCopy[2].data[0].numberToSelect" :label="elementsCopy[2].label" class="q-mt-sm">
                         <template #body>
                             <div v-for="(element, index) in elementsCopy[2].data" :key="index">
-                                <span class="label q-ml-md">{{ element.label }}</span>
+                                <span class="label q-ml-md">{{ element.label }} </span>
                                 <CardCarousel
                                     v-if="element.label"
                                     :element="filteredProducts(element.label)"
-                                    :numberToSelect="element.data[0].numberToSelect"
+                                    :numberToSelect="elementsCopy[2].data[0].numberToSelect"
                                     :disabledByParent="isDisabledByParent(element)"
                                 />
                             </div>
@@ -43,7 +43,7 @@
                     :offset="[30, articleHeight + 85]"
                     class="q-gutter-xs"
                 >
-                    <q-btn round dense color="white" text-color="black" icon="chevron_left" @click="carouselRef.value.previous()" />
+                    <q-btn round dense color="white" text-color="black" icon="chevron_left" @click="previousSlide" />
                 </q-carousel-control>
                 <q-carousel-control
                     v-if="currentSlide < stories.length - 1"
@@ -51,7 +51,7 @@
                     :offset="[30, articleHeight + 85]"
                     class="q-gutter-xs"
                 >
-                    <q-btn round dense color="white" text-color="black" icon="chevron_right" @click="carouselRef.value.next()" />
+                    <q-btn round dense color="white" text-color="black" icon="chevron_right" @click="nextSlide" />
                 </q-carousel-control>
             </template>
         </q-carousel>
@@ -81,14 +81,19 @@ const props = defineProps({
 });
 
 const userStore = useUserStore();
-const data = inject(selectedDataSymbol) as ISelectedData;
-console.log(data);
-const selectedData = ref<ISingleSelectedData[]>(data.selectedData || null);
+const data = props.element as ISelectedData;
+const selectedData = ref<ISingleSelectedData[]>([]);
 const elementsCopy = ref(cloneDeep(props.element.data));
 const articleHeight = ref(0);
 const currentSlide = ref(0);
-const currentSlideId = computed(() => stories[currentSlide.value]?.data[0]?.id || '');
-const carouselRef = ref(null);
+const currentSlideId = computed(() => stories.value[currentSlide.value]?.data[0]?.id || 'error');
+const carousel = ref(null);
+
+const resetCardCarousel = computed(() => {
+    return selectedData.value.filter(element => element.group).length
+})
+
+provide('resetCardCarousel', resetCardCarousel)
 
 const stories = computed(() => props.element.data[1].data.filter((element: any) => element.label === 'Story'));
 
@@ -101,8 +106,8 @@ const isCardAlreadySelected = (card: any): boolean => {
 };
 
 const isNumberToSelectReached = (): boolean => {
-    const selectedElements = selectedData.value.filter((element: any) => element.group);
-    return !!props.numberToSelect && selectedElements.length >= props.numberToSelect;
+    const selectedElementsInSelectedData = selectedData.value.filter((element: any) => element.group)
+    return !!props.element.data[1].data[0].numberToSelect && selectedElementsInSelectedData.length >= props.element.data[1].data[0].numberToSelect
 };
 
 const filteredProducts = (label: string) => {
@@ -113,15 +118,53 @@ const isDisabledByParent = (element: any) => {
     return selectedData.value.find((singleSelectedData: any) => singleSelectedData.group === true)?.id !== currentSlideId.value;
 };
 
+const updateElementInSelectedData = (element: ISingleSelectedData) => {
+    const foundIndex = selectedData.value.findIndex(singleSelectedData => singleSelectedData.id === element.id);
+    if (foundIndex !== -1) {
+        selectedData.value.splice(foundIndex, 1, element);
+    } else {
+        selectedData.value.push(element);
+    }
+};
+
+const controlGroupInSelectedData = (singleSelectedDataId: string, props: string[]) => {
+    const singleSelectedData = selectedData.value.find(element => element.id === singleSelectedDataId);
+    if (singleSelectedData) {
+        singleSelectedData.group = !props.some(prop => singleSelectedData[prop] === false || singleSelectedData[prop] == '');
+    }
+};
+
 onBeforeMount(() => {
     stories.value.forEach((story: any) => {
         if (story.data[0].selected) {
             currentSlide.value = stories.value.indexOf(story);
         }
-        data.updateElementInSelectedData({ id: story.data[0].id, button: story.data[0].selected });
-        data.controlGroupInSelectedData(story.data[0].id, ['button']);
+        updateElementInSelectedData({ id: story.data[0].id, button: story.data[0].selected });
+        controlGroupInSelectedData(story.data[0].id, ['button']);
     });
 });
+
+const checkPermission = (permissionId: string, notifyOnRun: boolean) => {
+    if (!userStore.doIHavePermissionFor(permissionId)) {
+        if (notifyOnRun) {
+            notify('Keine Berechtigung');
+        }
+        return false;
+    }
+    return true;
+};
+
+const previousSlide = () => {
+    if (carousel.value) {
+        carousel.value.previous();
+    }
+};
+
+const nextSlide = () => {
+    if (carousel.value) {
+        carousel.value.next();
+    }
+};
 
 onUnmounted(() => {
     selectedData.value = [];
@@ -130,8 +173,9 @@ onUnmounted(() => {
 provide('articleHeight', articleHeight);
 provide(selectedDataSymbol, {
     selectedData,
-    updateElementInSelectedData: data.updateElementInSelectedData,
-    controlGroupInSelectedData: data.controlGroupInSelectedData
+    updateElementInSelectedData,
+    controlGroupInSelectedData,
+    checkPermission
 });
 
 </script>
