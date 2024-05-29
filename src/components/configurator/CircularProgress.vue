@@ -45,12 +45,11 @@ const progressColor = computed(() => {
     }
 });
 
-// Cleanup on component unmount
-onUnmounted(() => {
-    // reset logic if needed, though setting fractionToPercent here won't have any effect since it's computed
-});
 
-// Show the numerator and denominator in the circle
+/* onUnmounted(() => {
+
+}); */
+
 const progress = computed(() => `${props.numerator}/${props.denominator}`);
 
 </script>

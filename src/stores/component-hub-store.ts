@@ -9,6 +9,7 @@ import GroupingComponent from 'src/components/configurator/GroupingComponent.vue
 import MitarberiterCard from 'src/components/configurator/cards/MitarbeiterCard.vue';
 import ProductCard from 'src/components/configurator/cards/ProductCard.vue';
 import PromotionCard from 'src/components/configurator/cards/PromotionCard.vue';
+import GroupingComponentSimple from 'src/components/configurator/GroupingComponentSimple.vue';
 
 interface ComponentPairs {
 	componentId: string;
@@ -70,7 +71,17 @@ export const useComponentStore = defineStore('componentHub', {
                 componentId: 'f1d28863-d476-4fa1-856c-4640765a4807',
                 component: PromotionCard,
                 requireMainConfigurator: true
-            }
+            },
+            {
+                componentId: '2349f10e-bbba-4931-9f3c-6e99346f3e16',
+                component: GroupingComponentSimple,
+                requireMainConfigurator: true
+            },
+            {
+                componentId: '91725a43-4193-4423-973b-982d8f9c8511',
+                component: CardCarousel,
+                requireMainConfigurator: true
+            },
         ] as ComponentPairs[],
 	}),
 

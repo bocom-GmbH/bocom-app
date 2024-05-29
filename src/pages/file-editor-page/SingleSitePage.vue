@@ -5,10 +5,11 @@
         <!-- filter the data object to get only the components with a label -->
         <div v-for="(component) of components.data.filter(file => file.label)" :key="component.data[0].elementId">
             <!-- use the main configurator if the component is ready and requires it -->
+            <!-- if the compomnent has no number to select it shoud be in the second level data -->
             <main-configurator
                 v-if="components && componentHub.getRequireMainConfigurator(component.data[0].elementId)"
                 :label="component.label"
-                :numberToSelect="component.data[0].numberToSelect"
+                :numberToSelect="component.data[0].numberToSelect || component.data[1].data[0].numberToSelect"
             >
                 <!-- the content goes to the body of the main configurator -->
                 <template v-slot:body>
@@ -17,7 +18,7 @@
                             v-if="components && component"
                             :element="component.data"
                             :is="componentHub.getComponentById(component.data[0].elementId)"
-                            :numberToSelect="component.data[0].numberToSelect"
+                            :numberToSelect="component.data[0].numberToSelect || component.data[1].data[0].numberToSelect"
                         />
                     </div>
                 </template>

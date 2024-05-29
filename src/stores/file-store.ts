@@ -46,7 +46,8 @@ function updateNestedObject(store: any, path: string, updatedObject: any): objec
 export const useFileStore = defineStore('file', {
     state: () => ({
         fileData: [] as IFileData[],
-        currentSite: null
+        currentSite: null,
+        currentSiteMap: []
     }),
 
     getters: {
@@ -86,6 +87,9 @@ export const useFileStore = defineStore('file', {
                 target.data[0].selected = false;
             }
             this.update('temp', target.data)
+        },
+        setCurrentSiteMap (id: string, label: string, index: number): void {
+            this.currentSiteMap.push({id, label, index});
         }
     }
 });

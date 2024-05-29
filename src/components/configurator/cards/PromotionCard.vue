@@ -37,7 +37,7 @@ const props = defineProps({
 });
 
 const elementsCopy = ref(cloneDeep(props.element));
-const selected = ref(props.element[0]?.selected); // Assuming 'selected' is directly on the first index
+const selected = ref(props.element[0]?.selected);
 const fileStore = useFileStore();
 const data = inject(selectedDataSymbol) as ISelectedData;
 

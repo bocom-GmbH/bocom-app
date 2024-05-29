@@ -24,7 +24,6 @@ import { cloneDeep } from 'lodash';
 import { useFileStore } from 'stores/file-store';
 import { selectedDataSymbol, ISelectedData } from 'src/types/index';
 
-// Define props and injections
 const props = defineProps({
     slide: {
         type: Object,
@@ -41,7 +40,6 @@ const articleHeight = inject('articleHeight', null) as number | null;
 const currentSlideId = inject('currentSlideId') as string;
 const currentSlide = inject('currentSlide') as object | null;
 
-// Component setup
 const elementsCopy = ref(cloneDeep(props.slide));
 const divRef = ref<Element | null>(null);
 

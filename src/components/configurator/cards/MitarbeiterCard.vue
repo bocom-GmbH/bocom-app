@@ -39,7 +39,7 @@ const props = defineProps({
 });
 
 const elementsCopy = ref(cloneDeep(props.element));
-const selected = ref(props.element[0].selected); // Assuming 'selected' is a part of your element object structure
+const selected = ref(props.element[0].selected);
 const fileStore = useFileStore();
 const data = inject(selectedDataSymbol) as IselectedData;
 

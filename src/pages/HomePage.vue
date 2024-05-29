@@ -23,6 +23,7 @@ const fileStore = useFileStore();
 
 // If the user is logged out, redirect to the login page
 onMounted(() => {
+    fileStore.currentSiteMap = [];
     if (!userStore.isUserLoggedIn) {
         router.push('/login');
     }

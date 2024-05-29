@@ -24,7 +24,8 @@ const props = defineProps({
     numberToSelect: {
         type: Number,
         default: 0 // provide a default value to ensure reactivity
-    }
+    },
+
 });
 
 const userStore = useUserStore();

@@ -54,18 +54,18 @@ const props = defineProps({
 
 const elementsCopy = ref(cloneDeep(props.element));
 const fileStore = useFileStore();
-const data = inject(selectedDataSymbol) as IselectedData;
+const { selectedData, updateElementInSelectedData, controlGroupInSelectedData, checkPermission } = inject(selectedDataSymbol) as IselectedData;
 
 onBeforeMount(() => {
     elementsCopy.value = cloneDeep(props.element);
 });
 
-watch(() => props.element, (newVal) => {
-    elementsCopy.value = cloneDeep(newVal);
+watch(props, (newVal) => {
+    elementsCopy.value = cloneDeep(newVal.element);
 }, { deep: true });
 
 const setDisabled = () => {
-    return data.selectedData.value.filter(data => data.group === true).length >= 2;
+    return selectedData.value.filter(data => data.group === true).length >= 2;
 };
 
 watch(elementsCopy, (newValue, oldValue) => {
@@ -76,14 +76,14 @@ watch(elementsCopy, (newValue, oldValue) => {
     if (!selected) {
         mengeElement.value = '';
         preisElement.value = '';
-        data.updateElementInSelectedData({ id, button: selected, Menge: '', Preis: '' });
+        updateElementInSelectedData({ id, button: selected, Menge: '', Preis: '' });
     } else {
         const mengeValue = mengeElement.value;
         const preisValue = preisElement.value;
-        data.updateElementInSelectedData({ id, button: selected, Menge: mengeValue, Preis: preisValue });
+        updateElementInSelectedData({ id, button: selected, Menge: mengeValue, Preis: preisValue });
     }
 
-    data.controlGroupInSelectedData(id, ['button', 'Menge', 'Preis']);
+    controlGroupInSelectedData(id, ['button', 'Menge', 'Preis']);
     fileStore.update(id, elementsCopy.value);
 
 }, { deep: true });

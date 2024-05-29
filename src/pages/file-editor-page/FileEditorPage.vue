@@ -1,14 +1,17 @@
 <template>
     <div v-if="magazine?.TemplateIds" ref="scrollArea">
-        <SingleSitePage :siteId="magazine.TemplateIds[currentSite - 1]" />
-        <div class="pagination">
+        <SingleSitePage :siteId="magazine.TemplateIds[currentSite]" />
+       <!--  <div class="pagination">
             <q-pagination
                 class="q-ma-none"
                 v-model="currentSite"
                 :max="magazine.TemplateIds.length"
                 direction-links
             />
-        </div>
+        </div> -->
+        <PaginationPuttons
+            :templateIds="magazine.TemplateIds"
+        />
     </div>
     <div v-else class="q-pa-md flex flex-center">
         <q-circular-progress
@@ -22,17 +25,20 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted, watch, provide } from 'vue';
 import { useRoute } from 'vue-router';
 import { useFileStore } from 'stores/file-store';
 import SingleSitePage from './SingleSitePage.vue';
+import PaginationPuttons from 'components/PaginationButtons.vue';
 
 const route = useRoute();
 const fileStore = useFileStore();
 
 const magazineId = ref(route.params.magazineId);
 const magazine = ref(null);
-const currentSite = ref(1);
+const currentSite = ref(0);
+
+provide('currentSite', currentSite);
 
 // Watch for route changes and magazine data updates
 onMounted(async () => {
