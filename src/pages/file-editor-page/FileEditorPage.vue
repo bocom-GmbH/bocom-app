@@ -10,6 +10,7 @@
             />
         </div> -->
         <PaginationPuttons
+            class="q-my-md q-pa-md"
             :templateIds="magazine.TemplateIds"
         />
     </div>

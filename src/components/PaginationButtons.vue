@@ -1,6 +1,7 @@
 <template>
     <div
         style="width: 100%; display: flex; flex-direction: row; justify-content: center; align-items: center; gap: 5px;"
+        class="wrapper"
     >
         <q-btn
             v-for="(page, index) in orderedSiteMap"
@@ -86,3 +87,13 @@ const goToPage = (index) => {
     currentPage.value = index;
 };
 </script>
+
+<style scoped>
+.wrapper {
+    width: 100%;
+    display: flex;
+    gap: 15px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+}
+</style>

@@ -70,6 +70,7 @@ export const useFileStore = defineStore('file', {
         },
         //store the current magazine site
         setCurrentSite (site: any): void {
+            this.currentSite = null;
             this.currentSite = site;
         },
         //updates the template in the store (if there are any changes) and saves it

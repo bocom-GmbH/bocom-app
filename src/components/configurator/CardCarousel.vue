@@ -1,12 +1,13 @@
 <template>
     <div>
         <div class="wrapper q-px-md" v-if="element">
-            <div v-for="card in element.filter(element => element.label)" :key="card.data.elementId">
+            <div v-for="(card, index) in element.filter(element => element.label)" :key="card.data.elementId">
                 <component
                     :is="getComponentById(card.data[0].elementId)"
                     :element="card.data"
                     :numberToSelect="numberToSelect"
                     :disable="setDisabled(card)"
+                    :key="index"
                 />
             </div>
         </div>
