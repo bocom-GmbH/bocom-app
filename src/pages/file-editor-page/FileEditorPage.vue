@@ -9,7 +9,7 @@
                 direction-links
             />
         </div> -->
-        <PaginationPuttons
+        <PaginationButtons
             class="q-my-md q-pa-md"
             :templateIds="magazine.TemplateIds"
         />
@@ -30,7 +30,7 @@ import { ref, onMounted, watch, provide } from 'vue';
 import { useRoute } from 'vue-router';
 import { useFileStore } from 'stores/file-store';
 import SingleSitePage from './SingleSitePage.vue';
-import PaginationPuttons from 'components/PaginationButtons.vue';
+import PaginationButtons from 'components/PaginationButtons.vue';
 
 const route = useRoute();
 const fileStore = useFileStore();

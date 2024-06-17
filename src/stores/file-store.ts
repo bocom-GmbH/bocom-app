@@ -64,6 +64,11 @@ export const useFileStore = defineStore('file', {
         }
     },
     actions: {
+        resetFileStore() {
+            this.fileData = [];
+            this.currentSite = null;
+            this.currentSiteMap = [];
+        },
         //store the magazines
         setFileData (singleFile: IFileData[]): void {
             this.fileData = singleFile;

@@ -1,17 +1,16 @@
 <template>
-    <div
-        style="width: 100%; display: flex; flex-direction: row; justify-content: center; align-items: center; gap: 5px;"
-        class="wrapper"
-    >
+    <div class="wrapper q-px-md">
         <q-btn
             v-for="(page, index) in orderedSiteMap"
             :key="index"
             :label="page.label"
             color="primary"
+            class="q-my-md"
             :text-color="index === currentPageIndex ? 'white' : 'primary'"
             :flat="!(index === currentPageIndex)"
             @click="goToPage(index)"
             :disable="index === currentPageIndex"
+            style="min-width: 80px;"
         />
     </div>
 </template>
@@ -31,7 +30,6 @@ const props = defineProps({
 
 const currentPage = inject('currentSite', ref(1));
 const fileStore = useFileStore();
-
 
 const orderedSiteMap = computed(() => {
     return fileStore.currentSiteMap.slice().sort((a, b) => a.index - b.index);
@@ -64,7 +62,7 @@ const querySiteData = async (siteById, index) => {
 };
 
 function extractLabelAndNumber(siteString) {
-    const match = siteString.match(/(\D+)(\d+(\+\d+)?)/);
+    const match = siteString.match(/(\D+)(\d+([+-]\d+)?)/);
     if (match) {
         return {
             label: match[1].trim(),
@@ -84,7 +82,7 @@ onMounted(() => {
 });
 
 const goToPage = (index) => {
-    currentPage.value = index;
+    currentPage.value = orderedSiteMap.value[index].index;
 };
 </script>
 
