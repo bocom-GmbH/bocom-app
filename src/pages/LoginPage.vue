@@ -41,6 +41,9 @@ import { useUserStore } from 'stores/authentication';
 import { Cookies } from 'quasar';
 import { loginWithTokenMutation } from 'src/apollo/mutations/user';
 import { useRouter } from 'vue-router'
+import { useApolloClient } from 'src/apollo/utils';
+
+
 
 const router = useRouter();
 
@@ -72,6 +75,10 @@ const loginFunc = async () => {
     store.setPermissions(
         window.localStorage.getItem('permissions')?.split(',')
     );
-    router.push('/');
+    useApolloClient();
+    setTimeout(() => {
+        router.push('/');
+        //location.reload();
+    }, 500);
 }
 </script>

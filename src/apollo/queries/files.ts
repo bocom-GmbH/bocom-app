@@ -37,4 +37,19 @@ const getSiteById = gql`
     }
 `
 
-export { queryFileData, getMagazine, getSiteById }
+const getAllProjectsToClient = gql`
+    query QueryProjectsToClient {
+        getAllProjectsToClient {
+            number
+            year
+            name
+            startdate
+            statelist {
+                state
+                date
+            }
+        }
+    }
+`
+
+export { queryFileData, getMagazine, getSiteById, getAllProjectsToClient }

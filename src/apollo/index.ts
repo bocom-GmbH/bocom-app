@@ -1,24 +1,41 @@
 import type { ApolloClientOptions } from '@apollo/client/core'
 import { createHttpLink, InMemoryCache } from '@apollo/client/core'
 import type { BootFileParams } from '@quasar/app'
-import { Cookies } from 'quasar'
+import { Cookies } from 'quasar';
+import { setContext } from '@apollo/client/link/context';
 
 export /* async */ function getClientOptions(
   /* {app, router, ...} */ options?: Partial<BootFileParams<any>>
 ) {
+    const httpLink = createHttpLink({
+        uri: 'https://graphql.bocom.at/',
+      });
+
+      const authLink = setContext((_, { headers }) => {
+        return {
+          headers: {
+            ...headers,
+            authorization: Cookies.get('apollo-token'),
+          }
+        }
+      });
+
   return <ApolloClientOptions<unknown>>Object.assign(
     // General options.
     <ApolloClientOptions<unknown>>{
-      link: createHttpLink({
-        uri:
-          process.env.GRAPHQL_URI ||
-          // Change to your graphql endpoint.
-          'https://graphql.bocom.at/',
-          headers:{
-            authorization: Cookies.get('apollo-token'),
-          }
-      }),
+      link: authLink.concat(httpLink),
       cache: new InMemoryCache(),
+      defaultOptions: {
+        query: {
+          fetchPolicy: 'no-cache',
+        },
+        watchQuery: {
+          fetchPolicy: 'no-cache',
+        },
+        mutate: {
+          fetchPolicy: 'no-cache',
+        }
+      },
     },
     // Specific Quasar mode options.
     process.env.MODE === 'spa'
