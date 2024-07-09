@@ -39,7 +39,7 @@
 import { ref, onBeforeMount, watch, inject } from 'vue';
 import { cloneDeep } from 'lodash';
 import { useFileStore } from 'stores/file-store';
-import { selectedDataSymbol, IselectedData } from 'src/types/index';
+import { selectedDataSymbol, ISelectedData } from 'src/types/index';
 
 const props = defineProps({
     element: {
@@ -54,7 +54,7 @@ const props = defineProps({
 
 const elementsCopy = ref(cloneDeep(props.element));
 const fileStore = useFileStore();
-const { selectedData, updateElementInSelectedData, controlGroupInSelectedData, checkPermission } = inject(selectedDataSymbol) as IselectedData;
+const { selectedData, updateElementInSelectedData, controlGroupInSelectedData, checkPermission } = inject(selectedDataSymbol) as ISelectedData;
 
 onBeforeMount(() => {
     elementsCopy.value = cloneDeep(props.element);

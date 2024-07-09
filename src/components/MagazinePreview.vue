@@ -6,8 +6,8 @@
                style="border-radius: 12px; width: 100%"
                icon="earth"
                :label="label"
-               header-class="bg-primary text-white"
-               expand-icon-class="text-white"
+               header-class="bg-primary text-secondary"
+               expand-icon-class="text-secondary"
            >
                <q-card class="q-mr-md">
                    <q-card-section>
@@ -19,6 +19,7 @@
                        class="q-ma-md"
                        style="width: 95%"
                        color="primary"
+                       text-color="secondary"
                        label="Open"
                        :to="{ path: `/HomePage/FileEditorPage/${id}` }"
                    />

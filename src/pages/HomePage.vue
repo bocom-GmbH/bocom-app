@@ -17,7 +17,7 @@
                 <q-list style="width: 100%; border:none" bordered class="rounded-borders">
                     <q-expansion-item
                         class="q-expansion-item shadow-1 overflow-hidden"
-                        style="border-radius: 8px; width: 100%"
+                        style="border-radius: 8px; width: 100%;"
 
                         :label=" file.number + '-' + file.year + '-' + file.name"
                         header-class="bg-primary text-secondary"
@@ -70,9 +70,6 @@
                 </q-list>
             </div>
        <!--  </div> -->
-         <q-btn @click="getProjectList()">
-            asd
-         </q-btn>
     </q-page>
 </template>
 
@@ -117,13 +114,10 @@ onMounted(() => {
 const fileDetails = ref<IFileDetails>();
 
 onMounted(() => {
-    console.log('mounted');
-
     getProjectList();
 });
 
 const getProjectList = () => {
-    console.log('getProjectList');
 
     const { onResult } = useQuery(
         getAllProjectsToClient,
@@ -134,14 +128,12 @@ const getProjectList = () => {
     );
 
     onResult((result) => {
-        console.log(result)
         fileDetails.value = result?.data?.getAllProjectsToClient;
     });
 }
 
 onUnmounted(() => {
     fileDetails.value = undefined;
-    console.log(fileDetails.value)
 });
 
 </script>

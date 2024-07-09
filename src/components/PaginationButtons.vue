@@ -1,16 +1,16 @@
 <template>
-    <div class="wrapper q-px-md">
+    <div class="wrapper flex justify-center q-px-md">
         <q-btn
             v-for="(page, index) in orderedSiteMap"
             :key="index"
             :label="page.label"
             color="primary"
             class="q-my-md"
-            :text-color="index === currentPageIndex ? 'white' : 'primary'"
+            :text-color="index === currentPageIndex ? 'secondary' : 'secondary'"
             :flat="!(index === currentPageIndex)"
             @click="goToPage(index)"
             :disable="index === currentPageIndex"
-            style="min-width: 80px;"
+            style="min-width: 20px;"
         />
     </div>
 </template>
