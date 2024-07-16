@@ -56,7 +56,7 @@ export const useFileStore = defineStore('file', {
         },
         //returns the desired magazine by id
         getFileDataById: (state) => (id: string) :IFileData | undefined => {
-            return state.fileData?.find((file: any) => file.id === id);
+            return state.fileData?.find((file: any) => file.projectData[0].id === id);
         },
         //returns the desired magazine site by site id
         getCurrentSiteComponents: (state) => () => {

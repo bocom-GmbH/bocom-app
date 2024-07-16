@@ -1,8 +1,18 @@
 export interface IFileData {
-    Jahr: string;
-    TemplateIds: string[];
-    id: string;
-    label: string;
+    number: number;
+    year: number;
+    name: string;
+    startDate: string;
+    stateList: {
+        state: string;
+        date: string;
+    }[];
+    projectData: {
+        id: string;
+        label: string;
+        year: number;
+        templateIds: string[];
+    }[];
 }
 
 export interface BottomMenuItem {

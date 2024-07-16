@@ -12,8 +12,5 @@
     "typescript",
     "vue"
   ],
-  "typescript.tsdk": "node_modules/typescript/lib",
-  "accessibility.signalOptions": {
-    "volume": 0
-  }
+  "typescript.tsdk": "node_modules/typescript/lib"
 }

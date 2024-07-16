@@ -48,6 +48,12 @@ const getAllProjectsToClient = gql`
                 state
                 date
             }
+            projectData {
+                id
+                label
+                Jahr
+                TemplateIds
+            }
         }
     }
 `

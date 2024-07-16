@@ -1,6 +1,6 @@
 <template>
-    <div v-if="magazine?.TemplateIds" ref="scrollArea">
-        <SingleSitePage :siteId="magazine.TemplateIds[currentSite]" />
+    <div v-if="magazine?.projectData[0]?.TemplateIds" ref="scrollArea">
+        <SingleSitePage :siteId="magazine.projectData[0]?.TemplateIds[currentSite]" />
        <!--  <div class="pagination">
             <q-pagination
                 class="q-ma-none"
@@ -11,7 +11,7 @@
         </div> -->
         <PaginationButtons
             class="q-my-md q-pa-md"
-            :templateIds="magazine.TemplateIds"
+            :templateIds="magazine?.projectData[0]?.TemplateIds"
         />
     </div>
     <div v-else class="q-pa-md flex flex-center">

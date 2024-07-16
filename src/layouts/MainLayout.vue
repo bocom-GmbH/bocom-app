@@ -58,6 +58,6 @@ const queryFileData = () => {
 
 // Fetch magazine data on component mount
 onMounted(() => {
-    queryFileData();
+    //queryFileData();
 });
 </script>
