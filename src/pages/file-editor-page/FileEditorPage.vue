@@ -47,7 +47,9 @@ onMounted(async () => {
 });
 
 watch(() => route.params.magazineId, (newId) => {
-    magazine.value = fileStore.getFileDataById(newId);
+    if(newId !== null || newId !== undefined) {
+        magazine.value = fileStore.getFileDataById(newId);
+    }
 });
 
 </script>

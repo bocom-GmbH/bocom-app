@@ -26,12 +26,13 @@ import { useRouter } from 'vue-router';
 import { useUserStore } from 'stores/authentication';
 import { useFileStore } from 'stores/file-store';
 import { Cookies } from 'quasar'
-import MagazinePreview from 'src/components/MagazinePreview.vue';
+//import MagazinePreview from 'src/components/MagazinePreview.vue';
 import MagazinePreview2 from 'src/components/MagazinePreview2.vue';
 
 
 import { useQuery } from '@vue/apollo-composable';
 import { getAllProjectsToClient } from 'src/apollo/queries/files';
+import { on } from 'events';
 
 interface State {
     state: string;
@@ -58,9 +59,6 @@ onMounted(() => {
     if (!userStore.isUserLoggedIn) {
         router.push('/login');
     }
-});
-
-onMounted(() => {
     getProjectList();
 });
 
