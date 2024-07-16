@@ -15,7 +15,7 @@ export /* async */ function getClientOptions(
         return {
           headers: {
             ...headers,
-            authorization: Cookies.get('apollo-token'),
+            authorization: window.localStorage.getItem('apollo-token') || '',
           }
         }
       });
