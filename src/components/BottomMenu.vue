@@ -25,6 +25,7 @@
 import { ref, watch } from 'vue';
 import { useTabStore } from 'src/stores/navigation-store';
 import type { BottomMenuItem } from './../types/index';
+import { useRoute } from 'vue-router';
 
 const props = defineProps({
     bottomMenuList: {
@@ -33,11 +34,17 @@ const props = defineProps({
     }
 });
 
+const route = useRoute();
+
 const tabStore = useTabStore();
 const activeTab = ref(tabStore.getActiveTab);
 
 watch(activeTab, (newValue) => {
-    tabStore.setActiveTab(newValue);
+    if(!newValue){
+        tabStore.setActiveTab(route.fullPath.split('/')[1]);
+    } else {
+        tabStore.setActiveTab(newValue);
+    }
 });
 </script>
 

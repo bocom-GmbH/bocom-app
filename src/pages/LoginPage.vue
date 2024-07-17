@@ -23,8 +23,9 @@
                     style="width: 100%"
                 />
                 <q-btn
+                    :disable="password === '' || username === ''"
                     style="width: 100%"
-                    class="bg-primary text-white"
+                    class="bg-primary text-secondary"
                     no-caps
                     label="Anmelden"
                     @click="loginFunc"
