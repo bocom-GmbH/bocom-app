@@ -47,7 +47,6 @@ export const useComponentStore = defineStore('componentHub', {
 
     actions: {
         getComponentHub () {
-            console.log('hi')
             const { onResult } = useQuery(
                 getComponentHub,
                 () => ({
@@ -57,7 +56,6 @@ export const useComponentStore = defineStore('componentHub', {
             );
         
             onResult((result) => {
-                console.log(result)
                 this.hub = result?.data?.getComponentHub;
             });
         }
