@@ -1,22 +1,22 @@
 <template>
-    <div class="wrapper flex justify-center q-px-md">
+    <div ref="wrapper" class="wrapper q-px-md">
         <q-btn
             v-for="(page, index) in orderedSiteMap"
             :key="index"
             :label="page.label"
             color="primary"
-            class="q-my-md"
+            class="pagination-btn"
             :text-color="index === currentPageIndex ? 'secondary' : 'secondary'"
             :flat="!(index === currentPageIndex)"
             @click="goToPage(index)"
             :disable="index === currentPageIndex"
-            style="min-width: 20px;"
+            :ref="index === currentPageIndex ? 'activeButton' : null"
         />
     </div>
 </template>
 
 <script setup lang="ts">
-import { ref, inject, onMounted, computed, watch } from 'vue';
+import { ref, inject, onMounted, computed, watch, nextTick } from 'vue';
 import { useQuery } from '@vue/apollo-composable';
 import { getSiteById } from 'src/apollo/queries/files';
 import { useFileStore } from 'stores/file-store';
@@ -28,6 +28,7 @@ const props = defineProps({
     }
 });
 
+const wrapper = ref(null);
 const currentPage = inject('currentSite', ref(1));
 const fileStore = useFileStore();
 
@@ -79,10 +80,35 @@ onMounted(() => {
     for (const [index, site] of props.templateIds.entries()) {
         querySiteData(site, index);
     }
+
+    nextTick(() => {
+        centerActiveButton();
+    });
+});
+
+watch(currentPageIndex, () => {
+    nextTick(() => {
+        centerActiveButton();
+    });
 });
 
 const goToPage = (index) => {
     currentPage.value = orderedSiteMap.value[index].index;
+};
+
+const centerActiveButton = () => {
+    if (wrapper.value && wrapper.value.$el) {
+        const activeButton = wrapper.value.$el.querySelector('.q-btn.q-btn--flat');
+        if (activeButton) {
+            const wrapperRect = wrapper.value.$el.getBoundingClientRect();
+            const buttonRect = activeButton.getBoundingClientRect();
+            const offset = buttonRect.left - wrapperRect.left - (wrapperRect.width / 2) + (buttonRect.width / 2);
+            wrapper.value.$el.scrollBy({
+                left: offset,
+                behavior: 'smooth'
+            });
+        }
+    }
 };
 </script>
 
@@ -93,5 +119,12 @@ const goToPage = (index) => {
     gap: 15px;
     overflow-x: auto;
     scroll-behavior: smooth;
+    white-space: nowrap; /* Prevent wrapping */
+}
+
+.pagination-btn {
+    min-width: 20px;
+    flex-shrink: 0; /* Prevent buttons from shrinking */
+    margin: 0 5px; /* Adjust the margin as needed */
 }
 </style>

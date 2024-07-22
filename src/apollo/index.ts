@@ -1,7 +1,6 @@
 import type { ApolloClientOptions } from '@apollo/client/core'
 import { createHttpLink, InMemoryCache } from '@apollo/client/core'
 import type { BootFileParams } from '@quasar/app'
-import { Cookies } from 'quasar';
 import { setContext } from '@apollo/client/link/context';
 
 export /* async */ function getClientOptions(
