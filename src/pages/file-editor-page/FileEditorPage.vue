@@ -52,10 +52,6 @@ watch(() => route.params.magazineId, (newId) => {
     }
 });
 
-watch(() => currentSite, () => {
-    fileStore.update('id', {})
-})
-
 </script>
 
 <style scoped>

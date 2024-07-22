@@ -56,7 +56,6 @@ export const useComponentStore = defineStore('componentHub', {
             );
         
             onResult((result) => {
-                this.hub = result?.data?.getComponentHub;
                 for (const item of result?.data?.getComponentHub) {
                     if (item.component === 'ImageCard') {
                         item.component = ImageCard;
@@ -78,6 +77,7 @@ export const useComponentStore = defineStore('componentHub', {
                         item.component = CardCarousel;
                     }
                 }
+                this.hub = result?.data?.getComponentHub;
             });
         }
     }

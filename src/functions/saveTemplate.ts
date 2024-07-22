@@ -41,8 +41,7 @@ const save = debounce((templateToSave: object) => {
         });
     }
     try {
-        console.log('save exercuted')
-        // performSave();
+        performSave();
     } catch (error) {
         console.log(error);
     }
