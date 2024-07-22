@@ -25,6 +25,7 @@ import { ref, onMounted, onUnmounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useUserStore } from 'stores/authentication';
 import { useFileStore } from 'stores/file-store';
+import { useComponentStore } from 'stores/component-hub-store'
 import { Cookies } from 'quasar'
 import MagazinePreview from 'src/components/MagazinePreview.vue';
 import MagazinePreview2 from 'src/components/MagazinePreview2.vue';
@@ -51,9 +52,11 @@ type IFileDetails = Array<IFileDetail>
 const router = useRouter();
 const userStore = useUserStore();
 const fileStore = useFileStore();
+const componentHubStore = useComponentStore();
 
 // If the user is logged out, redirect to the login page
 onMounted(() => {
+    componentHubStore.getComponentHub()
     fileStore.currentSiteMap = [];
     if (!userStore.isUserLoggedIn) {
         router.push('/login');

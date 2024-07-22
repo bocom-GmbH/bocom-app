@@ -6,7 +6,18 @@ const checkPermission = gql`
     }
 `
 
+const getComponentHub = gql`
+    query getComponentHub {
+        getComponentHub {
+            componentId
+            component
+            requireMainConfigurator
+        }
+    }
+`
+
 
 export{
-    checkPermission
+    checkPermission,
+    getComponentHub
 }

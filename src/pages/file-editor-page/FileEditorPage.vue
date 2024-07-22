@@ -50,6 +50,10 @@ watch(() => route.params.magazineId, (newId) => {
     magazine.value = fileStore.getFileDataById(newId);
 });
 
+watch(() => currentSite, () => {
+    fileStore.update('id', {})
+})
+
 </script>
 
 <style scoped>

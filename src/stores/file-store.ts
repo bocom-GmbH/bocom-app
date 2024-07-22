@@ -80,10 +80,11 @@ export const useFileStore = defineStore('file', {
         },
         //updates the template in the store (if there are any changes) and saves it
         update (id: string, updatedObject: any):void {
-            if(JSON.stringify(this.currentSite) !== JSON.stringify(updateNestedObject(this.currentSite, updatedObject[0].path, updatedObject))){
-                this.currentSite = updateNestedObject(this.currentSite, updatedObject[0].path, updatedObject);
-                save(this.currentSite);
-            }
+            console.log('save executed')
+            // if(JSON.stringify(this.currentSite) !== JSON.stringify(updateNestedObject(this.currentSite, updatedObject[0].path, updatedObject))){
+            //     this.currentSite = updateNestedObject(this.currentSite, updatedObject[0].path, updatedObject);
+            //     save(this.currentSite);
+            // }
         },
         //reset the 'selected' values by path and them saves the template
         resetSelectedValues(path: string) {
