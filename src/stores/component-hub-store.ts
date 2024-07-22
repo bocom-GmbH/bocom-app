@@ -57,6 +57,27 @@ export const useComponentStore = defineStore('componentHub', {
         
             onResult((result) => {
                 this.hub = result?.data?.getComponentHub;
+                for (const item of result?.data?.getComponentHub) {
+                    if (item.component === 'ImageCard') {
+                        item.component = ImageCard;
+                    } else if (item.component === 'ArticleSelector') {
+                        item.component = ArticleSelector;
+                    } else if (item.component === 'InputFieldsCard') {
+                        item.component = InputFieldsCard;
+                    } else if (item.component === 'GroupingComponent') {
+                        item.component = GroupingComponent;
+                    } else if (item.component === 'MitarbeiterCard') {
+                        item.component = MitarberiterCard;
+                    } else if (item.component === 'ProductCard') {
+                        item.component = ProductCard;
+                    } else if (item.component === 'PromotionCard') {
+                        item.component = PromotionCard;
+                    } else if (item.component === 'GroupingComponentSimple') {
+                        item.component = GroupingComponentSimple;
+                    } else if (item.component === 'CardCarousel') {
+                        item.component = CardCarousel;
+                    }
+                }
             });
         }
     }
