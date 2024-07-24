@@ -56,6 +56,7 @@ export const useComponentStore = defineStore('componentHub', {
             );
         
             onResult((result) => {
+                
                 for (const item of result?.data?.getComponentHub) {
                     if (item.component === 'ImageCard') {
                         item.component = ImageCard;
