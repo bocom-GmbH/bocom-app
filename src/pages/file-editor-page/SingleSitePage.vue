@@ -4,6 +4,7 @@
     <div v-if="components?.data">
         <!-- filter the data object to get only the components with a label -->
         <div v-for="(component, index) in components.data.filter(file => file.label)" :key="component.data[0].elementId">
+           
             <!-- use the main configurator if the component is ready and requires it -->
             <!-- if the compomnent has no number to select it shoud be in the second level data -->
             <main-configurator

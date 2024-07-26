@@ -1,5 +1,6 @@
 <template>
     <div>
+        
         <div class="flex justify-between items-center">
             <span class="q-ml-md text-weight-bold article-heading">{{ label }}</span>
             <CircularProgress :denominator="numberToSelect" :numerator="selectedData.filter(element => element.group).length" />

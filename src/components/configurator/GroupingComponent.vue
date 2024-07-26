@@ -21,7 +21,7 @@
                     :disable="setDisabled(slide)"
                 />
                 <div>
-                    <MainConfigurator :numberToSelect="elementsCopy[2].data[0].numberToSelect" :label="elementsCopy[2].label" class="q-mt-sm">
+                    <MainConfigurator v-if="elementsCopy[2]" :numberToSelect="elementsCopy[2].data[0].numberToSelect" :label="elementsCopy[2].label" class="q-mt-sm">
                         <template #body>
                             <div v-for="(element, index) in elementsCopy[2].data" :key="index">
                                 <span class="label q-ml-md">{{ element.label }} </span>
