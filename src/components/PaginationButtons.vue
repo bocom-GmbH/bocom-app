@@ -6,11 +6,11 @@
             :label="page.label"
             color="primary"
             class="pagination-btn"
-            :text-color="index === currentPageIndex ? 'secondary' : 'secondary'"
-            :flat="!(index === currentPageIndex)"
+            :text-color="index === currentSiteIndex ? 'secondary' : 'secondary'"
+            :flat="!(index === currentSiteIndex)"
             @click="goToPage(index)"
-            :disable="index === currentPageIndex"
-            :ref="index === currentPageIndex ? 'activeButton' : null"
+            :disable="index === currentSiteIndex"
+            :ref="index === currentSiteIndex ? 'activeButton' : null"
         />
     </div>
 </template>
@@ -29,15 +29,15 @@ const props = defineProps({
 });
 
 const wrapper = ref(null);
-const currentPage = inject('currentSite', ref(1));
+const currentSite = inject('currentSite', ref(1));
 const fileStore = useFileStore();
 
 const orderedSiteMap = computed(() => {
     return fileStore.currentSiteMap.slice().sort((a, b) => a.index - b.index);
 });
 
-const currentPageIndex = computed(() => {
-    return orderedSiteMap.value.findIndex(page => page.index === currentPage.value);
+const currentSiteIndex = computed(() => {
+    return orderedSiteMap.value.findIndex(page => page.index === currentSite.value);
 });
 
 const querySiteData = async (siteById, index) => {
@@ -86,14 +86,14 @@ onMounted(() => {
     });
 });
 
-watch(currentPageIndex, () => {
+watch(currentSiteIndex, () => {
     nextTick(() => {
         centerActiveButton();
     });
 });
 
 const goToPage = (index) => {
-    currentPage.value = orderedSiteMap.value[index].index;
+    currentSite.value = orderedSiteMap.value[index].index;
 };
 
 const centerActiveButton = () => {

@@ -1,5 +1,6 @@
 <template>
     <div v-if="magazine?.projectData[0]?.TemplateIds" ref="scrollArea">
+        <pagination-arrows :maxLength="magazine.projectData[0]?.TemplateIds.length"/>
         <SingleSitePage :siteId="magazine.projectData[0]?.TemplateIds[currentSite]" />
        <!--  <div class="pagination">
             <q-pagination
@@ -31,6 +32,7 @@ import { useRoute } from 'vue-router';
 import { useFileStore } from 'stores/file-store';
 import SingleSitePage from './SingleSitePage.vue';
 import PaginationButtons from 'components/PaginationButtons.vue';
+import PaginationArrows from 'components/PaginationArrows.vue';
 
 const route = useRoute();
 const fileStore = useFileStore();

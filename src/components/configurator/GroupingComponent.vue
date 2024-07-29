@@ -2,6 +2,7 @@
     <div>
         <div class="flex justify-between items-center">
             <span class="q-ml-md q-mb-md text-weight-bold article-heading">{{ element.data[1].label }}</span>
+            {{ currentSlide }} {{  stories.length }}
             <CircularProgress :denominator="element.data[1].data[0].numberToSelect" :numerator="selectedData.filter(element => element.group).length" />
         </div>
         <q-carousel
