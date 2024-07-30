@@ -2,7 +2,11 @@
     <q-card flat class="card-styled q-pa-md q-pa-none text-center bg-primary">
         <span class="card-title text-h5">
             {{ slide.find((element) => element.label === 'Titel').value }}
-        </span> <br> <br>
+        </span>
+        <q-img v-if="slide.find((element) => element.label === 'Titelbild')" style="border-radius: 0px;" class="custom-img q-mt-md bg-primary" fit="scale-down" :src="`https://images.bocom.at/${slide.find((element) => element.label === 'Titelbild').value}`">
+            <div v-if="disable" class="absolute-full text-subtitle2 flex flex-center"></div>
+        </q-img>
+        <br> <br>
         <div ref="divRef" class="synopsys q-pr-sm">
             <div class="fixed-height text-left" v-html="slide.find((element) => element.label === 'Text').value"></div>
         </div>

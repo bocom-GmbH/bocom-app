@@ -7,23 +7,25 @@
             <div class="custom-text q-mb-none text-weight-bold text-left">
                 {{ element.find((element) => element.label === 'Name').value }}
             </div>
-            <!-- <q-input
+            <q-input
+                v-if="elementsCopy.find((element) => element.label === 'Preis')"
                 :disable="!elementsCopy[0].selected"
                 v-model="elementsCopy.find((element) => element.label === 'Preis').value"
                 label="Preis"
                 outlined
                 rounded
                 color="secondary"
-            ></q-input> -->
+            ></q-input>
             <br>
-            <!-- <q-input
+            <q-input
+                v-if="elementsCopy.find((element) => element.label === 'Menge')"
                 :disable="!elementsCopy[0].selected"
                 v-model="elementsCopy.find((element) => element.label === 'Menge').value"
                 label="Menge"
                 outlined
                 rounded
                 color="secondary"
-            ></q-input> -->
+            ></q-input>
         </div>
         <q-toggle
             class="q-mt-none"
