@@ -10,15 +10,39 @@
         <div ref="divRef" class="synopsys q-pr-sm">
             <div class="fixed-height text-left" v-html="slide.find((element) => element.label === 'Text').value"></div>
         </div>
-        <q-toggle
-            color="positive"
-            size="70px"
-            v-model="elementsCopy[0].selected"
-            val="xl"
-            label=""
-            :disable="disable || !checkPermission(elementsCopy[0]?.permissionId, false)"
-            @click="checkPermission(elementsCopy[0]?.permissionId, true)"
-        />
+        <div class="flex justify-between items-center">
+            <div>
+                <q-btn
+                    v-show="props.buttons.hasBackButton"
+                    round
+                    dense
+                    color="white"
+                    text-color="black"
+                    icon="chevron_left"
+                    @click="$emit('previousSlide')"
+                />
+            </div>
+            <q-toggle
+                color="positive"
+                size="70px"
+                v-model="elementsCopy[0].selected"
+                val="xl"
+                label=""
+                :disable="disable || !checkPermission(elementsCopy[0]?.permissionId, false)"
+                @click="checkPermission(elementsCopy[0]?.permissionId, true)"
+            />
+            <div>
+                <q-btn
+                    v-show="props.buttons.hasNextButton"
+                    round
+                    dense
+                    color="white"
+                    text-color="black"
+                    icon="chevron_right"
+                    @click="$emit('nextSlide')"
+                />
+            </div>
+        </div>
     </q-card>
 </template>
 
@@ -36,6 +60,19 @@ const props = defineProps({
     disable: {
         type: Boolean,
         default: false
+    },
+    buttonsToNavigate: {
+        type: Boolean,
+        default: false
+    },
+    buttons: {
+        type: Object,
+        default: () => {
+            return {
+                hasBackButton: false,
+                hasNextButton: false
+            }
+        }
     }
 });
 

@@ -2,7 +2,7 @@
     <div>
         <div class="flex justify-between items-center">
             <span class="q-ml-md q-mb-md text-weight-bold article-heading">{{ element.data[1].label }}</span>
-            {{ currentSlide }} {{  stories.length }}
+            {{ currentSlide }} {{  stories.length }} {{ hasBackButton }}
             <CircularProgress :denominator="element.data[1].data[0].numberToSelect" :numerator="selectedData.filter(element => element.group).length" />
         </div>
         <q-carousel
@@ -12,7 +12,7 @@
             transition-next="slide-left"
             class="body q-mb-lg q-pb-md"
             ref="carousel"
-            style="border-radius: 12px;"
+            style="border-radius: 12px; position: relative;"
         >
             <q-carousel-slide v-for="(slide, index) in stories" :key="index" class="q-pa-none" :name="index">
                 <ArticleCard
@@ -20,6 +20,10 @@
                     style="border-radius: 12px;"
                     :slide="slide.data"
                     :disable="setDisabled(slide)"
+                    :buttonsToNavigate="true"
+                    :buttons="{hasBackButton, hasNextButton}"
+                    @previousSlide="previousSlide"
+                    @nextSlide="nextSlide"
                 />
                 <div>
                     <MainConfigurator v-if="elementsCopy[2]" :numberToSelect="elementsCopy[2].data[0].numberToSelect" :label="elementsCopy[2].label" class="q-mt-sm">
@@ -37,24 +41,23 @@
                     </MainConfigurator>
                 </div>
             </q-carousel-slide>
-            <template v-slot:control>
+            <!-- <template v-slot:control>
                 <q-carousel-control
-                    v-if="currentSlide > 0"
+                    v-if="true"
                     position="top-left"
-                    :offset="[30, articleHeight + 85]"
-                    class="q-gutter-xs"
+                    :offset="[30, 12]"
+                    :disabled="hasBackButton"
                 >
                     <q-btn round dense color="white" text-color="black" icon="chevron_left" @click="previousSlide" />
                 </q-carousel-control>
                 <q-carousel-control
                     v-if="currentSlide < stories.length - 1"
                     position="top-right"
-                    :offset="[30, articleHeight + 85]"
-                    class="q-gutter-xs"
+                    :offset="[30, 12]"
                 >
                     <q-btn round dense color="white" text-color="black" icon="chevron_right" @click="nextSlide" />
                 </q-carousel-control>
-            </template>
+            </template> -->
         </q-carousel>
     </div>
 </template>
@@ -170,6 +173,9 @@ const nextSlide = () => {
 onUnmounted(() => {
     selectedData.value = [];
 });
+
+const hasBackButton = computed(() => currentSlide.value > 0);
+const hasNextButton = computed(() => currentSlide.value < stories.value.length - 1);
 
 provide('articleHeight', articleHeight);
 provide(selectedDataSymbol, {
