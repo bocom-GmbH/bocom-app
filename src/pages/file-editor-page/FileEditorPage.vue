@@ -1,7 +1,7 @@
 <template>
     <div v-if="magazine?.projectData[0]?.TemplateIds" ref="scrollArea">
-        <pagination-arrows :maxLength="magazine.projectData[0]?.TemplateIds.length"/>
-        <SingleSitePage :siteId="magazine.projectData[0]?.TemplateIds[currentSite]" />
+        <pagination-arrows :maxLength="magazine.projectData[0]?.TemplateIds.length" :class="['paginationButtons', { 'isScrolled': isScrolled }]"/>
+        <SingleSitePage style="margin-top: 75px;" :siteId="magazine.projectData[0]?.TemplateIds[currentSite]"/>
        <!--  <div class="pagination">
             <q-pagination
                 class="q-ma-none"
@@ -27,7 +27,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, watch, provide } from 'vue';
+import { ref, onMounted, watch, provide, onUnmounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { useFileStore } from 'stores/file-store';
 import SingleSitePage from './SingleSitePage.vue';
@@ -41,17 +41,33 @@ const magazineId = ref(route.params.magazineId);
 const magazine = ref(null);
 const currentSite = ref(0);
 
+const scrollArea = ref<HTMLElement | null>(null);
+const isScrolled = ref(false);
+
 provide('currentSite', currentSite);
 
 // Watch for route changes and magazine data updates
 onMounted(async () => {
     magazine.value = await fileStore.getFileDataById(magazineId.value);
+    window.addEventListener('scroll', handleScroll);
 });
 
 watch(() => route.params.magazineId, (newId) => {
     if(newId !== null || newId !== undefined) {
         magazine.value = fileStore.getFileDataById(newId);
     }
+});
+
+const handleScroll = () => {
+    if (scrollArea.value) {
+        const { top } = scrollArea.value.getBoundingClientRect();
+        console.log(top)
+        isScrolled.value = top < 110;
+    }
+};
+
+onUnmounted(() => {
+    window.removeEventListener('scroll', handleScroll);
 });
 
 </script>
@@ -61,10 +77,29 @@ watch(() => route.params.magazineId, (newId) => {
     width: 100%;
     text-align: center;
 }
-.pagination {
+
+.paginationButtons {
+    position: fixed;
+    top: 50px;
     width: 100%;
-    display: flex;
-    justify-content: space-around;
-    margin-bottom: 20px;
+    height: 60px; /* Set an initial height */
+    transition: all 0.4s ease-in-out;
+    z-index: 1000000000000000;
+}
+
+.isScrolled {
+    height: 80px;
+    background-color: rgba(255, 255, 255, 0.64);
+    backdrop-filter: blur(10px);
+    margin-bottom: 10px;
+    box-shadow: 0 2px 5px grey;
+}
+
+@keyframes changeSize{
+	0% {
+	}
+	100%{
+		height: 80px;
+	}
 }
 </style>

@@ -1,5 +1,8 @@
 <template>
-    <div class="button-container q-mt-md" style="width: 100%">
+    <div
+        class="flex justify-around q-py-md items-center"
+        style="width: 100%"
+    >
         <q-btn
             icon="las la-step-backward"
             color="secondary"
@@ -25,7 +28,7 @@
             dense
         />
         <div class="label-container">
-           {{ components?.label }}
+            {{ components?.label }}
         </div>
         <q-btn
             icon="las la-angle-right"
@@ -55,8 +58,7 @@
 </template>
 
 <script setup lang="ts">
-import { inject } from 'vue';
-import { Ref, ref, watch } from 'vue';
+import { inject, ref, watch, onMounted, onUnmounted } from 'vue';
 import { useFileStore } from 'stores/file-store';
 
 const currentSite = inject<Ref<number>>('currentSite');
@@ -76,17 +78,5 @@ watch(fileStore.getCurrentSiteComponents, () => {
 </script>
 
 <style scoped>
-.button-container {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    white-space: nowrap;
-    overflow: hidden;
-}
 
-.label-container {
-    padding: 0 10px;
-    flex-grow: 1;
-    text-align: center;
-}
 </style>

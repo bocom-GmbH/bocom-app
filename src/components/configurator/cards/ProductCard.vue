@@ -62,7 +62,7 @@ onBeforeMount(() => {
     elementsCopy.value = cloneDeep(props.element);
 });
 
-watch(props, (newVal) => {
+watch(props.element, (newVal) => {
     elementsCopy.value = cloneDeep(newVal.element);
 }, { deep: true });
 
@@ -76,12 +76,13 @@ watch(elementsCopy, (newValue, oldValue) => {
     const preisElement = elementsCopy.value.find((element) => element.label === 'Preis');
 
     if (!selected) {
-        if (mengeElement) {
+        //disabled auto reset value because Thomas dont want it
+        /* if (mengeElement) {
             mengeElement.value = '';
         }
         if (preisElement) {
             preisElement.value = '';
-        }
+        } */
         updateElementInSelectedData({ id, button: selected, Menge: '', Preis: '' });
     } else {
         let mengeValue
@@ -92,7 +93,6 @@ watch(elementsCopy, (newValue, oldValue) => {
         if (preisElement) {
             preisValue = preisElement.value;
         }
-        
         updateElementInSelectedData({ id, button: selected, Menge: mengeValue, Preis: preisValue });
     }
 
