@@ -1,19 +1,12 @@
 <template>
     <div v-if="magazine?.projectData[0]?.TemplateIds" ref="scrollArea">
         <pagination-arrows :maxLength="magazine.projectData[0]?.TemplateIds.length" :class="['paginationButtons', { 'isScrolled': isScrolled }]"/>
-        <SingleSitePage style="margin-top: 75px;" :siteId="magazine.projectData[0]?.TemplateIds[currentSite]"/>
-       <!--  <div class="pagination">
-            <q-pagination
-                class="q-ma-none"
-                v-model="currentSite"
-                :max="magazine.TemplateIds.length"
-                direction-links
-            />
-        </div> -->
-        <PaginationButtons
+        <SingleSitePage class="q-mb-xl" style="margin-top: 75px;" :siteId="magazine.projectData[0]?.TemplateIds[currentSite]"/>
+      <!-- pagination deleted -->
+       <!--  <PaginationButtons
             class="q-my-md q-pa-md"
             :templateIds="magazine?.projectData[0]?.TemplateIds"
-        />
+        /> -->
     </div>
     <div v-else class="q-pa-md flex flex-center">
         <q-circular-progress
@@ -61,7 +54,6 @@ watch(() => route.params.magazineId, (newId) => {
 const handleScroll = () => {
     if (scrollArea.value) {
         const { top } = scrollArea.value.getBoundingClientRect();
-        console.log(top)
         isScrolled.value = top < 110;
     }
 };
@@ -82,15 +74,12 @@ onUnmounted(() => {
     position: fixed;
     top: 50px;
     width: 100%;
-    height: 60px; /* Set an initial height */
     transition: all 0.4s ease-in-out;
     z-index: 1000000000000000;
 }
 
 .isScrolled {
-    height: 80px;
-    background-color: rgba(255, 255, 255, 0.64);
-    backdrop-filter: blur(10px);
+    background-color: rgb(255, 255, 255);
     margin-bottom: 10px;
     box-shadow: 0 2px 5px grey;
 }

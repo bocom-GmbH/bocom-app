@@ -1,7 +1,7 @@
 <template>
     <div
-        class="flex justify-around q-py-md items-center"
-        style="width: 100%"
+        class="flex justify-around items-center"
+        style="width: 100%; height: 50px"
     >
         <q-btn
             icon="las la-step-backward"
