@@ -76,12 +76,23 @@ watch(elementsCopy, (newValue, oldValue) => {
     const preisElement = elementsCopy.value.find((element) => element.label === 'Preis');
 
     if (!selected) {
-        mengeElement.value = '';
-        preisElement.value = '';
+        if (mengeElement) {
+            mengeElement.value = '';
+        }
+        if (preisElement) {
+            preisElement.value = '';
+        }
         updateElementInSelectedData({ id, button: selected, Menge: '', Preis: '' });
     } else {
-        const mengeValue = mengeElement.value;
-        const preisValue = preisElement.value;
+        let mengeValue
+        if (mengeElement) {
+            mengeValue = mengeElement.value;
+        }
+        let preisValue
+        if (preisElement) {
+            preisValue = preisElement.value;
+        }
+        
         updateElementInSelectedData({ id, button: selected, Menge: mengeValue, Preis: preisValue });
     }
 
