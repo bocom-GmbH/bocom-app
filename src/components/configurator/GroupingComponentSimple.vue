@@ -3,6 +3,7 @@
         v-for="(carousel, index) in elementsCopy[1].data"
         :key="index"
     >
+        <span class="q-ml-md text-weight-bold article-heading">{{ carousel.label }}</span>
         <card-carousel
             v-if="true"
             :element="carousel.data"

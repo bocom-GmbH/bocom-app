@@ -61,7 +61,6 @@ watch(() => route.params.magazineId, (newId) => {
 const handleScroll = () => {
     if (scrollArea.value) {
         const { top } = scrollArea.value.getBoundingClientRect();
-        console.log(top)
         isScrolled.value = top < 110;
     }
 };
