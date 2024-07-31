@@ -1,6 +1,5 @@
 <template>
     <div class="q-ma-sm">
-        hi
         <q-carousel
             animated
             v-model="currentSlide"
@@ -11,9 +10,7 @@
             ref="carousel"
             :swipeable="true"
         >
-        {{ element }}
             <q-carousel-slide v-for="(slide, index) in element.slice(1)" :key="index" class="q-pa-none" :name="index">
-                {{ slide.data}}
                 <ArticleCard
                     :slide="slide.data"
                     :disable="setDisabled(slide)"
