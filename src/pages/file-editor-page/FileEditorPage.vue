@@ -74,7 +74,6 @@ onUnmounted(() => {
     position: fixed;
     top: 50px;
     width: 100%;
-    transition: all 0.4s ease-in-out;
     z-index: 1000000000000000;
 }
 

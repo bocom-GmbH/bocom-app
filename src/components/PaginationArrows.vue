@@ -1,64 +1,77 @@
 <template>
     <div
-        class="flex justify-around items-center"
-        style="width: 100%; height: 50px"
+        class="navigation-container"
     >
-        <q-btn
-            icon="las la-step-backward"
-            color="secondary"
-            :disable="currentSite === 0"
-            @click="currentSite = 0"
-            flat
-            dense
-        />
-        <q-btn
-            icon="las la-angle-double-left"
-            color="secondary"
-            :disable="currentSite - 2 < 0"
-            @click="currentSite - 2 > 0 ? currentSite -= 2 : null"
-            flat
-            dense
-        />
-        <q-btn
-            icon="las la-angle-left"
-            color="secondary"
-            :disable="currentSite === 0"
-            @click="currentSite > 0 ? currentSite-- : null"
-            flat
-            dense
-        />
+        <div
+            class="button-container"
+            :style="currentSite === 0 ? 'opacity: 0.25' : ''"
+        >
+            <q-btn
+                icon="las la-step-backward"
+                color="secondary"
+                :disable="currentSite === 0"
+                @click="currentSite = 0"
+                flat
+                dense
+            />
+            <div :style="currentSite - 1 === 0 ? 'opacity: 0.25' : ''">
+                <q-btn
+                    icon="las la-angle-double-left"
+                    color="secondary"
+                    :disable="currentSite - 1 < 0"
+                    @click="currentSite - 1 > 0 ? currentSite -= 2 : null"
+                    flat
+                    dense
+                />
+            </div>
+            <q-btn
+                icon="las la-angle-left"
+                color="secondary"
+                :disable="currentSite === 0"
+                @click="currentSite > 0 ? currentSite-- : null"
+                flat
+                dense
+            />
+        </div>
         <div class="label-container">
             {{ components?.label }}
         </div>
-        <q-btn
-            icon="las la-angle-right"
-            color="secondary"
-            :disable="currentSite === props.maxLength - 1"
-            @click="props.maxLength > currentSite ? currentSite++ : null"
-            flat
-            dense
-        />
-        <q-btn
-            icon="las la-angle-double-right"
-            color="secondary"
-            :disable="currentSite + 2 >= props.maxLength"
-            @click="currentSite + 2 < props.maxLength ? currentSite += 2 : null"
-            flat
-            dense
-        />
-        <q-btn
-            icon="las la-step-forward"
-            color="secondary"
-            :disable="currentSite === props.maxLength - 1"
-            @click="currentSite = props.maxLength - 1"
-            flat
-            dense
-        />
+        <div
+            class="button-container"
+            :style="currentSite === props.maxLength - 1 ? 'opacity: 0.25' : ''"
+        >
+            <q-btn
+                icon="las la-angle-right"
+                color="secondary"
+                :disable="currentSite === props.maxLength - 1"
+                @click="props.maxLength > currentSite ? currentSite++ : null"
+                flat
+                dense
+            />
+            <div :style="currentSite + 2 === props.maxLength ? 'opacity: 0.25': ''">
+                <q-btn
+                    icon="las la-angle-double-right"
+                    color="secondary"
+                    :disable="currentSite + 2 >= props.maxLength"
+                    @click="currentSite + 2 < props.maxLength ? currentSite += 2 : null"
+                    flat
+                    dense
+                />
+            </div>
+            <q-btn
+                icon="las la-step-forward"
+                color="secondary"
+                :disable="currentSite === props.maxLength - 1"
+                @click="currentSite = props.maxLength - 1"
+                flat
+                dense
+            />
+        </div>
     </div>
 </template>
 
 <script setup lang="ts">
-import { inject, ref, watch, onMounted, onUnmounted } from 'vue';
+import { inject, ref, watch } from 'vue';
 import { useFileStore } from 'stores/file-store';
 
 const currentSite = inject<Ref<number>>('currentSite');
@@ -78,5 +91,23 @@ watch(fileStore.getCurrentSiteComponents, () => {
 </script>
 
 <style scoped>
+.label-container {
+    width: 25%;
+    justify-content: center;
+    display: flex;
+}
 
+.button-container {
+    width: 33%;
+    justify-content: space-between;
+    display: flex;
+}
+
+.navigation-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    height: 50px;
+}
 </style>
