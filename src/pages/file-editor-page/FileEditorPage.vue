@@ -71,6 +71,7 @@ onUnmounted(() => {
 }
 
 .paginationButtons {
+    margin-top: env(safe-area-inset-top);
     position: fixed;
     top: 50px;
     width: 100%;
